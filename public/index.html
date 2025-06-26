@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Telegram Mini App</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f0f0f0;
+    }
+    .card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <h2>Добро пожаловать в Mini App!</h2>
+  <div class="card" id="user-info">
+    Загружаем данные...
+  </div>
+
+  <script>
+    const initData = Telegram.WebApp.initData;
+    console.log('initData:', initData);
+
+    fetch('/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'ok') {
+        const user = Telegram.WebApp.initDataUnsafe.user;
+        document.getElementById('user-info').innerHTML = `
+          <p><b>Твой Telegram ID:</b> ${user.id}</p>
+          <p><b>Имя:</b> ${user.first_name} ${user.last_name || ''}</p>
+          <p><b>Username:</b> @${user.username || 'нет'}</p>
+          <p style="color: green;">Авторизация прошла успешно ✅</p>
+        `;
+      } else {
+        document.getElementById('user-info').innerHTML = `<p style="color: red;">Ошибка верификации: ${data.message}</p>`;
+      }
+    })
+    .catch(err => {
+      document.getElementById('user-info').innerHTML = `<p style="color: red;">Ошибка соединения с сервером</p>`;
+      console.error(err);
+    });
+  </script>
+</body>
+</html>
