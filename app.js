@@ -29,11 +29,12 @@ app.post('/verify', (req, res) => {
   const receivedHash = urlParams.get('hash');
   urlParams.delete('hash');
 
-  const sortedKeys = Array.from(urlParams.keys()).sort();
+  const sortedKeys = Array.from(urlParams.keys()).filter(key => key !== 'hash').sort();
 
-  const dataCheckString = sortedKeys
-    .map(key => `${key}=${urlParams.get(key)}`)
-    .join('\n');
+const dataCheckString = sortedKeys
+  .map(key => `${key}=${urlParams.get(key)}`)
+  .join('\n');
+
 
   const secretKey = crypto.createHash('sha256').update(BOT_TOKEN).digest();
   const computedHash = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
