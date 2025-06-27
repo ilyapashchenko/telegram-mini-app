@@ -7,10 +7,15 @@ const PORT = process.env.PORT || 8080;
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 
+if (!BOT_TOKEN) {
+  console.error('❌ Ошибка: BOT_TOKEN не задан в переменных среды!');
+  process.exit(1);
+}
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Отдача index.html
+// Главная страница
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -29,17 +34,16 @@ app.post('/verify', (req, res) => {
   const receivedHash = urlParams.get('hash');
   urlParams.delete('hash');
 
-  const sortedKeys = Array.from(urlParams.keys()).filter(key => key !== 'hash').sort();
+  const sortedKeys = Array.from(urlParams.keys()).sort();
+  const dataCheckString = sortedKeys
+    .map(key => `${key}=${urlParams.get(key)}`)
+    .join('\n');
 
-const dataCheckString = sortedKeys
-  .map(key => `${key}=${urlParams.get(key)}`)
-  .join('\n');
-
+  console.log('dataCheckString:', dataCheckString);
 
   const secretKey = crypto.createHash('sha256').update(BOT_TOKEN).digest();
   const computedHash = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
 
-  console.log('dataCheckString:', dataCheckString);
   console.log('Вычисленный hash:', computedHash);
   console.log('Полученный hash:', receivedHash);
 
@@ -51,5 +55,5 @@ const dataCheckString = sortedKeys
 });
 
 app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+  console.log(`✅ Server started on port ${PORT}`);
 });
