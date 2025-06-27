@@ -42,7 +42,7 @@ app.post('/verify', (req, res) => {
     .map(key => `${key}=${urlParams.get(key)}`)
     .join('\n');
 
-  const secretKey = crypto.createHash('sha256').update(BOT_TOKEN).digest();
+  const secretKey = crypto.createHash('sha256').update(process.env.BOT_TOKEN).digest();
   const computedHash = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
 
   console.log('Вычисленный hash:', computedHash);
@@ -54,6 +54,7 @@ app.post('/verify', (req, res) => {
     res.status(401).json({ status: 'error', message: 'Invalid initData' });
   }
 });
+
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
