@@ -28,9 +28,9 @@
 
   <script>
     const initData = Telegram.WebApp.initData;
-    console.log('initData:', initData);
+    console.log('initData, которое сейчас отправляется:', initData);
 
-    fetch('https://telegram-mini-app-production-2332.up.railway.app/verify', {
+    fetch('/verify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ initData })
