@@ -1,18 +1,15 @@
 {
-  "name": "telegram-mini-app",
+  "name": "telegram-mini-app-auth",
   "version": "1.0.0",
-  "main": "app.js",
+  "description": "Telegram Mini App Auth Example",
+  "main": "server.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "express": "^5.1.0"
-  },
-  "engines": {
-    "node": "18.x"
+    "@telegram-apps/init-data-node": "^1.0.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
   }
 }
