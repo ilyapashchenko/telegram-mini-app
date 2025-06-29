@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { isValid, parse } = require('@telegram-apps/init-data-node');
 const cors = require('cors');
+const { Pool } = require('pg'); // ✅ Добавили pg
 
 const app = express();
 const PORT = process.env.PORT || 3000;
