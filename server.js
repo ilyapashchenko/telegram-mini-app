@@ -15,6 +15,11 @@ app.use(express.static('public'));
 // Подключаем все роуты
 app.use('/', authRoutes);
 
+// ✅ Healthcheck endpoint для Railway
+app.get('/', (req, res) => {
+  res.send('Server is up and running!');
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
