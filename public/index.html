@@ -7,11 +7,10 @@
 </head>
 <body>
   <h1>Telegram Mini App Auth</h1>
-  <button id="auth-btn">Authenticate</button>
-  <pre id="result"></pre>
+  <pre id="result">Loading...</pre>
 
   <script>
-    document.getElementById('auth-btn').addEventListener('click', async () => {
+    async function authenticate() {
       const initData = window.Telegram.WebApp.initData;
 
       const response = await fetch('/auth', {
@@ -24,7 +23,10 @@
 
       const result = await response.json();
       document.getElementById('result').textContent = JSON.stringify(result, null, 2);
-    });
+    }
+
+    // Автоматический вызов при загрузке страницы
+    authenticate();
   </script>
 </body>
 </html>
