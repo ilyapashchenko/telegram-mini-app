@@ -12,6 +12,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
+console.log('DATABASE_URL:', process.env.DATABASE_URL);
+
 // ✅ Подключение к базе данных PostgreSQL
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
