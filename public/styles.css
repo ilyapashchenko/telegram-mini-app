@@ -143,6 +143,8 @@ body {
 
 .menu {
     position: relative;
+    /* это добавил 22:02 */
+    top: 16px; 
 }
 
 .menu-btn {
