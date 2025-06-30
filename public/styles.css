@@ -159,29 +159,31 @@ body {
 }
 
 .dropdown-menu {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 200px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    display: none;
-    flex-direction: column;
-    padding: 10px;
-    z-index: 1000;
-    transform: translateX(-50px); /* 👉 Сдвигаем кнопки левее крестика */
+  position: absolute;
+  top: 16px; /* или что там у тебя */
+  right: 16px; /* оставь как есть */
+  width: 300px; /* увеличил ширину фона */
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  display: none;
+  flex-direction: column;
+  padding: 10px;
+  z-index: 1000;
+  /* Если у тебя есть transform — временно отключи, чтобы проверить */
 }
 
 .dropdown-menu button {
-    margin: 6px 0;
-    padding: 10px;
-    border: none;
-    background-color: #f0f0f0;
-    border-radius: 6px;
-    cursor: pointer;
-    text-align: left;
+  margin: 6px 0;
+  padding: 10px 20px 10px 10px; /* добавил справа отступ 20px, чтобы кнопки не растягивались на всю ширину */
+  border: none;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  max-width: 200px; /* фиксируем ширину кнопок */
 }
+
 
 
 /* При наведении — подсветка */
