@@ -22,23 +22,27 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const div = document.createElement('div');
                     div.className = 'service-item';
 
-                    // Название места
+                    // Создание названия места
                     const title = document.createElement('div');
                     title.textContent = place.place_name;
 
-                    // Кнопка "Записаться"
+                    // Создание кнопки "Записаться"
                     const button = document.createElement('button');
                     button.textContent = 'Записаться';
                     button.className = 'book-button';
                     button.onclick = () => {
                         alert(`Вы хотите записаться в: ${place.place_name} (ID: ${place.place_id})`);
-                        // Здесь ты потом можешь сделать POST запрос на backend для записи
+                        // Здесь можно сделать POST-запрос на backend для записи
                     };
 
+                    // Добавляем в div
                     div.appendChild(title);
                     div.appendChild(button);
+
+                    // Добавляем div в список
                     serviceList.appendChild(div);
                 });
+
             } else {
                 serviceList.textContent = 'Сервисов пока нет';
             }
