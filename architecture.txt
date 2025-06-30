@@ -6,6 +6,8 @@ telegram-mini-app/
 |----node_modules/
 |----public/
 |    |----index.html
+|----|----styles.css
+|----|----app.js
 |----roures/
 |    |----authRoutes.js
 |----architecture.txt
