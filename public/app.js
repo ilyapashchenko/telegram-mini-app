@@ -89,34 +89,27 @@ function submitId() {
 
 function toggleMenu() {
   const menu = document.getElementById('dropdownMenu');
-  menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+  const button = document.getElementById('menuButton');
+
+  const isOpen = menu.style.display === 'block';
+
+  if (isOpen) {
+    menu.style.display = 'none';
+    button.textContent = '☰'; // Гамбургер
+  } else {
+    menu.style.display = 'block';
+    button.textContent = '×'; // Крестик
+  }
 }
 
-// Примерные обработчики кнопок
-function showAgreement() {
-  closeMenu();
-  alert('Здесь будет текст пользовательского соглашения.');
-}
-
-function showLicense() {
-  closeMenu();
-  alert('Здесь будет текст лицензионного соглашения.');
-}
-
-function showSupport() {
-  closeMenu();
-  alert('Здесь будет информация о поддержке.');
-}
-
-function closeMenu() {
-  document.getElementById('dropdownMenu').style.display = 'none';
-}
-
-// Автоматически скрывать меню, если клик вне его
+// Автоматически скрывать меню при клике вне его
 document.addEventListener('click', function(event) {
   const menu = document.getElementById('dropdownMenu');
-  const button = document.querySelector('.menu-btn');
-  if (menu && !menu.contains(event.target) && !button.contains(event.target)) {
+  const button = document.getElementById('menuButton');
+  if (menu.style.display === 'block' &&
+      !menu.contains(event.target) &&
+      event.target !== button) {
     menu.style.display = 'none';
+    button.textContent = '☰';
   }
 });

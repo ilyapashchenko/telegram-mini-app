@@ -1,180 +1,194 @@
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #E5EDF8;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #E5EDF8;
 }
 
 .container {
-  padding: 16px;
+    padding: 16px;
 }
 
 .header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
 }
 
 .username {
-  font-size: 18px;
-  font-weight: bold;
-  margin-right: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 12px;
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .title {
-  font-size: 16px;
-  margin-bottom: 8px;
+    font-size: 16px;
+    margin-bottom: 8px;
 }
 
 .service-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .service-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 
 .add-button {
-  margin-top: 16px;
-  padding: 10px;
-  background-color: #fdf9f1;
-  color: black;
-  border: none;
-  border-radius: 8px;
-  width: 100%;
-  font-size: 16px;
+    margin-top: 16px;
+    padding: 10px;
+    background-color: #fdf9f1;
+    color: black;
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 16px;
 }
 
 .overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
-  display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
 }
 
 .modal {
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  background: #E5EDF8;
-  padding: 16px;
-  border-radius: 8px;
-  display: none;
-  width: 80%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #E5EDF8;
+    padding: 16px;
+    border-radius: 8px;
+    display: none;
+    width: 80%;
 }
 
 .modal-title {
-  font-size: 16px;
-  margin-bottom: 12px;
+    font-size: 16px;
+    margin-bottom: 12px;
 }
 
-.modal-button, .close-btn {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin-top: 8px;
-  border: none;
-  border-radius: 6px;
+.modal-button,
+.close-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 6px;
 }
 
 .modal-button {
-  background-color: #0088cc;
-  color: white;
+    background-color: #0088cc;
+    color: white;
 }
 
 .close-btn {
-  background: transparent;
-  color: black;
-  font-size: 18px;
-  text-align: right;
+    background: transparent;
+    color: black;
+    font-size: 18px;
+    text-align: right;
 }
 
 .book-button {
-  margin-top: 8px;
-  padding: 8px 12px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
 .book-button:hover {
-  background-color: #45a049;
+    background-color: #45a049;
 }
 
 /* оформление гамбургера */
 .header-bar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 50px;
-  background-color: #E5EDF8;
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background-color: #E5EDF8;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    z-index: 1000;
 
-  /* Добавляем выравнивание содержимого вправо */
-  justify-content: flex-end;
+    /* Добавляем выравнивание содержимого вправо */
+    justify-content: flex-end;
+}
+
+.menu {
+    position: relative;
 }
 
 .menu-btn {
-  font-size: 24px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 1001;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
 }
 
 .dropdown-menu {
-  position: absolute;
-  top: 50px; /* прямо под header-bar */
-  right: 16px; /* смещение от правого края, под кнопкой */
-  left: 16px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-
-  /* Отображать элементы вертикально */
-  display: none;
-  flex-direction: column;
-
-  min-width: 200px;
-  z-index: 1001;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    padding: 10px;
+    z-index: 1000;
 }
 
-/* Кнопки меню - растягиваем по ширине и расположение вертикальное */
 .dropdown-menu button {
-  padding: 10px;
-  border: none;
-  background: none;
-  text-align: left;
-  cursor: pointer;
-  width: 100%; /* Чтобы кнопки занимали всю ширину меню */
+    margin: 6px 0;
+    padding: 10px;
+    border: none;
+    background-color: #f0f0f0;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
 }
+
 
 /* При наведении — подсветка */
 .dropdown-menu button:hover {
-  background-color: #ddd;
+    background-color: #ddd;
 }
 
 
 .content {
-  margin-top: 50px; /* отступ равен высоте header-bar */
-  padding: 16px;
+    margin-top: 50px;
+    /* отступ равен высоте header-bar */
+    padding: 16px;
 }
