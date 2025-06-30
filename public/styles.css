@@ -120,41 +120,50 @@ body {
 }
 
 /* оформление гамбургера */
-.menu {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+.header-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 50px;
+  background-color: #E5EDF8;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  z-index: 1000;
 }
 
 .menu-btn {
+  font-size: 24px;
   background: transparent;
   border: none;
-  font-size: 24px;
   cursor: pointer;
 }
 
 .dropdown-menu {
-  display: none;
   position: absolute;
-  right: 0;
-  top: 30px;
+  top: 50px; /* сразу под header-bar */
+  right: 16px;
   background: white;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 10;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  display: none;
+  flex-direction: column;
+  min-width: 200px;
+  z-index: 1001;
 }
 
 .dropdown-menu button {
-  display: block;
-  width: 100%;
-  padding: 8px 12px;
+  padding: 10px;
   border: none;
-  background: white;
+  background: none;
   text-align: left;
   cursor: pointer;
 }
 
 .dropdown-menu button:hover {
-  background-color: #f0f0f0;
+  background-color: #ddd;
+}
+
+.content {
+  margin-top: 50px; /* отступ равен высоте header-bar */
+  padding: 16px;
 }

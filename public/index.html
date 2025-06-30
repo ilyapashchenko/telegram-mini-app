@@ -8,21 +8,25 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <div class="menu">
-  <button class="menu-btn" onclick="toggleMenu()">☰</button>
-  <div class="dropdown-menu" id="dropdownMenu">
-    <button onclick="showAgreement()">Пользовательское соглашение</button>
-    <button onclick="showLicense()">Лицензионное соглашение</button>
-    <button onclick="showSupport()">Поддержка</button>
-  </div>
-</div>
 
-  <!-- Отображение аватарки и имени пользователя -->
-  <!-- <div class="container">
-    <div class="header">
-      <div class="username" id="username">Имя пользователя</div>
-      <img class="avatar" id="avatar" src="" alt="Аватар">
-    </div> -->
+  <div class="header-bar">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="dropdown-menu" id="dropdownMenu">
+      <button onclick="showAgreement()">Пользовательское соглашение</button>
+      <button onclick="showLicense()">Лицензионное соглашение</button>
+      <button onclick="showSupport()">Поддержка</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Отображение аватарки и имени пользователя -->
+    <!--
+    <div class="container">
+      <div class="header">
+        <div class="username" id="username">Имя пользователя</div>
+        <img class="avatar" id="avatar" src="" alt="Аватар">
+      </div>
+    -->
 
     <div class="title">Ваши сервисы:</div>
     <div class="service-list" id="serviceList">
