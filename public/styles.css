@@ -160,8 +160,8 @@ body {
 
 .dropdown-menu {
     position: absolute;
-    top: 100;
-    right: 16;
+    top: 16px;
+    right: 16px;
     width: 200px;
     background-color: white;
     border-radius: 8px;
