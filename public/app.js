@@ -84,3 +84,39 @@ function submitId() {
     closeModal();
     alert('Вы ввели ID: ' + id + '. Здесь будет логика добавления.');
 }
+
+// обработка работы гамбургера
+
+function toggleMenu() {
+  const menu = document.getElementById('dropdownMenu');
+  menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+}
+
+// Примерные обработчики кнопок
+function showAgreement() {
+  closeMenu();
+  alert('Здесь будет текст пользовательского соглашения.');
+}
+
+function showLicense() {
+  closeMenu();
+  alert('Здесь будет текст лицензионного соглашения.');
+}
+
+function showSupport() {
+  closeMenu();
+  alert('Здесь будет информация о поддержке.');
+}
+
+function closeMenu() {
+  document.getElementById('dropdownMenu').style.display = 'none';
+}
+
+// Автоматически скрывать меню, если клик вне его
+document.addEventListener('click', function(event) {
+  const menu = document.getElementById('dropdownMenu');
+  const button = document.querySelector('.menu-btn');
+  if (menu && !menu.contains(event.target) && !button.contains(event.target)) {
+    menu.style.display = 'none';
+  }
+});

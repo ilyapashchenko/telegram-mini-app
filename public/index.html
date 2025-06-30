@@ -8,7 +8,15 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  
+  <div class="menu">
+  <button class="menu-btn" onclick="toggleMenu()">☰</button>
+  <div class="dropdown-menu" id="dropdownMenu">
+    <button onclick="showAgreement()">Пользовательское соглашение</button>
+    <button onclick="showLicense()">Лицензионное соглашение</button>
+    <button onclick="showSupport()">Поддержка</button>
+  </div>
+</div>
+
   <!-- Отображение аватарки и имени пользователя -->
   <!-- <div class="container">
     <div class="header">
