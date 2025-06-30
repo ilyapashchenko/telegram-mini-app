@@ -158,8 +158,8 @@ body {
 
 .dropdown-menu {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 16;
+    right: 16;
     width: 200px;
     background-color: white;
     border-radius: 8px;
@@ -168,6 +168,7 @@ body {
     flex-direction: column;
     padding: 10px;
     z-index: 1000;
+    transform: translateX(-50px); /* 👉 Сдвигаем кнопки левее крестика */
 }
 
 .dropdown-menu button {

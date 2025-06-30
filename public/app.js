@@ -102,6 +102,22 @@ function toggleMenu() {
   }
 }
 
+function showAgreement() {
+  alert('Здесь будет текст пользовательского соглашения.');
+  toggleMenu();  // Чтобы закрыть меню после клика
+}
+
+function showLicense() {
+  alert('Здесь будет текст лицензионного соглашения.');
+  toggleMenu();
+}
+
+function showSupport() {
+  alert('Здесь будет информация о поддержке.');
+  toggleMenu();
+}
+
+
 // Автоматически скрывать меню при клике вне его
 document.addEventListener('click', function(event) {
   const menu = document.getElementById('dropdownMenu');
