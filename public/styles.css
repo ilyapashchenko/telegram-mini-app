@@ -2,7 +2,7 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f3f3f3;
+  background-color: #E5EDF8;
 }
 
 .container {
@@ -49,8 +49,8 @@ body {
 .add-button {
   margin-top: 16px;
   padding: 10px;
-  background-color: #0088cc;
-  color: white;
+  background-color: #fdf9f1;
+  color: black;
   border: none;
   border-radius: 8px;
   width: 100%;
@@ -68,7 +68,7 @@ body {
   position: fixed;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  background: white;
+  background: #E5EDF8;
   padding: 16px;
   border-radius: 8px;
   display: none;
