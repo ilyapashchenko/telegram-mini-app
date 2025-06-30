@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         result.places.forEach(place => {
           const div = document.createElement('div');
           div.className = 'service-item';
-          div.textContent = place;
+          div.textContent = place.place_name;
           serviceList.appendChild(div);
         });
       } else {
