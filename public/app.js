@@ -11,8 +11,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const result = await response.json();
 
         if (result.success) {
-            document.getElementById('username').textContent = result.user.firstName;
-            document.getElementById('avatar').src = result.user.photoUrl;
+
+            // походу это поиск имени и аватарки
+            // document.getElementById('username').textContent = result.user.firstName;
+            // document.getElementById('avatar').src = result.user.photoUrl;
 
             const serviceList = document.getElementById('serviceList');
             serviceList.innerHTML = '';
