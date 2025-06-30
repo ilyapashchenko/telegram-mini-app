@@ -1,0 +1,102 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f3f3f3;
+}
+
+.container {
+  padding: 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.username {
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 12px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.title {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.service-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.service-item {
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.add-button {
+  margin-top: 16px;
+  padding: 10px;
+  background-color: #0088cc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 16px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+}
+
+.modal {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  display: none;
+  width: 80%;
+}
+
+.modal-title {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.modal-button, .close-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 6px;
+}
+
+.modal-button {
+  background-color: #0088cc;
+  color: white;
+}
+
+.close-btn {
+  background: transparent;
+  color: black;
+  font-size: 18px;
+  text-align: right;
+}

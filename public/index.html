@@ -1,38 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Telegram Mini App Auth</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mini App</title>
+  <link rel="stylesheet" href="styles.css">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <h1>Telegram Mini App Auth</h1>
-  <pre id="result">Loading...</pre>
+  <div class="container">
+    <div class="header">
+      <div class="username" id="username">Имя пользователя</div>
+      <img class="avatar" id="avatar" src="" alt="Аватар">
+    </div>
 
-  <script>
-  async function authenticate() {
-    const initData = window.Telegram.WebApp.initData;
+    <div class="title">Ваши сервисы:</div>
+    <div class="service-list" id="serviceList">
+      <!-- Сервисы будут подгружаться сюда -->
+    </div>
 
-    const response = await fetch('/auth', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ initData })
-    });
+    <button class="add-button" onclick="openModal()">Добавить</button>
+  </div>
 
-    const result = await response.json();
+  <!-- Оверлей и модалки -->
+  <div class="overlay" id="overlay" onclick="closeModal()"></div>
 
-    document.getElementById('result').textContent = JSON.stringify(result, null, 2);
+  <div class="modal" id="addModal">
+    <button class="close-btn" onclick="closeModal()">×</button>
+    <div class="modal-title">Выберите способ добавления</div>
+    <button class="modal-button" onclick="addByQR()">1) Добавить через QR</button>
+    <button class="modal-button" onclick="addByID()">2) Добавить по ID</button>
+  </div>
 
-    // Например, покажем список мест в консоли (потом можно красиво отрисовать)
-    if (result.success && result.places) {
-      console.log('User places:', result.places);
-    }
-  }
+  <div class="modal" id="idInputModal">
+    <button class="close-btn" onclick="closeModal()">×</button>
+    <div class="modal-title">Введите ID</div>
+    <input id="serviceIdInput" type="text" placeholder="Например: 12345" />
+    <button class="add-button" onclick="submitId()">Добавить</button>
+  </div>
 
-  authenticate();
-</script>
-
+  <script src="app.js"></script>
 </body>
 </html>
