@@ -1,0 +1,14 @@
+telegram-mini-app/
+|----controllers/
+|    |----authController.js
+|----db/
+|    |----pool.js
+|----node_modules/
+|----public/
+|    |----index.html
+|----roures/
+|    |----authRoutes.js
+|----architecture.txt
+|----package-lock.json
+|----package.json
+|----server.js

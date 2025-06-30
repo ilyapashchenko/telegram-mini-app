@@ -10,23 +10,29 @@
   <pre id="result">Loading...</pre>
 
   <script>
-    async function authenticate() {
-      const initData = window.Telegram.WebApp.initData;
+  async function authenticate() {
+    const initData = window.Telegram.WebApp.initData;
 
-      const response = await fetch('/auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ initData })
-      });
+    const response = await fetch('/auth', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ initData })
+    });
 
-      const result = await response.json();
-      document.getElementById('result').textContent = JSON.stringify(result, null, 2);
+    const result = await response.json();
+
+    document.getElementById('result').textContent = JSON.stringify(result, null, 2);
+
+    // Например, покажем список мест в консоли (потом можно красиво отрисовать)
+    if (result.success && result.places) {
+      console.log('User places:', result.places);
     }
+  }
 
-    // Автоматический вызов при загрузке страницы
-    authenticate();
-  </script>
+  authenticate();
+</script>
+
 </body>
 </html>

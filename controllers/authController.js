@@ -17,13 +17,56 @@ async function authHandler(req, res) {
   }
 
   const user = parse(initData).user;
+  const userId = user.id;
 
-  // Здесь можешь потом добавить логику работы с базой, например сохранение user в БД.
+  try {
+    // Проверяем, есть ли пользователь в таблице users
+    const { rows } = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
 
-  res.json({
-    success: true,
-    user,
-  });
+    if (rows.length === 0) {
+      // Если пользователя нет — создаём новую запись с пустыми местами
+      await pool.query(
+        `INSERT INTO users (user_id, place_1, place_2, place_3, place_4) VALUES ($1, NULL, NULL, NULL, NULL)`,
+        [userId]
+      );
+      
+      return res.json({
+        success: true,
+        user,
+        places: [], // Пустой список мест, т.к. пользователь новый
+      });
+    } else {
+      // Если пользователь есть — возвращаем его места (place_1..place_4)
+      const userPlaces = rows[0];
+
+      // Соберём массив не-null мест
+      const placesIds = [];
+      for (let i = 1; i <= 4; i++) {
+        const place = userPlaces[`place_${i}`];
+        if (place) placesIds.push(place);
+      }
+
+      // Можно дополнительно получить из таблицы places подробности по этим place_id
+      // Например:
+      let placesDetails = [];
+      if (placesIds.length > 0) {
+        const resPlaces = await pool.query(
+          `SELECT * FROM places WHERE place_id = ANY($1)`,
+          [placesIds]
+        );
+        placesDetails = resPlaces.rows;
+      }
+
+      return res.json({
+        success: true,
+        user,
+        places: placesDetails, // Возвращаем детали мест
+      });
+    }
+  } catch (error) {
+    console.error('DB error:', error);
+    return res.status(500).json({ success: false, error: 'Database error' });
+  }
 }
 
 module.exports = { authHandler };
