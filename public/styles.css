@@ -145,6 +145,7 @@ body {
   position: absolute;
   top: 50px; /* прямо под header-bar */
   right: 16px; /* смещение от правого края, под кнопкой */
+  left: 16px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
