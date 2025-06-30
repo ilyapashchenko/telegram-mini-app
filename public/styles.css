@@ -100,3 +100,17 @@ body {
   font-size: 18px;
   text-align: right;
 }
+
+.book-button {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.book-button:hover {
+  background-color: #45a049;
+}
