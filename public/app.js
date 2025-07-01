@@ -102,22 +102,6 @@ function toggleMenu() {
   }
 }
 
-function showAgreement() {
-  closeMenu();
-  document.getElementById('agreementModal').style.display = 'block';
-  document.getElementById('menuButton').textContent = '×';
-}
-
-function closeAgreement() {
-  document.getElementById('agreementModal').style.display = 'none';
-  document.getElementById('menuButton').textContent = '☰';
-}
-
-function showLicense() {
-  alert('Здесь будет текст лицензионного соглашения.');
-  toggleMenu();
-}
-
 function showSupport() {
   alert('Здесь будет информация о поддержке.');
   toggleMenu();
