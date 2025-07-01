@@ -119,10 +119,10 @@ body {
   margin-top: 8px;
   padding: 8px 12px;
   background-color: #fdf9f1; /* Сейчас зелёный, заменим */
-  border: 2px solid black; /* Чёрная обводка */
+  border: 1px solid black; /* Чёрная обводка */
   border-radius: 6px;
   cursor: pointer; /* Сделать фон чёрным */
-  color:white; /* Белый текст */
+  color:black; /* Белый текст */
   transition: background-color 0.3s ease;
 }
 
