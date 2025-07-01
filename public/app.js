@@ -103,7 +103,7 @@ function toggleMenu() {
 }
 
 function showSupport() {
-  alert('Здесь будет информация о поддержке.');
+  window.open('https://t.me/tap_tap_support', '_blank');
   toggleMenu();
 }
 
