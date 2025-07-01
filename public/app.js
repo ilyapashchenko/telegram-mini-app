@@ -104,7 +104,7 @@ function toggleMenu() {
 
 function showSupport() {
   window.open('https://t.me/tap_tap_support', '_blank');
-  toggleMenu();
+  closeMenu();
 }
 
 // функция закрытия меню
