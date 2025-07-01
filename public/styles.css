@@ -205,3 +205,34 @@ body {
     /* отступ равен высоте header-bar */
     padding: 16px;
 }
+
+/* стили для модального окна пользовательского соглашения */
+
+.full-screen-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  z-index: 2000;
+  display: none;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.full-screen-modal .modal-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: black;
+}

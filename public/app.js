@@ -103,8 +103,14 @@ function toggleMenu() {
 }
 
 function showAgreement() {
-  alert('Здесь будет текст пользовательского соглашения.');
-  toggleMenu();  // Чтобы закрыть меню после клика
+  closeMenu();
+  document.getElementById('agreementModal').style.display = 'block';
+  document.getElementById('menuButton').textContent = '×';
+}
+
+function closeAgreement() {
+  document.getElementById('agreementModal').style.display = 'none';
+  document.getElementById('menuButton').textContent = '☰';
 }
 
 function showLicense() {
