@@ -148,21 +148,28 @@ body {
 }
 
 .menu-btn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    z-index: 1001;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1001;
+  background: none;
+  border: none;
+  font-size: 32px;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+
 
 .dropdown-menu {
   position: absolute;
   top: 10px; /* или что там у тебя */
   right: 10px; /* оставь как есть */
-  width: 230px; /* увеличил ширину фона */
+  width: 245px; /* увеличил ширину фона */
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
