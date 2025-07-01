@@ -116,18 +116,22 @@ body {
 }
 
 .book-button {
-    margin-top: 8px;
-    padding: 8px 12px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: #fdf9f1; /* Сейчас зелёный, заменим */
+  color: white;
+  border: 2px solid black; /* Чёрная обводка */
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: black; /* Сделать фон чёрным */
+  color: white; /* Белый текст */
+  transition: background-color 0.3s ease;
 }
 
 .book-button:hover {
-    background-color: #45a049;
+  background-color: #333333; /* Немного светлее при наведении */
 }
+
 
 /* оформление гамбургера */
 .header-bar {
