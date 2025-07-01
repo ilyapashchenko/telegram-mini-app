@@ -103,8 +103,7 @@ function toggleMenu() {
 }
 
 function showAgreement() {
-  // closeMenu();
-  toggleMenu();
+  closeMenu();
   document.getElementById('agreementModal').style.display = 'block';
   document.getElementById('menuButton').textContent = '×';
 }
@@ -123,6 +122,17 @@ function showSupport() {
   alert('Здесь будет информация о поддержке.');
   toggleMenu();
 }
+
+// функция закрытия меню
+
+function closeMenu() {
+  const menu = document.getElementById('dropdownMenu');
+  const button = document.getElementById('menuButton');
+
+  menu.style.display = 'none';
+  button.textContent = '☰';
+}
+
 
 
 // Автоматически скрывать меню при клике вне его
