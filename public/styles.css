@@ -61,6 +61,11 @@ body {
     font-size: 16px;
 }
 
+.add-button:hover {
+    background-color: #f0e9d8; /* Можешь выбрать любой другой цвет */
+    cursor: pointer;
+}
+
 .overlay {
     position: fixed;
     top: 0;

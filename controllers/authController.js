@@ -69,4 +69,57 @@ async function authHandler(req, res) {
   }
 }
 
-module.exports = { authHandler };
+async function addPlaceById(req, res) {
+  const { initData, placeId } = req.body;
+
+  if (!initData || !placeId) {
+    return res.status(400).json({ success: false, error: 'Missing data' });
+  }
+
+  const valid = isValid(initData, BOT_TOKEN);
+
+  if (!valid) {
+    return res.status(401).json({ success: false, error: 'Invalid initData' });
+  }
+
+  const user = parse(initData).user;
+  const userId = user.id;
+
+  try {
+    // Проверим, существует ли placeId в таблице places
+    const placeCheck = await pool.query('SELECT * FROM places WHERE place_id = $1', [placeId]);
+
+    if (placeCheck.rows.length === 0) {
+      return res.json({ success: false, error: 'Сервис с таким ID не найден' });
+    }
+
+    // Найдём первую свободную колонку place_1..place_4 у пользователя
+    const userRow = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
+
+    if (userRow.rows.length === 0) {
+      return res.json({ success: false, error: 'Пользователь не найден' });
+    }
+
+    const userPlaces = userRow.rows[0];
+    let updated = false;
+
+    for (let i = 1; i <= 4; i++) {
+      if (!userPlaces[`place_${i}`]) {
+        await pool.query(`UPDATE users SET place_${i} = $1 WHERE user_id = $2`, [placeId, userId]);
+        updated = true;
+        break;
+      }
+    }
+
+    if (!updated) {
+      return res.json({ success: false, error: 'У вас уже максимальное количество сервисов (4)' });
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('DB error при добавлении места:', error);
+    res.status(500).json({ success: false, error: 'Database error' });
+  }
+}
+
+module.exports = { authHandler, addPlaceById };

@@ -79,11 +79,39 @@ function addByID() {
     document.getElementById('idInputModal').style.display = 'block';
 }
 
-function submitId() {
-    const id = document.getElementById('serviceIdInput').value;
-    closeModal();
-    alert('Вы ввели ID: ' + id + '. Здесь будет логика добавления.');
+async function submitId() {
+  const id = document.getElementById('serviceIdInput').value.trim();
+
+  if (!id) {
+    alert('Пожалуйста, введите ID');
+    return;
+  }
+
+  try {
+    const initData = window.Telegram.WebApp.initData;
+
+    const response = await fetch('/addPlaceById', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData, placeId: id })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert('Сервис успешно добавлен!');
+      location.reload();  // Перезагружаем страницу, чтобы отобразился новый список сервисов
+    } else {
+      alert('Ошибка: ' + result.error);
+    }
+  } catch (error) {
+    console.error('Ошибка при добавлении места:', error);
+    alert('Произошла ошибка');
+  }
+
+  closeModal();
 }
+
 
 // обработка работы гамбургера
 
