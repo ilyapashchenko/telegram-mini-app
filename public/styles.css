@@ -160,9 +160,9 @@ body {
 
 .dropdown-menu {
   position: absolute;
-  top: 16px; /* или что там у тебя */
-  right: 16px; /* оставь как есть */
-  width: 300px; /* увеличил ширину фона */
+  top: 10px; /* или что там у тебя */
+  right: 10px; /* оставь как есть */
+  width: 230px; /* увеличил ширину фона */
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
