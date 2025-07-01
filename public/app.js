@@ -103,7 +103,8 @@ function toggleMenu() {
 }
 
 function showAgreement() {
-  closeMenu();
+  // closeMenu();
+  toggleMenu();
   document.getElementById('agreementModal').style.display = 'block';
   document.getElementById('menuButton').textContent = '×';
 }
