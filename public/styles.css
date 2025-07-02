@@ -46,15 +46,15 @@ body {
     justify-content: space-between;
     align-items: center;
     background: transparent;
-    padding: 50px;
+    padding: 10px;
     /* border-radius: 8px; */
     /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */
-    border-bottom: 1px solid black;
+    /* border-bottom: 1px solid black; */
 }
 
-.service-item:last-child {
+/* .service-item:last-child {
   border-bottom: none;
-}
+} */
 
 
 .add-button {
