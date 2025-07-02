@@ -39,11 +39,13 @@ body {
     gap: 8px;
 }
 
+/* прямоугольника с названием сервиса и кнопкой */
+
 .service-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: white;
+    background: #E5EDF8;
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -121,7 +123,7 @@ body {
   background-color: #fdf9f1; /* Сейчас зелёный, заменим */
   border: 1px solid black; /* Чёрная обводка */
   border-radius: 6px;
-  cursor: pointer; /* Сделать фон чёрным */
+  cursor: pointer;
   color:black; /* Белый текст */
   transition: background-color 0.3s ease;
 }
