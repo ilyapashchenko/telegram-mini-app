@@ -62,7 +62,7 @@ body {
     padding: 10px;
     background-color: #fdf9f1;
     color: black;
-    border: none;
+    border: 1px solid black;
     border-radius: 8px;
     width: 100%;
     font-size: 16px;
