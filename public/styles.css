@@ -140,16 +140,16 @@ body {
 .book-button {
   margin-top: 0;
   padding: 8px 12px;
-  background-color: #fdf9f1; /* Сейчас зелёный, заменим */
+  background-color: #fdf9f1; 
   border: 1px solid black; /* Чёрная обводка */
   border-radius: 6px;
   cursor: pointer;
-  color:black; /* Белый текст */
-  transition: background-color 0.3s ease;
+  color:black; 
+  /* transition: background-color 0.3s ease; */
 }
 
 .book-button:hover {
-  background-color: #333333; /* Немного светлее при наведении */
+  background-color: #f0e9d8; /* Немного светлее при наведении */
 }
 
 
