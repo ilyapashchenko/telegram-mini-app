@@ -88,6 +88,8 @@ function addByQR() {
 
 function addByID() {
   console.log('addByID called');
+  console.log('overlay display =', document.getElementById('overlay').style.display);
+
 
   document.getElementById('addModal').style.display = 'none';
   const idModal = document.getElementById('idInputModal');

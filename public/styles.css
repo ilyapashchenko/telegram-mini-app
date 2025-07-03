@@ -244,3 +244,8 @@ body {
   margin: 4px auto;
   width: 85%;
 }
+
+#idInputModal {
+  border: 2px solid red;
+  z-index: 3000;
+}
