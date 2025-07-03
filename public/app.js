@@ -82,6 +82,7 @@ function addByID() {
   idModal.style.display = 'block';
 
   const input = document.getElementById('serviceIdInput');
+  input.removeAttribute('disabled'); // <-- это важно
   input.value = '';        // очистить поле
   input.disabled = false;  // включить, если было отключено
   input.focus();           // поставить фокус
