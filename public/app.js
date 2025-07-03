@@ -89,7 +89,8 @@ function addByID() {
 
 
 async function submitId() {
-  const id = document.getElementById('serviceIdInput').value.trim();
+  const idInput = document.getElementById('serviceIdInput');
+  const id = idInput.value.trim();
 
   if (!id) {
     alert('Пожалуйста, введите ID');
@@ -100,7 +101,6 @@ async function submitId() {
     alert('ID должен содержать только цифры.');
     return;
   }
-
 
   try {
     const initData = window.Telegram.WebApp.initData;
@@ -113,19 +113,27 @@ async function submitId() {
 
     const result = await response.json();
 
+    closeModal(); // закрываем сразу после получения результата
+
     if (result.success) {
       alert('Сервис успешно добавлен!');
-      location.reload();  // Перезагружаем страницу, чтобы отобразился новый список сервисов
+      location.reload(); // перезагрузка страницы для обновления списка
     } else {
       alert('Ошибка: ' + result.error);
+      // В случае ошибки поле не заблокировано, т.к. не менялось disabled
+      // Можно добавить сброс значения, если нужно
+      idInput.value = '';
+      idInput.disabled = false;
     }
   } catch (error) {
+    closeModal();
     console.error('Ошибка при добавлении места:', error);
     alert('Произошла ошибка');
+    idInput.value = '';
+    idInput.disabled = false;
   }
-
-  closeModal();
 }
+
 
 
 // обработка работы гамбургера
