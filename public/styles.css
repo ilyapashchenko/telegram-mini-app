@@ -138,7 +138,7 @@ body {
 }
 
 .book-button {
-  margin-top: 8px;
+  margin-top: 0;
   padding: 8px 12px;
   background-color: #fdf9f1; /* Сейчас зелёный, заменим */
   border: 1px solid black; /* Чёрная обводка */
@@ -241,5 +241,5 @@ body {
   height: 1px;
   background-color: black;
   margin: 4px auto;
-  width: 75%;
+  width: 85%;
 }
