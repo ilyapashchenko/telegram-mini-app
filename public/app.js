@@ -69,7 +69,14 @@ function closeModal() {
   document.getElementById('overlay').style.display = 'none';
   document.getElementById('addModal').style.display = 'none';
   document.getElementById('idInputModal').style.display = 'none';
+
+  const input = document.getElementById('serviceIdInput');
+  if (input) {
+    input.disabled = false;
+    input.value = '';
+  }
 }
+
 
 function addByQR() {
   closeModal();
