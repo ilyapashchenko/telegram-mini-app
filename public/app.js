@@ -92,7 +92,11 @@ function addByID() {
 
 
   document.getElementById('addModal').style.display = 'none';
+  console.log('До скрытия overlay:', document.getElementById('overlay').style.display);
   document.getElementById('overlay').style.display = 'none';
+  console.log('После скрытия overlay:', document.getElementById('overlay').style.display);
+
+
   const idModal = document.getElementById('idInputModal');
   idModal.style.display = 'block';
 

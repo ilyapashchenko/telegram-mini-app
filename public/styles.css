@@ -97,6 +97,7 @@ body {
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
     display: none;
+    z-index: 1000; /* важно! */
 }
 
 .modal {
@@ -109,6 +110,7 @@ body {
     border-radius: 8px;
     display: none;
     width: 80%;
+    z-index: 2000; /* должно быть выше, чем у overlay */
 }
 
 .modal-title {
