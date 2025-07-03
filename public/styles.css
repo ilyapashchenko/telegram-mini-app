@@ -73,7 +73,7 @@ body {
 
 
 .add-button {
-    margin-top: 16px;
+    margin: 16px auto 0;
     padding: 10px;
     background-color: #fdf9f1;
     color: black;
@@ -81,7 +81,7 @@ body {
     border-radius: 8px;
     width: 200px;
     font-size: 16px;
-    margin: 16px auto 0;
+    display: block;
 }
 
 .add-button:hover {
