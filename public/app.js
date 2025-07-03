@@ -78,8 +78,15 @@ function addByQR() {
 
 function addByID() {
   document.getElementById('addModal').style.display = 'none';
-  document.getElementById('idInputModal').style.display = 'block';
+  const idModal = document.getElementById('idInputModal');
+  idModal.style.display = 'block';
+
+  const input = document.getElementById('serviceIdInput');
+  input.value = '';        // очистить поле
+  input.disabled = false;  // включить, если было отключено
+  input.focus();           // поставить фокус
 }
+
 
 async function submitId() {
   const id = document.getElementById('serviceIdInput').value.trim();
