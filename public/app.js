@@ -91,7 +91,8 @@ function addByID() {
   console.log('overlay display =', document.getElementById('overlay').style.display);
 
 
-  // document.getElementById('addModal').style.display = 'none';
+  document.getElementById('addModal').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
   const idModal = document.getElementById('idInputModal');
   idModal.style.display = 'block';
 
