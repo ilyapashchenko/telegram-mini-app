@@ -66,14 +66,17 @@ function openModal() {
 }
 
 function closeModal() {
+  console.log('closeModal called');
   document.getElementById('overlay').style.display = 'none';
   document.getElementById('addModal').style.display = 'none';
   document.getElementById('idInputModal').style.display = 'none';
 
   const input = document.getElementById('serviceIdInput');
   if (input) {
+    console.log('Before reset in closeModal: input.disabled =', input.disabled);
     input.disabled = false;
     input.value = '';
+    console.log('After reset in closeModal: input.disabled =', input.disabled);
   }
 }
 
@@ -84,21 +87,28 @@ function addByQR() {
 }
 
 function addByID() {
+  console.log('addByID called');
+
   document.getElementById('addModal').style.display = 'none';
   const idModal = document.getElementById('idInputModal');
   idModal.style.display = 'block';
 
   const input = document.getElementById('serviceIdInput');
+  console.log('Before setup: input.disabled =', input.disabled);
   input.removeAttribute('disabled'); // <-- это важно
   input.value = '';        // очистить поле
   input.disabled = false;  // включить, если было отключено
   input.focus();           // поставить фокус
+  console.log('After setup: input.disabled =', input.disabled);
 }
 
 
 async function submitId() {
+  console.log('submitId called');
   const idInput = document.getElementById('serviceIdInput');
   const id = idInput.value.trim();
+
+  console.log('Initial: input.disabled =', idInput.disabled);
 
   if (!id) {
     alert('Пожалуйста, введите ID');
@@ -121,6 +131,8 @@ async function submitId() {
 
     const result = await response.json();
 
+    console.log('Response received:', result);
+
     closeModal(); // закрываем сразу после получения результата
 
     if (result.success) {
@@ -132,13 +144,16 @@ async function submitId() {
       // Можно добавить сброс значения, если нужно
       idInput.value = '';
       idInput.disabled = false;
+      console.log('Error case: input.disabled =', idInput.disabled);
     }
   } catch (error) {
+    console.error('Ошибка при добавлении места:', error);
     closeModal();
     console.error('Ошибка при добавлении места:', error);
     alert('Произошла ошибка');
     idInput.value = '';
     idInput.disabled = false;
+    console.log('Catch case: input.disabled =', idInput.disabled);
   }
 }
 
