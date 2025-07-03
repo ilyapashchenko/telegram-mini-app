@@ -58,18 +58,18 @@ body {
 
 /* псевдоэлемент между местами */
 
-.service-item::after {
+/* .service-item::after {
   content: "";
   display: block;
   height: 1px;
   background-color: black;
   margin-top: 8px;
-}
+} */
 
 /* последний псевдоэлемент без линии */
-.service-item:last-child::after {
+/* .service-item:last-child::after {
   display: none;
-}
+} */
 
 
 .add-button {
