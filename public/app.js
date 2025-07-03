@@ -92,9 +92,6 @@ function addByID() {
 
 
   document.getElementById('addModal').style.display = 'none';
-  console.log('До скрытия overlay:', document.getElementById('overlay').style.display);
-  document.getElementById('overlay').style.display = 'none';
-  console.log('После скрытия overlay:', document.getElementById('overlay').style.display);
 
 
   const idModal = document.getElementById('idInputModal');
@@ -105,7 +102,7 @@ function addByID() {
   input.removeAttribute('disabled'); // <-- это важно
   input.value = '';        // очистить поле
   input.disabled = false;  // включить, если было отключено
-  input.focus();           // поставить фокус
+  setTimeout(() => input.focus(), 100);           // поставить фокус
   console.log('After setup: input.disabled =', input.disabled);
 }
 
