@@ -235,8 +235,10 @@ body {
     padding: 16px;
 }
 
+/* чёрная линия, разделяющая разные места */
+
 .service-divider {
   height: 1px;
   background-color: black;
-  margin: 4px 0;
+  margin: 4px 10;
 }
