@@ -61,13 +61,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Модалки:
 function openModal() {
-  document.getElementById('overlay').style.display = 'block';
+  const overlay = document.getElementById('overlay');
+  overlay.style.visibility = 'visible';
+  overlay.style.pointerEvents = 'auto';
+
   document.getElementById('addModal').style.display = 'block';
 }
 
 function closeModal() {
   console.log('closeModal called');
-  document.getElementById('overlay').style.display = 'none';
+  const overlay = document.getElementById('overlay');
+  overlay.style.visibility = 'hidden';
+  overlay.style.pointerEvents = 'none';
+
   document.getElementById('addModal').style.display = 'none';
   document.getElementById('idInputModal').style.display = 'none';
 
