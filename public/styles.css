@@ -234,3 +234,9 @@ body {
     /* отступ равен высоте header-bar */
     padding: 16px;
 }
+
+.service-divider {
+  height: 1px;
+  background-color: black;
+  margin: 4px 0;
+}
