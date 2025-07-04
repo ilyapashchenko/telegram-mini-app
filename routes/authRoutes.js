@@ -5,7 +5,8 @@ const router = express.Router();
 
 router.post('/auth', authHandler);
 router.post('/addPlaceById', addPlaceById);
-router.post('/deletePlace', deletePlace);
+router.post('/deletePlace', authController.deletePlace);
+
 
 
 module.exports = router;
