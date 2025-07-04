@@ -251,9 +251,9 @@ body {
   display: block;
   margin: 0 auto 12px; /* по центру + отступ снизу */
   width: 80%;
-  max-width: 300px;
+  max-width: 250px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 13px;
 }
