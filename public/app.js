@@ -100,8 +100,11 @@ function addByID() {
   document.getElementById('addModal').style.display = 'none';
 
 
+  console.log('addByID called');
   const idModal = document.getElementById('idInputModal');
   idModal.style.display = 'block';
+  console.log('idInputModal display:', idModal.style.display);
+
 
   const input = document.getElementById('serviceIdInput');
   console.log('Before setup: input.disabled =', input.disabled);
@@ -144,22 +147,17 @@ async function submitId() {
 
     console.log('Response received:', result);
 
-    closeModal(); // закрываем сразу после получения результата
-
     if (result.success) {
+      closeModal();
       alert('Сервис успешно добавлен!');
       location.reload(); // перезагрузка страницы для обновления списка
     } else {
       alert('Ошибка: ' + result.error);
-      // В случае ошибки поле не заблокировано, т.к. не менялось disabled
-      // Можно добавить сброс значения, если нужно
       idInput.value = '';
       idInput.disabled = false;
       console.log('Error case: input.disabled =', idInput.disabled);
     }
   } catch (error) {
-    console.error('Ошибка при добавлении места:', error);
-    closeModal();
     console.error('Ошибка при добавлении места:', error);
     alert('Произошла ошибка');
     idInput.value = '';
@@ -167,6 +165,7 @@ async function submitId() {
     console.log('Catch case: input.disabled =', idInput.disabled);
   }
 }
+
 
 
 
