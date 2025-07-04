@@ -89,7 +89,7 @@ function closeModal() {
 
 function addByQR() {
   closeModal();
-  alert('Сканер QR пока не реализован.');
+  showNotification('Сканер QR пока не реализован');
 }
 
 function addByID() {
@@ -193,6 +193,17 @@ function closeMenu() {
   menu.style.display = 'none';
   button.textContent = '☰';
 }
+
+function showNotification(message) {
+  const alertBox = document.getElementById('customAlert');
+  alertBox.textContent = message;
+  alertBox.style.display = 'block';
+
+  setTimeout(() => {
+    alertBox.style.display = 'none';
+  }, 3000); // Скрыть через 3 секунды
+}
+
 
 
 
