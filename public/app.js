@@ -94,27 +94,20 @@ function addByQR() {
 
 function addByID() {
   console.log('addByID called');
-  console.log('overlay display =', document.getElementById('overlay').style.display);
-
-
   document.getElementById('addModal').style.display = 'none';
-
-
-  console.log('addByID called');
   const idModal = document.getElementById('idInputModal');
   idModal.style.display = 'block';
-  console.log('idInputModal display:', idModal.style.display);
-
 
   const input = document.getElementById('serviceIdInput');
-  console.log('Before setup: input.disabled =', input.disabled);
-  input.removeAttribute('disabled'); // <-- это важно
-  input.value = '';        // очистить поле
-  input.disabled = false;  // включить, если было отключено
-  input.blur();
-  setTimeout(() => input.focus(), 100);           // поставить фокус
-  console.log('After setup: input.disabled =', input.disabled);
+  input.value = '';
+  input.disabled = false;
+
+  requestAnimationFrame(() => {
+    input.focus();
+    console.log('Focus set via requestAnimationFrame');
+  });
 }
+
 
 
 async function submitId() {
