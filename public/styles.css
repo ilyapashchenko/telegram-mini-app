@@ -143,6 +143,10 @@ body {
   background-color: #f0e9d8; /* Немного светлее при наведении */
 }
 
+#confirmModal {
+  position: relative; /* нужно добавить эту строку */
+}
+
 #cancelDeleteBtn {
   all: unset; /* обнуляем всё: padding, border, background и т.д. */
   position: absolute;
