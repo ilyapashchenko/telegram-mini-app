@@ -143,20 +143,17 @@ body {
   background-color: #f0e9d8; /* Немного светлее при наведении */
 }
 
-/* кнопка удаления сервиса */
-.delete-button {
-  background-color: transparent;
-  border: none;
-  color: red;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 4px;
-  transition: color 0.2s ease;
+#cancelDeleteBtn {
+  background-color: white;
+  color: #333;
+  border: 1px solid #aaa;
+  font-weight: bold;
 }
 
-.delete-button:hover {
-  color: darkred;
+#cancelDeleteBtn:hover {
+  background-color: #eee;
 }
+
 
 #confirmModal {
   text-align: center;
