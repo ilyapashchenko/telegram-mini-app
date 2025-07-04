@@ -52,26 +52,6 @@ body {
     /* border-bottom: 1px solid black; */
 }
 
-/* .service-item:last-child {
-  border-bottom: none;
-} */
-
-/* псевдоэлемент между местами */
-
-/* .service-item::after {
-  content: "";
-  display: block;
-  height: 1px;
-  background-color: black;
-  margin-top: 8px;
-} */
-
-/* последний псевдоэлемент без линии */
-/* .service-item:last-child::after {
-  display: none;
-} */
-
-
 .add-button {
     margin: 16px auto 0;
     padding: 10px;
@@ -245,11 +225,6 @@ body {
   background-color: black;
   margin: 4px auto;
   width: 85%;
-}
-
-#idInputModal {
-  border: 2px solid red;
-  z-index: 3000;
 }
 
 .custom-alert {

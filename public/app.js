@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           button.textContent = 'Записаться';
           button.className = 'book-button';
           button.onclick = () => {
-            alert(`Вы хотите записаться в: ${place.place_name} (ID: ${place.place_id})`);
+            showNotification(`Вы хотите записаться в: ${place.place_name} (ID: ${place.place_id})`);
           };
 
           div.appendChild(title);
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
     } else {
-      alert('Ошибка аутентификации');
+      showNotification('Ошибка аутентификации');
     }
   } catch (error) {
     console.error('Ошибка при загрузке:', error);
@@ -71,8 +71,7 @@ function openModal() {
 function closeModal() {
   console.log('closeModal called');
   const overlay = document.getElementById('overlay');
-  overlay.style.visibility = 'hidden';
-  overlay.style.pointerEvents = 'none';
+  overlay.style.display = 'none'; // возвращаем нормальную логику
 
   document.getElementById('addModal').style.display = 'none';
   document.getElementById('idInputModal').style.display = 'none';
@@ -85,6 +84,7 @@ function closeModal() {
     console.log('After reset in closeModal: input.disabled =', input.disabled);
   }
 }
+
 
 
 function addByQR() {
