@@ -143,6 +143,19 @@ body {
   background-color: #f0e9d8; /* Немного светлее при наведении */
 }
 
+#cancelDeleteBtn {
+  color: black; /* меняем цвет текста */
+  font-weight: bold; /* делаем текст жирным */
+  font-size: 16px; /* меняем размер */
+  background-color: #f5f5f5; /* светлый фон */
+  border: 1px solid red; /* рамка */
+  padding: 10px 20px; /* отступы */
+  border-radius: 12px; /* скругление углов */
+  text-align: center; /* выравнивание текста по центру */
+  width: 100%; /* чтобы заняла всю ширину родителя */
+}
+
+
 /* #cancelDeleteBtn {
   background-color: white;
   color: #333;
