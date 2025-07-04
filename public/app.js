@@ -142,17 +142,17 @@ async function submitId() {
 
     if (result.success) {
       closeModal();
-      alert('Сервис успешно добавлен!');
+      showNotification('Сервис успешно добавлен!');
       location.reload(); // перезагрузка страницы для обновления списка
     } else {
-      alert('Ошибка: ' + result.error);
+      showNotification('Ошибка: ' + result.error);
       idInput.value = '';
       idInput.disabled = false;
       console.log('Error case: input.disabled =', idInput.disabled);
     }
   } catch (error) {
     console.error('Ошибка при добавлении места:', error);
-    alert('Произошла ошибка');
+    showNotification('Произошла ошибка');
     idInput.value = '';
     idInput.disabled = false;
     console.log('Catch case: input.disabled =', idInput.disabled);
