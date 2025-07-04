@@ -62,11 +62,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Модалки:
 function openModal() {
   const overlay = document.getElementById('overlay');
-  overlay.style.visibility = 'visible';
-  overlay.style.pointerEvents = 'auto';
+  overlay.style.display = 'block'; // 🟢 включаем overlay
 
   document.getElementById('addModal').style.display = 'block';
 }
+
 
 function closeModal() {
   console.log('closeModal called');
