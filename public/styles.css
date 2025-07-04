@@ -158,6 +158,12 @@ body {
   color: darkred;
 }
 
+#confirmModal {
+  text-align: center;
+  z-index: 3000;
+}
+
+
 /* оформление гамбургера */
 .header-bar {
     position: fixed;

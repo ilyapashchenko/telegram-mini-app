@@ -31,6 +31,13 @@ document.addEventListener('DOMContentLoaded', async () => {
           buttonGroup.style.display = 'flex';
           buttonGroup.style.gap = '8px';
 
+          // Кнопка удаления — слева
+          const deleteBtn = document.createElement('button');
+          deleteBtn.className = 'delete-button';
+          deleteBtn.innerHTML = '🗑️';
+          deleteBtn.onclick = () => confirmDelete(place.place_id);
+
+          // Кнопка записи — справа
           const bookBtn = document.createElement('button');
           bookBtn.textContent = 'Записаться';
           bookBtn.className = 'book-button';
@@ -38,17 +45,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             showNotification(`Вы хотите записаться в: ${place.place_name} (ID: ${place.place_id})`);
           };
 
-          const deleteBtn = document.createElement('button');
-          deleteBtn.className = 'delete-button';
-          deleteBtn.innerHTML = '🗑';
-          deleteBtn.onclick = () => deleteService(place.place_id);
-
-          buttonGroup.appendChild(bookBtn);
+          // Добавляем кнопки в нужном порядке: сначала 🗑, потом "Записаться"
           buttonGroup.appendChild(deleteBtn);
+          buttonGroup.appendChild(bookBtn);
 
           div.appendChild(title);
           div.appendChild(buttonGroup);
           serviceList.appendChild(div);
+
 
           if (index < result.places.length - 1) {
             const divider = document.createElement('div');
@@ -216,9 +220,24 @@ function showNotification(message) {
   }, 3000); // Скрыть через 3 секунды
 }
 
-async function deleteService(placeId) {
-  const confirmDelete = confirm('Вы действительно хотите удалить этот сервис?');
-  if (!confirmDelete) return;
+let placeIdToDelete = null;
+
+function confirmDelete(placeId) {
+  placeIdToDelete = placeId;
+  document.getElementById('overlay').style.visibility = 'visible';
+  document.getElementById('overlay').style.pointerEvents = 'auto';
+  document.getElementById('confirmModal').style.display = 'block';
+}
+
+function closeConfirmModal() {
+  placeIdToDelete = null;
+  document.getElementById('confirmModal').style.display = 'none';
+  document.getElementById('overlay').style.visibility = 'hidden';
+  document.getElementById('overlay').style.pointerEvents = 'none';
+}
+
+async function deleteConfirmedService() {
+  if (!placeIdToDelete) return;
 
   try {
     const initData = window.Telegram.WebApp.initData;
@@ -226,10 +245,12 @@ async function deleteService(placeId) {
     const response = await fetch('/deletePlace', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ initData, placeId })
+      body: JSON.stringify({ initData, placeId: placeIdToDelete })
     });
 
     const result = await response.json();
+
+    closeConfirmModal();
 
     if (result.success) {
       showNotification('Сервис удалён');
@@ -240,8 +261,10 @@ async function deleteService(placeId) {
   } catch (error) {
     console.error('Ошибка при удалении сервиса:', error);
     showNotification('Произошла ошибка при удалении');
+    closeConfirmModal();
   }
 }
+
 
 
 

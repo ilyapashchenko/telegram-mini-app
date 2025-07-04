@@ -50,10 +50,15 @@
   <div class="modal" id="idInputModal">
     <button class="close-btn" onclick="closeModal()">×</button>
     <div class="modal-title">Введите ID</div>
-    <input id="serviceIdInput" type="text" placeholder="Например: 12345" autocomplete="off"/>
+    <input id="serviceIdInput" type="text" placeholder="Например: 12345" autocomplete="off" />
     <button class="add-button" onclick="submitId()">Добавить</button>
   </div>
 
+  <div class="modal" id="confirmModal">
+    <div class="modal-title">Удалить этот сервис?</div>
+    <button class="modal-button" onclick="deleteConfirmedService()">Удалить</button>
+    <button class="close-btn" onclick="closeConfirmModal()">Отмена</button>
+  </div>
 
 
 
