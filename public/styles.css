@@ -143,6 +143,20 @@ body {
   background-color: #f0e9d8; /* Немного светлее при наведении */
 }
 
+/* кнопка удаления сервиса */
+.delete-button {
+  background-color: transparent;
+  border: none;
+  color: red;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s ease;
+}
+
+.delete-button:hover {
+  color: darkred;
+}
 
 /* оформление гамбургера */
 .header-bar {

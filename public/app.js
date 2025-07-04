@@ -27,24 +27,36 @@ document.addEventListener('DOMContentLoaded', async () => {
           const title = document.createElement('div');
           title.textContent = place.place_name;
 
-          const button = document.createElement('button');
-          button.textContent = 'Записаться';
-          button.className = 'book-button';
-          button.onclick = () => {
+          const buttonGroup = document.createElement('div');
+          buttonGroup.style.display = 'flex';
+          buttonGroup.style.gap = '8px';
+
+          const bookBtn = document.createElement('button');
+          bookBtn.textContent = 'Записаться';
+          bookBtn.className = 'book-button';
+          bookBtn.onclick = () => {
             showNotification(`Вы хотите записаться в: ${place.place_name} (ID: ${place.place_id})`);
           };
 
+          const deleteBtn = document.createElement('button');
+          deleteBtn.className = 'delete-button';
+          deleteBtn.innerHTML = '🗑';
+          deleteBtn.onclick = () => deleteService(place.place_id);
+
+          buttonGroup.appendChild(bookBtn);
+          buttonGroup.appendChild(deleteBtn);
+
           div.appendChild(title);
-          div.appendChild(button);
+          div.appendChild(buttonGroup);
           serviceList.appendChild(div);
 
-          // Добавляем разделитель, кроме последнего элемента
           if (index < result.places.length - 1) {
             const divider = document.createElement('div');
             divider.className = 'service-divider';
             serviceList.appendChild(divider);
           }
         });
+
 
 
       } else {
@@ -204,6 +216,32 @@ function showNotification(message) {
   }, 3000); // Скрыть через 3 секунды
 }
 
+async function deleteService(placeId) {
+  const confirmDelete = confirm('Вы действительно хотите удалить этот сервис?');
+  if (!confirmDelete) return;
+
+  try {
+    const initData = window.Telegram.WebApp.initData;
+
+    const response = await fetch('/deletePlace', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData, placeId })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      showNotification('Сервис удалён');
+      location.reload();
+    } else {
+      showNotification('Ошибка: ' + result.error);
+    }
+  } catch (error) {
+    console.error('Ошибка при удалении сервиса:', error);
+    showNotification('Произошла ошибка при удалении');
+  }
+}
 
 
 

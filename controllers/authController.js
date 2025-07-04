@@ -125,6 +125,52 @@ async function addPlaceById(req, res) {
   }
 }
 
+async function deletePlace(req, res) {
+  const { initData, placeId } = req.body;
+
+  if (!initData || !placeId) {
+    return res.status(400).json({ success: false, error: 'Missing data' });
+  }
+
+  const valid = isValid(initData, BOT_TOKEN);
+  if (!valid) {
+    return res.status(401).json({ success: false, error: 'Invalid initData' });
+  }
+
+  const user = parse(initData).user;
+  const userId = user.id;
+
+  try {
+    const { rows } = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, error: 'Пользователь не найден' });
+    }
+
+    const userRow = rows[0];
+    let updated = false;
+
+    for (let i = 1; i <= 4; i++) {
+      if (userRow[`place_${i}`] == placeId) {
+        await pool.query(`UPDATE users SET place_${i} = NULL WHERE user_id = $1`, [userId]);
+        updated = true;
+        break;
+      }
+    }
+
+    if (updated) {
+      res.json({ success: true });
+    } else {
+      res.json({ success: false, error: 'У вас нет такого сервиса' });
+    }
+
+  } catch (error) {
+    console.error('Ошибка при удалении сервиса:', error);
+    res.status(500).json({ success: false, error: 'Database error' });
+  }
+}
 
 
-module.exports = { authHandler, addPlaceById };
+
+
+module.exports = { authHandler, addPlaceById, deletePlace  };
