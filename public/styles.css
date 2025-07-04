@@ -143,7 +143,7 @@ body {
   background-color: #f0e9d8; /* Немного светлее при наведении */
 }
 
-#cancelDeleteBtn {
+/* #cancelDeleteBtn {
   background-color: white;
   color: #333;
   border: 1px solid #aaa;
@@ -152,7 +152,7 @@ body {
 
 #cancelDeleteBtn:hover {
   background-color: #eee;
-}
+} */
 
 
 #confirmModal {
