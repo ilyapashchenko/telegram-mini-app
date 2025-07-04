@@ -87,6 +87,7 @@ body {
     transform: translate(-50%, -50%);
     background: #E5EDF8;
     padding: 16px;
+    align-items: center; /* по горизонтали */
     border-radius: 8px;
     display: none;
     width: 80%;
@@ -95,6 +96,7 @@ body {
 
 .modal-title {
     font-size: 16px;
+    text-align: center;
     margin-bottom: 12px;
 }
 
