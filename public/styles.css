@@ -82,7 +82,7 @@ body {
 
 .modal {
     position: fixed;
-    top: 30%;
+    top: 35%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: #E5EDF8;
