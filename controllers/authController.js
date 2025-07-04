@@ -77,6 +77,7 @@ async function addPlaceById(req, res) {
   }
 
   const valid = isValid(initData, BOT_TOKEN);
+
   if (!valid) {
     return res.status(401).json({ success: false, error: 'Invalid initData' });
   }
@@ -89,47 +90,41 @@ async function addPlaceById(req, res) {
     const placeCheck = await pool.query('SELECT * FROM places WHERE place_id = $1', [placeId]);
 
     if (placeCheck.rows.length === 0) {
-      // 👇 явно устанавливаем тип и отправляем JSON
-      return res.status(200).json({ success: false, error: 'Сервис с таким ID не найден' });
+      return res.json({ success: false, error: 'Сервис с таким ID не найден' });
     }
 
-    // Найдём первую свободную колонку place_1..place_4 у пользователя
+    // Получаем текущие места пользователя
     const userRow = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
 
     if (userRow.rows.length === 0) {
-      return res.status(200).json({ success: false, error: 'Пользователь не найден' });
+      return res.json({ success: false, error: 'Пользователь не найден' });
     }
 
     const userPlaces = userRow.rows[0];
 
-    // Проверка: не добавлен ли этот place уже
+    // Проверка, добавлен ли уже такой placeId
     for (let i = 1; i <= 4; i++) {
-      if (userPlaces[`place_${i}`] === Number(placeId)) {
-        return res.status(200).json({ success: false, error: 'Этот сервис уже добавлен' });
+      if (userPlaces[`place_${i}`] === placeId) {
+        return res.json({ success: false, error: 'Этот сервис уже добавлен' });
       }
     }
 
-    let updated = false;
-
+    // Найдём первую свободную колонку place_1..place_4
     for (let i = 1; i <= 4; i++) {
       if (!userPlaces[`place_${i}`]) {
         await pool.query(`UPDATE users SET place_${i} = $1 WHERE user_id = $2`, [placeId, userId]);
-        updated = true;
-        break;
+        return res.json({ success: true });
       }
     }
 
-    if (!updated) {
-      return res.status(200).json({ success: false, error: 'У вас уже максимальное количество сервисов (4)' });
-    }
-
-    return res.status(200).json({ success: true });
+    return res.json({ success: false, error: 'У вас уже максимальное количество сервисов (4)' });
 
   } catch (error) {
     console.error('DB error при добавлении места:', error);
-    return res.status(500).json({ success: false, error: 'Database error' });
+    res.status(500).json({ success: false, error: 'Database error' });
   }
 }
+
 
 
 module.exports = { authHandler, addPlaceById };
