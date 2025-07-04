@@ -144,17 +144,16 @@ body {
 }
 
 #cancelDeleteBtn {
-  color: black; /* меняем цвет текста */
-  font-weight: bold; /* делаем текст жирным */
-  font-size: 16px; /* меняем размер */
-  background-color: #f5f5f5; /* светлый фон */
-  border: 1px solid red; /* рамка */
-  padding: 10px 20px; /* отступы */
-  border-radius: 12px; /* скругление углов */
-  text-align: center; /* выравнивание текста по центру */
-  width: 100%; /* чтобы заняла всю ширину родителя */
+  all: unset; /* обнуляем всё: padding, border, background и т.д. */
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  color: black;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 1100;
 }
-
 
 /* #cancelDeleteBtn {
   background-color: white;
