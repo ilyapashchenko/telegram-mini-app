@@ -88,8 +88,8 @@ function closeModal() {
 
 
 function addByQR() {
-  closeModal();
   showNotification('Сканер QR пока не реализован');
+  return;
 }
 
 function addByID() {
@@ -118,12 +118,12 @@ async function submitId() {
   console.log('Initial: input.disabled =', idInput.disabled);
 
   if (!id) {
-    alert('Пожалуйста, введите ID');
+    showNotification('Пожалуйста, введите ID');
     return;
   }
 
   if (!/^\d+$/.test(id)) {
-    alert('ID должен содержать только цифры.');
+    showNotification('ID должен содержать только цифры.');
     return;
   }
 
