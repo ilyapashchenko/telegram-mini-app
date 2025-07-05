@@ -149,21 +149,13 @@ body {
 
 #cancelDeleteBtn {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 1001;
-
+  top: 8px;
+  right: 12px;
   background: none;
   border: none;
-  font-size: 32px;
-  cursor: pointer;
-  width: 48px;
-  height: 48px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 25px;
   color: black;
+  cursor: pointer;
 }
 
 
