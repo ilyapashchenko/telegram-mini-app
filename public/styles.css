@@ -251,21 +251,21 @@ body {
   top: 10px; /* или что там у тебя */
   right: 10px; /* оставь как есть */
   width: 152px; /* увеличил ширину фона */
-  background-color: white;
-  border-radius: 8px;
+  background-color: #E5EDF8;
+  border: 1px solid black; /* Чёрная обводка */
+  border-radius: 6px;
   box-shadow: 0 2px 6px rgba(53, 14, 14, 0.2);
   display: none;
   flex-direction: column;
   padding: 10px;
   z-index: 1000;
-  /* Если у тебя есть transform — временно отключи, чтобы проверить */
 }
 
 .dropdown-menu button {
   margin: 6px 0;
   padding: 10px 20px 10px 10px; /* добавил справа отступ 20px, чтобы кнопки не растягивались на всю ширину */
   border: none;
-  background-color: #f0f0f0;
+  background-color: #fdf9f1;
   border-radius: 6px;
   cursor: pointer;
   text-align: left;
