@@ -323,3 +323,12 @@ body {
   border-radius: 6px;
   font-size: 13px;
 }
+
+.delete-button {
+  background: none;      /* убираем фон */
+  border: none;          /* убираем рамку */
+  padding: 0;            /* убираем внутренние отступы */
+  cursor: pointer;       /* чтобы был курсор руки при наведении */
+  font-size: 18px;       /* размер иконки, подкорректируй под себя */
+  color: inherit;        /* цвет иконки унаследовать */
+}
