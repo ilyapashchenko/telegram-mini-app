@@ -199,8 +199,8 @@ async function submitId() {
 // обработка работы гамбургера
 
 function toggleMenu() {
-  const menu = document.getElementById('dropdownMenu');
-  const button = document.getElementById('menuButton');
+  const menu = document.getElementById('dropdown-menu');
+  const button = document.getElementById('menu-btn');
   const overlay = document.getElementById('overlay');
 
   const isOpen = menu.style.display === 'block';
