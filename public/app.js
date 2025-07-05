@@ -208,13 +208,24 @@ function toggleMenu() {
   if (isOpen) {
     menu.style.display = 'none';
     button.textContent = '☰';
-    overlay.style.display = 'none';
+    // Скрываем overlay, но только если не открыты другие модалки!
+    // Нужно проверить, открыты ли другие окна и закрывать overlay только если все закрыты
+    if (
+      document.getElementById('addModal').style.display === 'none' &&
+      document.getElementById('idInputModal').style.display === 'none' &&
+      document.getElementById('confirmModal').style.display === 'none'
+    ) {
+      overlay.style.visibility = 'hidden';
+      overlay.style.pointerEvents = 'none';
+    }
   } else {
     menu.style.display = 'block';
     button.textContent = '×';
-    overlay.style.display = 'block';
+    overlay.style.visibility = 'visible';
+    overlay.style.pointerEvents = 'auto';
   }
 }
+
 
 
 
