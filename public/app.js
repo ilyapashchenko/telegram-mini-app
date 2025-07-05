@@ -78,29 +78,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Модалки:
 function openModal() {
   const overlay = document.getElementById('overlay');
-  overlay.style.visibility = 'visible';
-  overlay.style.pointerEvents = 'auto';
-
+  overlay.style.display = 'block'; // включаем overlay
   document.getElementById('addModal').style.display = 'block';
 }
 
-function closeModal() {
-  console.log('closeModal called');
-  const overlay = document.getElementById('overlay');
-  overlay.style.visibility = 'hidden';
-  overlay.style.pointerEvents = 'none';
 
+function closeModal() {
+  document.getElementById('overlay').style.display = 'none';
   document.getElementById('addModal').style.display = 'none';
   document.getElementById('idInputModal').style.display = 'none';
 
   const input = document.getElementById('serviceIdInput');
   if (input) {
-    console.log('Before reset in closeModal: input.disabled =', input.disabled);
     input.disabled = false;
     input.value = '';
-    console.log('After reset in closeModal: input.disabled =', input.disabled);
   }
 }
+
 
 
 
@@ -226,17 +220,17 @@ let placeIdToDelete = null;
 
 function confirmDelete(placeId) {
   placeIdToDelete = placeId;
-  document.getElementById('overlay').style.visibility = 'visible';
-  document.getElementById('overlay').style.pointerEvents = 'auto';
+  document.getElementById('overlay').style.display = 'block';
   document.getElementById('confirmModal').style.display = 'block';
 }
+
 
 function closeConfirmModal() {
   placeIdToDelete = null;
   document.getElementById('confirmModal').style.display = 'none';
-  document.getElementById('overlay').style.visibility = 'hidden';
-  document.getElementById('overlay').style.pointerEvents = 'none';
+  document.getElementById('overlay').style.display = 'none';
 }
+
 
 async function deleteConfirmedService() {
   if (!placeIdToDelete) return;
