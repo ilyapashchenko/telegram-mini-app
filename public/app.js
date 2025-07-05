@@ -199,32 +199,23 @@ async function submitId() {
 // обработка работы гамбургера
 
 function toggleMenu() {
-  const menu = document.getElementById('dropdown-menu');
-  const button = document.getElementById('menu-btn');
+  const menu = document.getElementById('dropdownMenu');
+  const button = document.getElementById('menuButton');
   const overlay = document.getElementById('overlay');
 
   const isOpen = menu.style.display === 'block';
 
   if (isOpen) {
     menu.style.display = 'none';
-    button.textContent = '☰';
-    // Скрываем overlay, но только если не открыты другие модалки!
-    // Нужно проверить, открыты ли другие окна и закрывать overlay только если все закрыты
-    if (
-      document.getElementById('addModal').style.display === 'none' &&
-      document.getElementById('idInputModal').style.display === 'none' &&
-      document.getElementById('confirmModal').style.display === 'none'
-    ) {
-      overlay.style.visibility = 'hidden';
-      overlay.style.pointerEvents = 'none';
-    }
+    button.textContent = '☰'; // гамбургер
+    overlay.style.display = 'none';
   } else {
     menu.style.display = 'block';
-    button.textContent = '×';
-    overlay.style.visibility = 'visible';
-    overlay.style.pointerEvents = 'auto';
+    button.textContent = '×'; // крестик
+    overlay.style.display = 'block';
   }
 }
+
 
 
 
