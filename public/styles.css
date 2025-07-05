@@ -70,7 +70,7 @@ html, body {
 }
 
 .overlay {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
@@ -206,7 +206,7 @@ html, body {
 
 /* оформление гамбургера */
 .header-bar {
-    position: fixed;
+    position: relative;
     top: 0;
     left: 0;
     right: 0;
@@ -215,7 +215,7 @@ html, body {
     display: flex;
     align-items: center;
     padding: 0 16px;
-    z-index: 999;
+    z-index: 1500;
 
     /* Добавляем выравнивание содержимого вправо */
     justify-content: flex-end;

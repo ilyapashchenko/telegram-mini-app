@@ -10,16 +10,14 @@
 </head>
 
 <body>
-  
+
   <div class="header-bar">
-  <div class="overlay" id="overlay" onclick="closeAllModals()"></div>
+    <div class="overlay" id="overlay" onclick="closeAllModals()"></div>
     <button class="menu-btn" id="menuButton" onclick="toggleMenu()">☰</button>
     <div class="dropdown-menu" id="dropdownMenu">
       <button onclick="showSupport()">Поддержка</button>
     </div>
-
   </div>
-
   <div class="content">
     <!-- Отображение аватарки и имени пользователя -->
     <!--
@@ -34,7 +32,6 @@
     <div class="service-list" id="serviceList">
       <!-- Сервисы будут подгружаться сюда -->
     </div>
-
     <button class="add-button" onclick="openModal()">Добавить</button>
   </div>
 
@@ -60,8 +57,6 @@
     <div class="modal-title">Удалить этот сервис?</div>
     <button class="modal-button" onclick="deleteConfirmedService()">Удалить</button>
   </div>
-
-
 
   <script src="app.js"></script>
   <div id="customAlert" class="custom-alert"></div>
