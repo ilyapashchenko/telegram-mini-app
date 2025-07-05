@@ -143,8 +143,22 @@ body {
   background-color: #f0e9d8; /* Немного светлее при наведении */
 }
 
+/* #confirmModal {
+  position: relative; 
+} */
+
 #confirmModal {
-  position: relative; /* нужно добавить эту строку */
+    position: fixed;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #E5EDF8;
+    padding: 16px;
+    align-items: center; /* по горизонтали */
+    border-radius: 8px;
+    display: none;
+    width: 80%;
+    z-index: 2000; /* должно быть выше, чем у overlay */
 }
 
 #cancelDeleteBtn {
