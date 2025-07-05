@@ -102,6 +102,12 @@ function closeAllModals() {
   document.getElementById('idInputModal').style.display = 'none';
   document.getElementById('confirmModal').style.display = 'none';
 
+  // Закрытие меню
+  const menu = document.getElementById('dropdownMenu');
+  const button = document.getElementById('menuButton');
+  menu.style.display = 'none';
+  button.textContent = '☰';
+
   const input = document.getElementById('serviceIdInput');
   if (input) {
     input.disabled = false;
