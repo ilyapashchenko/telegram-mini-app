@@ -195,17 +195,22 @@ async function submitId() {
 function toggleMenu() {
   const menu = document.getElementById('dropdownMenu');
   const button = document.getElementById('menuButton');
+  const overlay = document.getElementById('overlay');
 
   const isOpen = menu.style.display === 'block';
 
   if (isOpen) {
     menu.style.display = 'none';
-    button.textContent = '☰'; // Гамбургер
+    button.textContent = '☰';
+    overlay.style.display = 'none';
   } else {
     menu.style.display = 'block';
-    button.textContent = '×'; // Крестик
+    button.textContent = '×';
+    overlay.style.display = 'block';
   }
 }
+
+
 
 function showSupport() {
   window.open('https://t.me/tap_tap_support', '_blank');
