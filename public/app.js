@@ -78,16 +78,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Модалки:
 function openModal() {
   const overlay = document.getElementById('overlay');
-  overlay.style.display = 'block'; // 🟢 включаем overlay
+  overlay.style.visibility = 'visible';
+  overlay.style.pointerEvents = 'auto';
 
   document.getElementById('addModal').style.display = 'block';
 }
 
-
 function closeModal() {
   console.log('closeModal called');
   const overlay = document.getElementById('overlay');
-  overlay.style.display = 'none'; // возвращаем нормальную логику
+  overlay.style.visibility = 'hidden';
+  overlay.style.pointerEvents = 'none';
 
   document.getElementById('addModal').style.display = 'none';
   document.getElementById('idInputModal').style.display = 'none';
@@ -100,6 +101,7 @@ function closeModal() {
     console.log('After reset in closeModal: input.disabled =', input.disabled);
   }
 }
+
 
 
 
