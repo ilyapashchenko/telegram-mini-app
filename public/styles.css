@@ -257,7 +257,7 @@ body {
   display: none;
   flex-direction: column;
   padding: 10px;
-  z-index: 2001;
+  z-index: 5000;
 }
 
 .dropdown-menu button {
