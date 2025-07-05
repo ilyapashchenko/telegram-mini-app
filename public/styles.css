@@ -228,8 +228,7 @@ html, body {
 }
 
 .menu-btn {
-  /* position: absolute; */
-  position: relative;
+  position: absolute;
   top: 16px;
   right: 16px;
   z-index: 2000;
