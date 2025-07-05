@@ -207,14 +207,15 @@ function toggleMenu() {
 
   if (isOpen) {
     menu.style.display = 'none';
-    button.textContent = '☰'; // гамбургер
+    button.textContent = '☰';
     overlay.style.display = 'none';
   } else {
     menu.style.display = 'block';
-    button.textContent = '×'; // крестик
+    button.textContent = '×';
     overlay.style.display = 'block';
   }
 }
+
 
 
 

@@ -15,6 +15,7 @@
     <div class="overlay" id="overlay" onclick="closeAllModals()"></div>
     <button class="menu-btn" id="menuButton" onclick="toggleMenu()">☰</button>
     <div class="dropdown-menu" id="dropdownMenu">
+      <button class="close-btn" onclick="toggleMenu()">×</button>
       <button onclick="showSupport()">Поддержка</button>
     </div>
   </div>
@@ -58,6 +59,8 @@
     <button class="modal-button" onclick="deleteConfirmedService()">Удалить</button>
   </div>
 
+
+  <div class="overlay" id="overlay" onclick="closeAllModals()"></div>
   <script src="app.js"></script>
   <div id="customAlert" class="custom-alert"></div>
 </body>

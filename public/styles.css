@@ -70,7 +70,7 @@ html, body {
 }
 
 .overlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -119,14 +119,17 @@ html, body {
 
 .close-btn {
   position: absolute;
-  top: 8px;
-  right: 12px;
+  top: 5px;
+  right: 5px;
   background: none;
   border: none;
   font-size: 25px;
   color: black;
   cursor: pointer;
+  background-color: transparent !important;
+  border: none !important;
 }
+
 
 .book-button {
   margin-top: 0;
@@ -206,7 +209,7 @@ html, body {
 
 /* оформление гамбургера */
 .header-bar {
-    position: relative;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
