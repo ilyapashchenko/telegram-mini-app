@@ -273,6 +273,7 @@ html, body {
   cursor: pointer;
   text-align: left;
   max-width: 200px; /* фиксируем ширину кнопок */
+  color: black;
 }
 
 
