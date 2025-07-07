@@ -54,11 +54,15 @@ document.addEventListener('DOMContentLoaded', async () => {
           serviceList.appendChild(div);
 
 
-          if (index < result.places.length - 1) {
+          if (
+            index < result.places.length - 1 &&
+            serviceList.lastChild?.classList?.contains('service-divider') === false
+          ) {
             const divider = document.createElement('div');
             divider.className = 'service-divider';
             serviceList.appendChild(divider);
           }
+
         });
 
 
