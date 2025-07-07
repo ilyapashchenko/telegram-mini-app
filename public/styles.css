@@ -213,10 +213,7 @@ html, body {
     top: 0;
     left: 0;
     right: 0;
-    /* was
-    height: 50; */
-    /* now */
-    height: 0;
+    height: 50;
     background-color: #E5EDF8;
     display: flex;
     align-items: center;
