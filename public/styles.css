@@ -230,7 +230,7 @@ body {
   display: flex;
   flex-direction: column; /* ← это важно */
   align-items: flex-start;
-  padding: 32px;
+  padding: 10px;
   z-index: 1500;
 
   /* Добавляем выравнивание содержимого вправо */
