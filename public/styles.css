@@ -336,3 +336,8 @@ html, body {
   font-size: 18px;       /* размер иконки, подкорректируй под себя */
   color: inherit;        /* цвет иконки унаследовать */
 }
+
+
+.service-divider + .service-divider {
+  background-color: red;
+}
