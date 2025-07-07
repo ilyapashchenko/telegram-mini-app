@@ -225,12 +225,12 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 100;
+  height: 80;
   background-color: #E5EDF8;
   display: flex;
   flex-direction: column; /* ← это важно */
   align-items: flex-start;
-  padding: 0 16px;
+  padding: 32px;
   z-index: 1500;
 
   /* Добавляем выравнивание содержимого вправо */
