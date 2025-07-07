@@ -26,7 +26,7 @@ async function authHandler(req, res) {
     if (rows.length === 0) {
       // Если пользователя нет — создаём новую запись с пустыми местами
       await pool.query(
-        `INSERT INTO users (user_id, place_1, place_2, place_3, place_4) VALUES ($1, NULL, NULL, NULL, NULL)`,
+        `INSERT INTO users (user_id, place_1, place_2, place_3, place_4, place_5, place_6, place_7, place_8, place_9, place_10) VALUES ($1, NULL, NULL, NULL, NULL)`,
         [userId]
       );
       
@@ -36,12 +36,12 @@ async function authHandler(req, res) {
         places: [], // Пустой список мест, т.к. пользователь новый
       });
     } else {
-      // Если пользователь есть — возвращаем его места (place_1..place_4)
+      // Если пользователь есть — возвращаем его места (place_1..place_10)
       const userPlaces = rows[0];
 
       // Соберём массив не-null мест
       const placesIds = [];
-      for (let i = 1; i <= 4; i++) {
+      for (let i = 1; i <= 10; i++) {
         const place = userPlaces[`place_${i}`];
         if (place) placesIds.push(place);
       }
@@ -103,21 +103,21 @@ async function addPlaceById(req, res) {
     const userPlaces = userRow.rows[0];
 
     // Проверка, добавлен ли уже такой placeId
-    for (let i = 1; i <= 4; i++) {
+    for (let i = 1; i <= 10; i++) {
       if (userPlaces[`place_${i}`] === placeId) {
         return res.json({ success: false, error: 'Этот сервис уже добавлен' });
       }
     }
 
-    // Найдём первую свободную колонку place_1..place_4
-    for (let i = 1; i <= 4; i++) {
+    // Найдём первую свободную колонку place_1..place_10
+    for (let i = 1; i <= 10; i++) {
       if (!userPlaces[`place_${i}`]) {
         await pool.query(`UPDATE users SET place_${i} = $1 WHERE user_id = $2`, [placeId, userId]);
         return res.json({ success: true });
       }
     }
 
-    return res.json({ success: false, error: 'У вас уже максимальное количество сервисов (4)' });
+    return res.json({ success: false, error: 'У вас уже максимальное количество сервисов (10)' });
 
   } catch (error) {
     console.error('DB error при добавлении места:', error);
@@ -150,7 +150,7 @@ async function deletePlace(req, res) {
     const userRow = rows[0];
     let updated = false;
 
-    for (let i = 1; i <= 4; i++) {
+    for (let i = 1; i <= 10; i++) {
       if (userRow[`place_${i}`] == placeId) {
         await pool.query(`UPDATE users SET place_${i} = NULL WHERE user_id = $1`, [userId]);
         updated = true;
