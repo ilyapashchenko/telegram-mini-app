@@ -1,103 +1,110 @@
-html, body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #E5EDF8;
+html,
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #E5EDF8;
 }
 
 .container {
-    padding: 16px;
+  padding: 16px;
 }
 
 .header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
 .username {
-    font-size: 18px;
-    font-weight: bold;
-    margin-right: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 12px;
 }
 
 .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .title {
-    font-size: 16px;
-    margin-bottom: 8px;
+  font-size: 16px;
+  /* margin-bottom: 8px; */
+  margin-top: 30px;
+
 }
 
 .service-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 /* прямоугольника с названием сервиса и кнопкой */
 
 .service-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: transparent;
-    padding: 10px;
-    /* border-radius: 8px; */
-    /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */
-    /* border-bottom: 1px solid black; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  padding: 10px;
+  /* border-radius: 8px; */
+  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */
+  /* border-bottom: 1px solid black; */
 }
 
 .add-button {
-    margin: 16px auto 0;
-    padding: 10px;
-    background-color: #fdf9f1;
-    color: black;
-    border: 1px solid black;
-    border-radius: 8px;
-    width: 200px;
-    font-size: 16px;
-    display: block;
+  margin: 16px auto 0;
+  padding: 10px;
+  background-color: #fdf9f1;
+  color: black;
+  border: 1px solid black;
+  border-radius: 8px;
+  width: 200px;
+  font-size: 16px;
+  display: block;
 }
 
 .add-button:hover {
-    background-color: #f0e9d8; /* Можешь выбрать любой другой цвет */
-    cursor: pointer;
+  background-color: #f0e9d8;
+  /* Можешь выбрать любой другой цвет */
+  cursor: pointer;
 }
 
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
-    z-index: 1000; /* важно! */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 1000;
+  /* важно! */
 }
 
 .modal {
-    position: fixed;
-    top: 35%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #E5EDF8;
-    padding: 16px;
-    align-items: center; /* по горизонтали */
-    border-radius: 8px;
-    display: none;
-    width: 80%;
-    z-index: 2000; /* должно быть выше, чем у overlay */
+  position: fixed;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #E5EDF8;
+  padding: 16px;
+  align-items: center;
+  /* по горизонтали */
+  border-radius: 8px;
+  display: none;
+  width: 80%;
+  z-index: 2000;
+  /* должно быть выше, чем у overlay */
 }
 
 .modal-title {
-    font-size: 16px;
-    text-align: center;
-    margin-bottom: 12px;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 12px;
 }
 
 .modal-button {
@@ -113,8 +120,9 @@ html, body {
 }
 
 .modal-button:hover {
-    background-color: #f0e9d8; /* Можешь выбрать любой другой цвет */
-    cursor: pointer;
+  background-color: #f0e9d8;
+  /* Можешь выбрать любой другой цвет */
+  cursor: pointer;
 }
 
 .close-btn {
@@ -134,16 +142,18 @@ html, body {
 .book-button {
   margin-top: 0;
   padding: 8px 12px;
-  background-color: #fdf9f1; 
-  border: 1px solid black; /* Чёрная обводка */
+  background-color: #fdf9f1;
+  border: 1px solid black;
+  /* Чёрная обводка */
   border-radius: 6px;
   cursor: pointer;
-  color:black; 
+  color: black;
   /* transition: background-color 0.3s ease; */
 }
 
 .book-button:hover {
-  background-color: #f0e9d8; /* Немного светлее при наведении */
+  background-color: #f0e9d8;
+  /* Немного светлее при наведении */
 }
 
 /* #confirmModal {
@@ -151,17 +161,19 @@ html, body {
 } */
 
 #confirmModal {
-    position: fixed;
-    top: 35%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #E5EDF8;
-    padding: 16px;
-    align-items: center; /* по горизонтали */
-    border-radius: 8px;
-    display: none;
-    width: 80%;
-    z-index: 2000; /* должно быть выше, чем у overlay */
+  position: fixed;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #E5EDF8;
+  padding: 16px;
+  align-items: center;
+  /* по горизонтали */
+  border-radius: 8px;
+  display: none;
+  width: 80%;
+  z-index: 2000;
+  /* должно быть выше, чем у overlay */
 }
 
 #cancelDeleteBtn {
@@ -209,25 +221,26 @@ html, body {
 
 /* оформление гамбургера */
 .header-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 50;
-    background-color: #E5EDF8;
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    z-index: 1500;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50;
+  background-color: #E5EDF8;
+  display: flex;
+  flex-direction: column; /* ← это важно */
+  align-items: flex-start;
+  padding: 0 16px;
+  z-index: 1500;
 
-    /* Добавляем выравнивание содержимого вправо */
-    justify-content: flex-end;
+  /* Добавляем выравнивание содержимого вправо */
+  justify-content: flex-end;
 }
 
 .menu {
-    position: relative;
-    /* это добавил 22:02 */
-    top: 16px; 
+  position: relative;
+  /* это добавил 22:02 */
+  top: 16px;
 }
 
 .menu-btn {
@@ -251,9 +264,12 @@ html, body {
 
 .dropdown-menu {
   position: absolute;
-  top: 10px; /* или что там у тебя */
-  right: 10px; /* оставь как есть */
-  width: 152px; /* увеличил ширину фона */
+  top: 10px;
+  /* или что там у тебя */
+  right: 10px;
+  /* оставь как есть */
+  width: 152px;
+  /* увеличил ширину фона */
   background-color: #E5EDF8;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(53, 14, 14, 0.2);
@@ -265,14 +281,16 @@ html, body {
 
 .dropdown-menu button {
   margin: 6px 0;
-  padding: 10px 20px 10px 10px; /* добавил справа отступ 20px, чтобы кнопки не растягивались на всю ширину */
+  padding: 10px 20px 10px 10px;
+  /* добавил справа отступ 20px, чтобы кнопки не растягивались на всю ширину */
   border: none;
   background-color: #fdf9f1;
   border: 1px solid black;
   border-radius: 6px;
   cursor: pointer;
   text-align: left;
-  max-width: 200px; /* фиксируем ширину кнопок */
+  max-width: 200px;
+  /* фиксируем ширину кнопок */
   color: black;
 }
 
@@ -280,14 +298,14 @@ html, body {
 
 /* При наведении — подсветка */
 .dropdown-menu button:hover {
-    background-color: #f0e9d8;
+  background-color: #f0e9d8;
 }
 
 
 .content {
-    margin-top: 50px;
-    /* отступ равен высоте header-bar */
-    padding: 16px;
+  margin-top: 90px;
+  /* отступ равен высоте header-bar */
+  padding: 16px;
 }
 
 /* чёрная линия, разделяющая разные места */
@@ -319,7 +337,8 @@ html, body {
 
 #serviceIdInput {
   display: block;
-  margin: 0 auto 12px; /* по центру + отступ снизу */
+  margin: 0 auto 12px;
+  /* по центру + отступ снизу */
   width: 80%;
   max-width: 200px;
   padding: 8px;
@@ -329,10 +348,16 @@ html, body {
 }
 
 .delete-button {
-  background: none;      /* убираем фон */
-  border: none;          /* убираем рамку */
-  padding: 0;            /* убираем внутренние отступы */
-  cursor: pointer;       /* чтобы был курсор руки при наведении */
-  font-size: 18px;       /* размер иконки, подкорректируй под себя */
-  color: inherit;        /* цвет иконки унаследовать */
+  background: none;
+  /* убираем фон */
+  border: none;
+  /* убираем рамку */
+  padding: 0;
+  /* убираем внутренние отступы */
+  cursor: pointer;
+  /* чтобы был курсор руки при наведении */
+  font-size: 18px;
+  /* размер иконки, подкорректируй под себя */
+  color: inherit;
+  /* цвет иконки унаследовать */
 }
