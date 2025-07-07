@@ -225,7 +225,7 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 80;
+  height: 100;
   background-color: #E5EDF8;
   display: flex;
   flex-direction: column; /* ← это важно */
@@ -303,7 +303,7 @@ body {
 
 
 .content {
-  margin-top: 150px;
+  margin-top: 120px;
   /* отступ равен высоте header-bar */
   padding: 16px;
 }
