@@ -484,7 +484,8 @@ function submitSelectedDate() {
   closeChooseDateModal();
 
   // Переход к следующему шагу: выбор времени (свободные слоты)
-  openChooseSlotModal(); // эту функцию сделаем дальше
+  openChooseTimeModal();
+  // openChooseSlotModal(); // эту функцию сделаем дальше
 }
 
 // МОДАЛКА ВЫБОРА ВРЕМЕНИ
