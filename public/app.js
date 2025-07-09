@@ -354,7 +354,7 @@ function openChooseServiceModal(placeId) {
     .then(res => res.json())
     .then(data => {
       if (data.success) {
-        const serviceList = document.getElementById('serviceList');
+        const serviceList = document.getElementById('serviceSelectList');
         serviceList.innerHTML = '';
         selectedServices = [];
 
