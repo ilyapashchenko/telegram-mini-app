@@ -426,34 +426,6 @@ function submitSelectedServices() {
   openChooseDateModal(); // сделаем позже
 }
 
-
-// function openChooseServiceModal(services) {
-//   const modal = document.getElementById('chooseServiceModal');
-//   const list = document.getElementById('serviceSelectList');
-//   list.innerHTML = ''; // Очистим перед показом
-
-//   services.forEach(service => {
-//     const option = document.createElement('div');
-//     option.className = 'service-option';
-
-//     const checkbox = document.createElement('input');
-//     checkbox.type = 'checkbox';
-//     checkbox.value = service.service_id;
-//     checkbox.dataset.duration = service.duration; // если нужно
-//     checkbox.dataset.name = service.name;
-
-//     const label = document.createElement('label');
-//     label.textContent = service.name;
-
-//     option.appendChild(checkbox);
-//     option.appendChild(label);
-//     list.appendChild(option);
-//   });
-
-//   modal.style.display = 'block';
-//   document.getElementById('overlay').style.display = 'block';
-// }
-
 // подгрузка чекбоксов
 function renderServices(services) {
   const serviceSelectList = document.getElementById('serviceSelectList');
@@ -472,6 +444,47 @@ function renderServices(services) {
     serviceSelectList.appendChild(label);
   });
 }
+
+// ВЫБОР ДАТЫ
+let selectedDate = null;
+
+function openChooseDateModal() {
+  const dateInput = document.getElementById('bookingDatePicker');
+
+  const today = new Date().toISOString().split('T')[0];
+  dateInput.min = today;
+  dateInput.value = today;
+
+  selectedDate = today;
+
+  dateInput.onchange = () => {
+    selectedDate = dateInput.value;
+  };
+
+  document.getElementById('chooseDateModal').style.display = 'block';
+  document.getElementById('overlay').style.display = 'block';
+}
+
+function closeChooseDateModal() {
+  document.getElementById('chooseDateModal').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
+}
+
+function submitSelectedDate() {
+  if (!selectedDate) {
+    showNotification('Выберите дату');
+    return;
+  }
+
+  console.log('Дата выбрана:', selectedDate);
+
+  closeChooseDateModal();
+
+  // Переход к следующему шагу: выбор времени (свободные слоты)
+  openChooseSlotModal(); // эту функцию сделаем дальше
+}
+
+
 
 
 
