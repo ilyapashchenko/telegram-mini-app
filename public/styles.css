@@ -364,7 +364,7 @@ body {
   /* цвет иконки унаследовать */
 }
 
-/* модалка выбора мастера */
+/* модалка кнопки выбора мастера */
 #masterList button {
   margin-top: 10px;
   display: block;
@@ -375,4 +375,32 @@ body {
   color: white;
   border-radius: 8px;
   cursor: pointer;
+}
+
+/* Контейнер для списка услуг */
+.service-select-list {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  background: #f9f9f9;
+}
+
+/* Стиль для каждой услуги */
+.service-option {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.service-option:last-child {
+  border-bottom: none;
+}
+
+.service-option input[type="checkbox"] {
+  margin-right: 12px;
+  transform: scale(1.2);
 }
