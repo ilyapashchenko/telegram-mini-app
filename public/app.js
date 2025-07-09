@@ -454,6 +454,26 @@ function openChooseServiceModal(services) {
   document.getElementById('overlay').style.display = 'block';
 }
 
+// подгрузка чекбоксов
+function renderServices(services) {
+  const serviceSelectList = document.getElementById('serviceSelectList');
+  serviceSelectList.innerHTML = ''; // очищаем список перед вставкой
+
+  services.forEach(service => {
+    const label = document.createElement('label');
+    label.style.display = 'block'; // чтобы каждый чекбокс был с новой строки
+    label.innerHTML = `
+      <input type="checkbox" 
+             value="${service.service_id}" 
+             data-name="${service.service_name}" 
+             data-duration="${service.duration}">
+      ${service.service_name} (${service.duration} мин)
+    `;
+    serviceSelectList.appendChild(label);
+  });
+}
+
+
 
 
 // Автоматически скрывать меню при клике вне его
