@@ -298,9 +298,13 @@ async function deleteConfirmedService() {
 
 // Функция открытия модалки выбора мастера
 
+// ПЕРЕМЕННЫЕ
 let currentBookingPlaceId = null;
 let selectedMaster = null;
 let selectedServices = [];
+let selectedDate = null;
+let totalDuration = 0;
+
 
 
 function openChooseMasterModal(placeId) {
@@ -423,9 +427,11 @@ function submitSelectedServices() {
   console.log('Общая длительность:', totalDuration, 'минут');
 
   // дальше вызовем функцию показа календаря
-  const selectedDate = '2025-07-11'; // временная дата для теста
+  // const selectedDate = '2025-07-11'; // временная дата для теста
 
-  openChooseTimeModal(selectedDate, totalDuration);
+  // openChooseTimeModal(selectedDate, totalDuration);
+  // Показываем календарь вместо слотов сразу
+  openChooseDateModal();
 
 }
 
@@ -449,7 +455,6 @@ function renderServices(services) {
 }
 
 // ВЫБОР ДАТЫ
-let selectedDate = null;
 
 function openChooseDateModal() {
   const dateInput = document.getElementById('bookingDatePicker');
