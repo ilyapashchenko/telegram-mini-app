@@ -423,7 +423,10 @@ function submitSelectedServices() {
   console.log('Общая длительность:', totalDuration, 'минут');
 
   // дальше вызовем функцию показа календаря
-  openChooseDateModal(); // сделаем позже
+  const selectedDate = '2025-07-11'; // временная дата для теста
+
+  openChooseTimeModal(selectedDate, totalDuration);
+
 }
 
 // подгрузка чекбоксов
@@ -484,7 +487,68 @@ function submitSelectedDate() {
   openChooseSlotModal(); // эту функцию сделаем дальше
 }
 
+// МОДАЛКА ВЫБОРА ВРЕМЕНИ
+let selectedSlot = null;
 
+function openChooseTimeModal(date, totalDuration) {
+  fetch('/getFreeSlots', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      masterId: selectedMaster.master_id,
+      date: date,
+      duration: totalDuration
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        const slotList = document.getElementById('slotList');
+        slotList.innerHTML = '';
+
+        if (data.slots.length === 0) {
+          slotList.innerHTML = '<div>Нет доступного времени на эту дату</div>';
+          return;
+        }
+
+        data.slots.forEach(slot => {
+          const btn = document.createElement('button');
+          btn.textContent = slot;
+          btn.className = 'slot-button';
+
+          btn.onclick = () => {
+            // сбрасываем выделение
+            document.querySelectorAll('.slot-button').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
+            // запоминаем выбранный слот
+            selectedSlot = slot;
+
+            // активируем кнопку записи
+            document.getElementById('confirmBookingBtn').disabled = false;
+          };
+
+          slotList.appendChild(btn);
+        });
+
+        document.getElementById('chooseTimeModal').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+      } else {
+        showNotification('Ошибка при получении свободного времени');
+      }
+    })
+    .catch(err => {
+      console.error('Ошибка при получении слотов:', err);
+      showNotification('Ошибка сервера');
+    });
+}
+
+function closeChooseTimeModal() {
+  document.getElementById('chooseTimeModal').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
+  selectedSlot = null;
+  document.getElementById('confirmBookingBtn').disabled = true;
+}
 
 
 

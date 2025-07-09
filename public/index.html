@@ -88,6 +88,18 @@
     <button class="modal-button" onclick="submitSelectedDate()">Продолжить</button>
   </div>
 
+  <!-- МОДАЛКА ВЫБОРА ВРЕМЕНИ -->
+  <!-- Модалка выбора времени -->
+  <div class="modal" id="chooseTimeModal">
+    <button class="close-btn" onclick="closeChooseTimeModal()">×</button>
+    <div class="modal-title">Выберите время</div>
+
+    <div id="slotList" class="slot-list">
+      <!-- Слоты будут подставляться сюда -->
+    </div>
+
+    <button class="modal-button" id="confirmBookingBtn" onclick="submitBooking()" disabled>Записаться</button>
+  </div>
 
 
 
