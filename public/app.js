@@ -497,6 +497,9 @@ function submitSelectedDate() {
 let selectedSlot = null;
 
 function openChooseTimeModal(date, totalDuration) {
+  console.log('🔍 masterId:', selectedMaster?.master_id);
+  console.log('📅 date:', date);
+  console.log('⏱ duration:', totalDuration);
   fetch('/getFreeSlots', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
