@@ -228,7 +228,8 @@ body {
   height: 80;
   background-color: #E5EDF8;
   display: flex;
-  flex-direction: column; /* ← это важно */
+  flex-direction: column;
+  /* ← это важно */
   align-items: flex-start;
   padding: 10px;
   z-index: 1500;
@@ -361,4 +362,17 @@ body {
   /* размер иконки, подкорректируй под себя */
   color: inherit;
   /* цвет иконки унаследовать */
+}
+
+/* модалка выбора мастера */
+#masterList button {
+  margin-top: 10px;
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #0088cc;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
 }

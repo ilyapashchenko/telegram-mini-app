@@ -42,8 +42,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           bookBtn.textContent = 'Записаться';
           bookBtn.className = 'book-button';
           bookBtn.onclick = () => {
-            showNotification(`Вы хотите записаться в: ${place.place_name} (ID: ${place.place_id})`);
+            openChooseMasterModal(place.place_id);
           };
+
 
           // Добавляем кнопки в нужном порядке: сначала 🗑, потом "Записаться"
           buttonGroup.appendChild(deleteBtn);
@@ -293,6 +294,50 @@ async function deleteConfirmedService() {
     showNotification('Произошла ошибка при удалении');
     closeConfirmModal();
   }
+}
+
+// Функция открытия модалки выбора мастера
+
+let currentBookingPlaceId = null;
+
+function openChooseMasterModal(placeId) {
+  currentBookingPlaceId = placeId;
+  fetch('/getMastersByPlace', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ placeId })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        const masterList = document.getElementById('masterList');
+        masterList.innerHTML = '';
+
+        data.masters.forEach(master => {
+          const btn = document.createElement('button');
+          btn.textContent = master.name;
+          btn.onclick = () => {
+            // здесь пока просто лог, потом будет переход к услугам
+            console.log(`Выбран мастер: ${master.name} (ID: ${master.master_id})`);
+          };
+          masterList.appendChild(btn);
+        });
+
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('chooseMasterModal').style.display = 'block';
+      } else {
+        showNotification('Ошибка при получении мастеров');
+      }
+    })
+    .catch(err => {
+      console.error('Ошибка при получении мастеров:', err);
+      showNotification('Сетевая ошибка');
+    });
+}
+
+function closeChooseMasterModal() {
+  document.getElementById('chooseMasterModal').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
 }
 
 

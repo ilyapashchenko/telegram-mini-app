@@ -29,7 +29,7 @@ async function authHandler(req, res) {
         `INSERT INTO users (user_id, place_1, place_2, place_3, place_4, place_5, place_6, place_7, place_8, place_9, place_10) VALUES ($1, NULL, NULL, NULL, NULL)`,
         [userId]
       );
-      
+
       return res.json({
         success: true,
         user,
@@ -173,4 +173,4 @@ async function deletePlace(req, res) {
 
 
 
-module.exports = { authHandler, addPlaceById, deletePlace  };
+module.exports = { authHandler, addPlaceById, deletePlace };

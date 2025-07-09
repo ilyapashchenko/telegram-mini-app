@@ -59,6 +59,14 @@
     <button class="modal-button" onclick="deleteConfirmedService()">Удалить</button>
   </div>
 
+  <!-- модалка выбора мастера -->
+  <div class="modal" id="chooseMasterModal">
+    <button class="close-btn" onclick="closeChooseMasterModal()">×</button>
+    <div class="modal-title">Выберите мастера</div>
+    <div id="masterList"></div>
+  </div>
+
+
 
   <div class="overlay" id="overlay" onclick="closeAllModals()"></div>
   <script src="app.js"></script>

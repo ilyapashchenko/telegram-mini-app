@@ -1,10 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
+const masterController = require('../controllers/masterController');
+
 
 router.post('/auth', authController.authHandler);
 router.post('/addPlaceById', authController.addPlaceById);
 router.post('/deletePlace', authController.deletePlace);
+router.post('/getMastersByPlace', masterController.getMastersByPlace);
+
 
 module.exports = router;
 
