@@ -427,32 +427,32 @@ function submitSelectedServices() {
 }
 
 
-function openChooseServiceModal(services) {
-  const modal = document.getElementById('chooseServiceModal');
-  const list = document.getElementById('serviceSelectList');
-  list.innerHTML = ''; // Очистим перед показом
+// function openChooseServiceModal(services) {
+//   const modal = document.getElementById('chooseServiceModal');
+//   const list = document.getElementById('serviceSelectList');
+//   list.innerHTML = ''; // Очистим перед показом
 
-  services.forEach(service => {
-    const option = document.createElement('div');
-    option.className = 'service-option';
+//   services.forEach(service => {
+//     const option = document.createElement('div');
+//     option.className = 'service-option';
 
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.value = service.service_id;
-    checkbox.dataset.duration = service.duration; // если нужно
-    checkbox.dataset.name = service.name;
+//     const checkbox = document.createElement('input');
+//     checkbox.type = 'checkbox';
+//     checkbox.value = service.service_id;
+//     checkbox.dataset.duration = service.duration; // если нужно
+//     checkbox.dataset.name = service.name;
 
-    const label = document.createElement('label');
-    label.textContent = service.name;
+//     const label = document.createElement('label');
+//     label.textContent = service.name;
 
-    option.appendChild(checkbox);
-    option.appendChild(label);
-    list.appendChild(option);
-  });
+//     option.appendChild(checkbox);
+//     option.appendChild(label);
+//     list.appendChild(option);
+//   });
 
-  modal.style.display = 'block';
-  document.getElementById('overlay').style.display = 'block';
-}
+//   modal.style.display = 'block';
+//   document.getElementById('overlay').style.display = 'block';
+// }
 
 // подгрузка чекбоксов
 function renderServices(services) {
