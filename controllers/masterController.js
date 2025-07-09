@@ -20,6 +20,27 @@ async function getMastersByPlace(req, res) {
     }
 }
 
-module.exports = {
-    getMastersByPlace
-};
+// подгрузка услуг конкретного сервиса
+async function getServicesByPlace(req, res) {
+    const { placeId } = req.body;
+
+    if (!placeId) {
+        return res.status(400).json({ success: false, error: 'placeId is missing' });
+    }
+
+    try {
+        const { rows } = await pool.query(
+            'SELECT service_id, name, duration_minutes FROM services WHERE place_id = $1',
+            [placeId]
+        );
+
+        return res.json({ success: true, services: rows });
+    } catch (error) {
+        console.error('Ошибка при получении услуг:', error);
+        res.status(500).json({ success: false, error: 'Database error' });
+    }
+}
+
+
+module.exports = { getMastersByPlace, getServicesByPlace };
+

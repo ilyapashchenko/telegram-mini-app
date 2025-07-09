@@ -8,6 +8,7 @@ router.post('/auth', authController.authHandler);
 router.post('/addPlaceById', authController.addPlaceById);
 router.post('/deletePlace', authController.deletePlace);
 router.post('/getMastersByPlace', masterController.getMastersByPlace);
+router.post('/getServicesByPlace', masterController.getServicesByPlace);
 
 
 module.exports = router;

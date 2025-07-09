@@ -299,6 +299,9 @@ async function deleteConfirmedService() {
 // Функция открытия модалки выбора мастера
 
 let currentBookingPlaceId = null;
+let selectedMaster = null;
+let selectedServices = [];
+
 
 function openChooseMasterModal(placeId) {
   currentBookingPlaceId = placeId;
@@ -317,8 +320,9 @@ function openChooseMasterModal(placeId) {
           const btn = document.createElement('button');
           btn.textContent = master.name;
           btn.onclick = () => {
-            // здесь пока просто лог, потом будет переход к услугам
-            console.log(`Выбран мастер: ${master.name} (ID: ${master.master_id})`);
+            selectedMaster = master;
+            closeChooseMasterModal();
+            openChooseServiceModal(currentBookingPlaceId);
           };
           masterList.appendChild(btn);
         });
@@ -340,6 +344,80 @@ function closeChooseMasterModal() {
   document.getElementById('overlay').style.display = 'none';
 }
 
+// Функции показа и закрытия выбора услуг
+function openChooseServiceModal(placeId) {
+  fetch('/getServicesByPlace', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ placeId })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        const serviceList = document.getElementById('serviceList');
+        serviceList.innerHTML = '';
+        selectedServices = [];
+
+        data.services.forEach(service => {
+          const label = document.createElement('label');
+          label.style.display = 'block';
+          label.style.marginBottom = '8px';
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.value = service.service_id;
+
+          checkbox.onchange = () => {
+            if (checkbox.checked) {
+              selectedServices.push({
+                id: service.service_id,
+                name: service.name,
+                duration: service.duration_minutes
+              });
+            } else {
+              selectedServices = selectedServices.filter(s => s.id !== service.service_id);
+            }
+          };
+
+          label.appendChild(checkbox);
+          label.appendChild(document.createTextNode(` ${service.name} (${service.duration_minutes} мин)`));
+          serviceList.appendChild(label);
+        });
+
+        document.getElementById('chooseServiceModal').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+      } else {
+        showNotification('Не удалось получить список услуг');
+      }
+    })
+    .catch(err => {
+      console.error('Ошибка при получении услуг:', err);
+      showNotification('Ошибка сервера');
+    });
+}
+
+function closeChooseServiceModal() {
+  document.getElementById('chooseServiceModal').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
+}
+
+// кнопка продолжить после выбора услуг
+function submitSelectedServices() {
+  if (selectedServices.length === 0) {
+    showNotification('Выберите хотя бы одну услугу');
+    return;
+  }
+
+  closeChooseServiceModal();
+
+  const totalDuration = selectedServices.reduce((sum, s) => sum + s.duration, 0);
+  console.log('Выбран мастер:', selectedMaster.name);
+  console.log('Услуги:', selectedServices.map(s => s.name));
+  console.log('Общая длительность:', totalDuration, 'минут');
+
+  // дальше вызовем функцию показа календаря
+  openChooseDateModal(); // сделаем позже
+}
 
 
 

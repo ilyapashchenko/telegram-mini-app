@@ -66,6 +66,14 @@
     <div id="masterList"></div>
   </div>
 
+  <!-- модалка выбора услуги конкретного сервиса -->
+  <div class="modal" id="chooseServiceModal">
+    <button class="close-btn" onclick="closeChooseServiceModal()">×</button>
+    <div class="modal-title">Выберите услуги</div>
+    <div id="serviceList"></div>
+    <button class="modal-button" onclick="submitSelectedServices()">Продолжить</button>
+  </div>
+
 
 
   <div class="overlay" id="overlay" onclick="closeAllModals()"></div>
