@@ -12,6 +12,11 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
+// МАРШРУТ ДЛЯ ВЫБОРА ДОСТУПНОГО СЛОТА
+const bookingRoutes = require('./routes/bookingRoutes');
+app.use(bookingRoutes);
+
+
 // Подключаем все роуты
 app.use('/', authRoutes);
 
