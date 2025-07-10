@@ -435,6 +435,13 @@ function submitSelectedServices() {
 
 }
 
+function closeChooseServiceModal() {
+  document.getElementById('chooseServiceModal').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
+}
+
+
+
 // подгрузка чекбоксов
 function renderServices(services) {
   const serviceSelectList = document.getElementById('serviceSelectList');
