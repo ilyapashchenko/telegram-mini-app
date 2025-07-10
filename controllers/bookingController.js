@@ -49,4 +49,35 @@ async function getFreeSlots(req, res) {
     }
 }
 
-module.exports = { getFreeSlots };
+
+
+// СЕРВЕРНАЯ РУЧКА ДЛЯ ЗАПИСИ
+async function createBooking(req, res) {
+  const { masterId, date, time, services } = req.body;
+
+  if (!masterId || !date || !time || !services || services.length === 0) {
+    return res.status(400).json({ success: false, error: 'Недостаточно данных' });
+  }
+
+  try {
+    // Считаем суммарную длительность
+    const duration = services.reduce((sum, s) => sum + s.duration, 0);
+
+    // TODO: можно проверить, свободно ли это время, если хочешь
+
+    // Записываем в таблицу appointments
+    await pool.query(
+      `INSERT INTO appointments (master_id, date, time, duration)
+       VALUES ($1, $2, $3, $4)`,
+      [masterId, date, time, duration]
+    );
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Ошибка при создании записи:', error);
+    res.status(500).json({ success: false, error: 'Ошибка сервера' });
+  }
+}
+
+
+module.exports = { getFreeSlots, createBooking  };

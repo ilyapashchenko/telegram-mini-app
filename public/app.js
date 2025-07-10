@@ -613,6 +613,70 @@ function closeChooseTimeModal() {
 
 
 
+
+
+
+
+
+
+
+
+
+// ПОДТВЕРЖДЕНИЕ ЗАПИСИ
+function submitBooking() {
+  if (!selectedSlot || !selectedDate || !selectedMaster || selectedServices.length === 0) {
+    showNotification('Пожалуйста, выберите все данные для записи');
+    return;
+  }
+
+  const initData = window.Telegram.WebApp.initData;
+
+  fetch('/createBooking', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      initData,
+      masterId: selectedMaster.master_id,
+      date: selectedDate,
+      time: selectedSlot,
+      services: selectedServices
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        showNotification('Вы успешно записаны!');
+        closeChooseTimeModal(); // закрываем модалку
+      } else {
+        showNotification('Ошибка при записи: ' + data.error);
+      }
+    })
+    .catch(err => {
+      console.error('Ошибка при записи:', err);
+      showNotification('Ошибка сервера при записи');
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Автоматически скрывать меню при клике вне его
 document.addEventListener('click', function (event) {
   const menu = document.getElementById('dropdownMenu');

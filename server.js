@@ -16,6 +16,9 @@ app.use(express.static('public'));
 const bookingRoutes = require('./routes/bookingRoutes');
 app.use(bookingRoutes);
 
+// МАРШРУТ ДЛЯ ЗАПИСИ
+const bookingRoutes = require('./routes/bookingRoutes');
+app.use(bookingRoutes);
 
 // Подключаем все роуты
 app.use('/', authRoutes);
