@@ -53,31 +53,44 @@ async function getFreeSlots(req, res) {
 
 // СЕРВЕРНАЯ РУЧКА ДЛЯ ЗАПИСИ
 async function createBooking(req, res) {
-  const { masterId, date, time, services } = req.body;
+    try {
+        const { masterId, date, time, services } = req.body;
 
-  if (!masterId || !date || !time || !services || services.length === 0) {
-    return res.status(400).json({ success: false, error: 'Недостаточно данных' });
-  }
+        if (!masterId || !date || !time || !services || services.length === 0) {
+            return res.status(400).json({ success: false, error: 'Некорректные данные' });
+        }
 
-  try {
-    // Считаем суммарную длительность
-    const duration = services.reduce((sum, s) => sum + s.duration, 0);
+        // 🔍 Получаем place_id по masterId
+        const placeResult = await pool.query(
+            `SELECT place_id FROM masters WHERE master_id = $1`,
+            [masterId]
+        );
 
-    // TODO: можно проверить, свободно ли это время, если хочешь
+        if (placeResult.rows.length === 0) {
+            return res.status(400).json({ success: false, error: 'Мастер не найден' });
+        }
 
-    // Записываем в таблицу appointments
-    await pool.query(
-      `INSERT INTO appointments (master_id, date, time, duration)
-       VALUES ($1, $2, $3, $4)`,
-      [masterId, date, time, duration]
-    );
+        const placeId = placeResult.rows[0].place_id;
 
-    res.json({ success: true });
-  } catch (error) {
-    console.error('Ошибка при создании записи:', error);
-    res.status(500).json({ success: false, error: 'Ошибка сервера' });
-  }
+        const [hours, minutes] = time.split(':').map(Number);
+        const startTime = hours * 60 + minutes;
+        const totalDuration = services.reduce((sum, s) => sum + s.duration, 0);
+
+        // ✅ Добавляем запись
+        await pool.query(
+            `INSERT INTO appointments (master_id, place_id, date, time, duration)
+       VALUES ($1, $2, $3, $4, $5)`,
+            [masterId, placeId, date, time, totalDuration]
+        );
+
+        res.json({ success: true });
+
+    } catch (error) {
+        console.error('❌ Ошибка при создании записи:', error);
+        res.status(500).json({ success: false, error: 'Ошибка сервера' });
+    }
 }
 
 
-module.exports = { getFreeSlots, createBooking  };
+
+module.exports = { getFreeSlots, createBooking };
