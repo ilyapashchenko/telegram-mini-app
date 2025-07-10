@@ -304,9 +304,12 @@ let selectedMaster = null;
 let selectedServices = [];
 let selectedDate = null;
 let totalDuration = 0;
+let selectedSlot = null;
+let bookingDuration = 0;
 
 
 
+// ВЫБОР МАСТЕРА
 function openChooseMasterModal(placeId) {
   currentBookingPlaceId = placeId;
   fetch('/getMastersByPlace', {
@@ -348,7 +351,24 @@ function closeChooseMasterModal() {
   document.getElementById('overlay').style.display = 'none';
 }
 
-// Функции показа и закрытия выбора услуг
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ВЫБОР УСЛУГИ
 function openChooseServiceModal(placeId) {
   fetch('/getServicesByPlace', {
     method: 'POST',
@@ -421,7 +441,7 @@ function submitSelectedServices() {
 
   closeChooseServiceModal();
 
-  const totalDuration = selectedServices.reduce((sum, s) => sum + s.duration, 0);
+  bookingDuration = selectedServices.reduce((sum, s) => sum + s.duration, 0);
   console.log('Выбран мастер:', selectedMaster.name);
   console.log('Услуги:', selectedServices.map(s => s.name));
   console.log('Общая длительность:', totalDuration, 'минут');
@@ -439,8 +459,6 @@ function closeChooseServiceModal() {
   document.getElementById('chooseServiceModal').style.display = 'none';
   document.getElementById('overlay').style.display = 'none';
 }
-
-
 
 // подгрузка чекбоксов
 function renderServices(services) {
@@ -461,8 +479,19 @@ function renderServices(services) {
   });
 }
 
-// ВЫБОР ДАТЫ
 
+
+
+
+
+
+
+
+
+
+
+
+// ВЫБОР ДАТЫ
 function openChooseDateModal() {
   const dateInput = document.getElementById('bookingDatePicker');
 
@@ -496,13 +525,28 @@ function submitSelectedDate() {
   closeChooseDateModal();
 
   // Переход к следующему шагу: выбор времени (свободные слоты)
-  openChooseTimeModal();
+  openChooseTimeModal(selectedDate, bookingDuration);
   // openChooseSlotModal(); // эту функцию сделаем дальше
 }
 
-// МОДАЛКА ВЫБОРА ВРЕМЕНИ
-let selectedSlot = null;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//ВЫБОР ВРЕМЕНИ
 function openChooseTimeModal(date, totalDuration) {
   console.log('🔍 masterId:', selectedMaster?.master_id);
   console.log('📅 date:', date);
