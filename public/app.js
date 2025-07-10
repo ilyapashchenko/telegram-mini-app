@@ -371,6 +371,10 @@ function openChooseServiceModal(placeId) {
           checkbox.type = 'checkbox';
           checkbox.value = service.service_id;
 
+          // ✅ Добавляем необходимые data-атрибуты
+          checkbox.dataset.name = service.name;
+          checkbox.dataset.duration = service.duration_minutes;
+
           checkbox.onchange = () => {
             if (checkbox.checked) {
               selectedServices.push({
@@ -400,10 +404,6 @@ function openChooseServiceModal(placeId) {
     });
 }
 
-function closeChooseServiceModal() {
-  document.getElementById('chooseServiceModal').style.display = 'none';
-  document.getElementById('overlay').style.display = 'none';
-}
 
 // кнопка продолжить после выбора услуг
 function submitSelectedServices() {
