@@ -673,10 +673,10 @@ function switchTab(tab) {
   screens.forEach(screen => screen.style.display = 'none');
 
   // 👉 показываем заголовок только на главной вкладке
-  const title = document.getElementById('mainTitle');
-  if (title) {
-    title.style.display = (tab === 'home') ? 'block' : 'none';
-  }
+  // const title = document.getElementById('mainTitle');
+  // if (title) {
+  //   title.style.display = (tab === 'home') ? 'block' : 'none';
+  // }
 
   if (tab === 'home') {
     document.getElementById('mainScreen').style.display = 'block';
