@@ -52,32 +52,28 @@ async function getFreeSlots(req, res) {
 
 
 // СЕРВЕРНАЯ РУЧКА ДЛЯ ЗАПИСИ
-const { parseInitData } = require('@telegram-apps/init-data-node');
+const { validateInitData } = require('@telegram-apps/init-data-node');
 
 async function createBooking(req, res) {
     try {
         const { initData, masterId, date, time, services } = req.body;
 
-        // ✅ Проверка базовых данных
-        if (!initData || !masterId || !date || !time || !services || services.length === 0) {
+        // Проверяем initData
+        if (!initData) {
+            return res.status(400).json({ success: false, error: 'initData не передан' });
+        }
+
+        const validation = validateInitData(initData, process.env.TELEGRAM_BOT_TOKEN);
+        if (!validation.ok) {
+            return res.status(400).json({ success: false, error: 'Невалидный initData' });
+        }
+
+        // Проверяем остальные параметры
+        if (!masterId || !date || !time || !services || services.length === 0) {
             return res.status(400).json({ success: false, error: 'Некорректные данные' });
         }
 
-        // ✅ Проверка initData и извлечение user.id
-        let clientId;
-        try {
-            const { user } = parseInitData(initData, process.env.BOT_TOKEN);
-            clientId = user?.id;
-        } catch (e) {
-            console.error('❌ Ошибка валидации initData:', e);
-            return res.status(401).json({ success: false, error: 'Невалидный initData' });
-        }
-
-        if (!clientId) {
-            return res.status(400).json({ success: false, error: 'Не удалось определить пользователя' });
-        }
-
-        // 🔍 Получаем place_id по masterId
+        // Получаем place_id
         const placeResult = await pool.query(
             `SELECT place_id FROM masters WHERE master_id = $1`,
             [masterId]
@@ -89,25 +85,26 @@ async function createBooking(req, res) {
 
         const placeId = placeResult.rows[0].place_id;
 
-        // ⏱ Вычисляем длительность
+        // Получаем id пользователя из initData
+        const clientId = validation.user.id;
+
         const totalDuration = services.reduce((sum, s) => sum + s.duration, 0);
 
-        // ✅ Добавляем запись
+        // Добавляем запись с client_id
         await pool.query(
             `INSERT INTO appointments (master_id, place_id, date, time, duration, client_id)
-             VALUES ($1, $2, $3, $4, $5, $6)`,
+       VALUES ($1, $2, $3, $4, $5, $6)`,
             [masterId, placeId, date, time, totalDuration, clientId]
         );
 
         res.json({ success: true });
 
     } catch (error) {
-        console.error('❌ Ошибка при создании записи:', error);
+        console.error('Ошибка при создании записи:', error);
         res.status(500).json({ success: false, error: 'Ошибка сервера' });
     }
 }
 
-module.exports = { createBooking };
 
 
 
