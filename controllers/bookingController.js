@@ -61,7 +61,6 @@ function extractTelegramUserId(initData) {
 // СЕРВЕРНАЯ РУЧКА ДЛЯ ЗАПИСИ
 const { validateInitData } = require('@telegram-apps/init-data-node');
 
-const { validateInitData } = require('@telegram-apps/init-data-node');
 
 async function createBooking(req, res) {
     console.log('📥 Получен запрос на создание записи');
