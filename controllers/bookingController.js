@@ -64,7 +64,6 @@ const { initDataValidator } = require('@telegram-apps/init-data-node');
 const validator = initDataValidator(process.env.TELEGRAM_BOT_TOKEN);
 
 const { isValid, parse } = require('@telegram-apps/init-data-node');
-const pool = require('../db/pool');
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 
