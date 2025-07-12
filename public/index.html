@@ -20,24 +20,32 @@
     </div>
     <div class="title">Ваши сервисы:</div>
   </div>
-  <div class="content">
-    <!-- Отображение аватарки и имени пользователя -->
-    <!--
-    <div class="container">
-      <div class="header">
-        <div class="username" id="username">Имя пользователя</div>
-        <img class="avatar" id="avatar" src="" alt="Аватар">
-      </div>
-    -->
 
-    <div class="service-list" id="serviceList">
-      <!-- Сервисы будут подгружаться сюда -->
+  <!-- Контейнер всех экранов -->
+  <div class="content">
+
+    <!-- Главный экран -->
+    <div class="screen" id="mainScreen">
+      <div class="service-list" id="serviceList">
+        <!-- Сервисы будут подгружаться сюда -->
+      </div>
+      <button class="add-button" onclick="openModal()">Добавить</button>
     </div>
-    <button class="add-button" onclick="openModal()">Добавить</button>
+
+    <!-- Экран записей -->
+    <div class="screen" id="bookingsScreen" style="display: none;">
+      <div class="modal-title">Ваши записи</div>
+      <div id="bookingList">Загрузка записей...</div>
+    </div>
+
+    <!-- Экран профиля -->
+    <div class="screen" id="profileScreen" style="display: none;">
+      <div class="modal-title">Профиль</div>
+      <div style="padding: 1rem;">(Раздел профиля пока пуст)</div>
+    </div>
   </div>
 
-  <!-- Оверлей и модалки -->
-  <!-- <div class="overlay" id="overlay" onclick="closeAllModals()"></div> -->
+  <!-- Модалки и оверлеи -->
 
   <div class="modal" id="addModal">
     <button class="close-btn" onclick="closeModal()">×</button>
@@ -59,64 +67,43 @@
     <button class="modal-button" onclick="deleteConfirmedService()">Удалить</button>
   </div>
 
-  <!-- модалка выбора мастера -->
+  <!-- Модалка выбора мастера -->
   <div class="modal" id="chooseMasterModal">
     <button class="close-btn" onclick="closeChooseMasterModal()">×</button>
     <div class="modal-title">Выберите мастера</div>
     <div id="masterList"></div>
   </div>
 
-  <!-- модалка выбора услуги конкретного сервиса -->
+  <!-- Модалка выбора услуг -->
   <div class="modal" id="chooseServiceModal">
     <button class="close-btn" onclick="closeChooseServiceModal()">×</button>
     <div class="modal-title">Выберите услуги</div>
-
-    <div id="serviceSelectList" class="service-select-list">
-      <!-- сюда будут подставляться чекбоксы -->
-    </div>
-
+    <div id="serviceSelectList" class="service-select-list"></div>
     <button class="modal-button" onclick="submitSelectedServices()">Продолжить</button>
   </div>
 
-  <!-- модалка выбора даты  -->
+  <!-- Модалка выбора даты -->
   <div class="modal" id="chooseDateModal">
     <button class="close-btn" onclick="closeChooseDateModal()">×</button>
     <div class="modal-title">Выберите дату</div>
-
     <input type="date" id="bookingDatePicker" min="" class="date-input">
-
     <button class="modal-button" onclick="submitSelectedDate()">Продолжить</button>
   </div>
 
-  <!-- МОДАЛКА ВЫБОРА ВРЕМЕНИ -->
   <!-- Модалка выбора времени -->
   <div class="modal" id="chooseTimeModal">
     <button class="close-btn" onclick="closeChooseTimeModal()">×</button>
     <div class="modal-title">Выберите время</div>
-
-    <div id="slotList" class="slot-list">
-      <!-- Слоты будут подставляться сюда -->
-    </div>
-
+    <div id="slotList" class="slot-list"></div>
     <button class="modal-button" id="confirmBookingBtn" onclick="submitBooking()" disabled>Записаться</button>
   </div>
 
-
-
-  <!-- Нижнее навигационное меню -->
+  <!-- Нижнее меню -->
   <div class="bottom-nav">
-    <button onclick="switchTab('home')">
-      🏠<br><span>Главная</span>
-    </button>
-    <button onclick="switchTab('bookings')">
-      📅<br><span>Записи</span>
-    </button>
-    <button onclick="switchTab('profile')">
-      👤<br><span>Профиль</span>
-    </button>
+    <button onclick="switchTab('home')">🏠<br><span>Главная</span></button>
+    <button onclick="switchTab('bookings')">📅<br><span>Записи</span></button>
+    <button onclick="switchTab('profile')">👤<br><span>Профиль</span></button>
   </div>
-
-
 
   <div class="overlay" id="overlay" onclick="closeAllModals()"></div>
   <script src="app.js"></script>

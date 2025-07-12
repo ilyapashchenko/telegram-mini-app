@@ -668,10 +668,18 @@ function submitBooking() {
 
 // ПЕРЕКЛЮЧАТЕЛЬ МЕЖДУ ОСНОВНЫМИ ОКНАМИ 
 
-function switchTab(tabName) {
-  showNotification(`Переключено на вкладку: ${tabName}`);
-  // позже здесь можно будет переключать видимость блоков
+function switchTab(tab) {
+  const screens = document.querySelectorAll('.screen');
+  screens.forEach(screen => screen.style.display = 'none');
+
+  if (tab === 'home') {
+    document.getElementById('mainScreen').style.display = 'block';
+  } else if (tab === 'bookings') {
+    document.getElementById('bookingsScreen').style.display = 'block';
+    loadUserBookings(); // вызываем функцию загрузки записей
+  }
 }
+
 
 
 
