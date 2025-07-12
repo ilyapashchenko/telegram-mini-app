@@ -691,6 +691,7 @@ function switchTab(tab) {
     document.getElementById('profileScreen').style.display = 'block';
     if (title) {
       title.style.display = 'block';
+      title.textContent = none;
       // title.textContent = 'Профиль';
     }
   }
