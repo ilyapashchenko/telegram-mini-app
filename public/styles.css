@@ -477,7 +477,6 @@ body {
 
 
 /* СТИЛЬ ОКНА С ЗАПИСЯМИ */
-#bookingsScreen {
-  padding-top: 60px;
-  /* или больше, если нужно ниже */
+#bookingList {
+  margin-top: 60px;
 }
