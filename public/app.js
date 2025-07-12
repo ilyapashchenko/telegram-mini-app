@@ -672,33 +672,17 @@ function switchTab(tab) {
   const screens = document.querySelectorAll('.screen');
   screens.forEach(screen => screen.style.display = 'none');
 
-  // Заголовок только на главной
-  const mainTitle = document.getElementById('mainTitle');
-  if (mainTitle) {
-    mainTitle.style.display = tab === 'home' ? 'block' : 'none';
+  // 👉 показываем заголовок только на главной вкладке
+  const title = document.getElementById('mainTitle');
+  if (title) {
+    title.style.display = (tab === 'home') ? 'block' : 'none';
   }
 
-  const headerHeight = window.Telegram.WebApp.headerHeight || 60;
-
-  const bookingsScreen = document.getElementById('bookingsScreen');
-  const profileScreen = document.getElementById('profileScreen');
-  const mainScreen = document.getElementById('mainScreen');
-
-  // сбрасываем отступы
-  bookingsScreen.style.paddingTop = '0';
-  profileScreen.style.paddingTop = '0';
-  mainScreen.style.paddingTop = '0';
-
   if (tab === 'home') {
-    mainScreen.style.display = 'block';
-    mainScreen.style.paddingTop = `${headerHeight + 10}px`;
+    document.getElementById('mainScreen').style.display = 'block';
   } else if (tab === 'bookings') {
-    bookingsScreen.style.display = 'block';
-    bookingsScreen.style.paddingTop = `${headerHeight + 10}px`;
+    document.getElementById('bookingsScreen').style.display = 'block';
     loadBookings();
-  } else if (tab === 'profile') {
-    profileScreen.style.display = 'block';
-    profileScreen.style.paddingTop = `${headerHeight + 10}px`;
   }
 }
 
