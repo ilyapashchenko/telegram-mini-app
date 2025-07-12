@@ -704,11 +704,14 @@ function loadBookings() {
             year: 'numeric'
           });
 
+          const formattedTime = booking.time.slice(0, 5); // Обрезаем до HH:MM
+
           const div = document.createElement('div');
           div.className = 'booking-card';
           div.innerHTML = `
             <strong>${booking.service_name}</strong><br>
-            ${formattedDate} в ${booking.time}<br>
+            Дата: ${formattedDate}<br>
+            Время: ${formattedTime}<br>
             Мастер: ${booking.master_name}<br>
             Длительность: ${booking.duration} мин
           `;
@@ -723,6 +726,7 @@ function loadBookings() {
       showNotification('Не удалось загрузить записи');
     });
 }
+
 
 
 
