@@ -698,11 +698,17 @@ function loadBookings() {
 
       if (data.success && data.bookings.length > 0) {
         data.bookings.forEach(booking => {
+          const formattedDate = new Date(booking.date).toLocaleDateString('ru-RU', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+          });
+
           const div = document.createElement('div');
           div.className = 'booking-card';
           div.innerHTML = `
             <strong>${booking.service_name}</strong><br>
-            ${booking.date} в ${booking.time}<br>
+            ${formattedDate} в ${booking.time}<br>
             Мастер: ${booking.master_name}<br>
             Длительность: ${booking.duration} мин
           `;
@@ -717,6 +723,7 @@ function loadBookings() {
       showNotification('Не удалось загрузить записи');
     });
 }
+
 
 
 
