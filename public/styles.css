@@ -190,9 +190,9 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  /* height: 80;
-  сейчас сделал так */
-  height: 80px;
+  height: 80;
+  /* сейчас сделал так
+  height: 80px; */
   background-color: #E5EDF8;
   display: flex;
   flex-direction: column;
@@ -421,6 +421,7 @@ body {
 /* ЧТОБЫ КОНТЕНТ НА ЭКРАНЕ НЕ ПЕРЕСЕКАЛСЯ С НИЖНИМ МЕНЮ */
 
 .screen {
+  padding-top: 80px;
   display: none;
   padding-bottom: 60px;
   /* чтобы не пересекалось с нижним меню */
@@ -442,7 +443,7 @@ body {
   padding: 10px;
 }
 
-#bookingsScreen {
+/* #bookingsScreen {
   padding-top: 80px;
-  /* подгоняем под высоту header-bar */
-}
+  подгоняем под высоту header-bar
+} */
