@@ -53,7 +53,6 @@ async function getFreeSlots(req, res) {
 
 // СЕРВЕРНАЯ РУЧКА ДЛЯ ЗАПИСИ
 const { parseInitData } = require('@telegram-apps/init-data-node');
-const pool = require('../db/pool');
 
 async function createBooking(req, res) {
     try {
