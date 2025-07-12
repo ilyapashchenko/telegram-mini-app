@@ -59,7 +59,6 @@ function extractTelegramUserId(initData) {
 }
 
 // СЕРВЕРНАЯ РУЧКА ДЛЯ ЗАПИСИ
-const { initDataValidator } = require('@telegram-apps/init-data-node');
 
 const validator = initDataValidator(process.env.TELEGRAM_BOT_TOKEN);
 
