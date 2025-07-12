@@ -421,7 +421,7 @@ body {
 /* ЧТОБЫ КОНТЕНТ НА ЭКРАНЕ НЕ ПЕРЕСЕКАЛСЯ С НИЖНИМ МЕНЮ */
 
 .screen {
-  padding-top: 80px;
+  /* padding-top: 80px; */
   display: none;
   padding-bottom: 60px;
   /* чтобы не пересекалось с нижним меню */
