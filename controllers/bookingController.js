@@ -59,38 +59,36 @@ function extractTelegramUserId(initData) {
 }
 
 // СЕРВЕРНАЯ РУЧКА ДЛЯ ЗАПИСИ
-const { validateInitData } = require('@telegram-apps/init-data-node');
+const { initDataValidator } = require('@telegram-apps/init-data-node');
 
+const validator = initDataValidator(process.env.TELEGRAM_BOT_TOKEN);
 
 async function createBooking(req, res) {
     console.log('📥 Получен запрос на создание записи');
+    const { initData, masterId, date, time, services } = req.body;
+
+    console.log('🔍 Данные запроса:', req.body);
+
+    if (!initData) {
+        return res.status(400).json({ success: false, error: 'initData не передан' });
+    }
+
+    const validation = validator(initData);
+    if (!validation.ok) {
+        return res.status(400).json({ success: false, error: 'Невалидный initData' });
+    }
+
+    if (!masterId || !date || !time || !services || services.length === 0) {
+        return res.status(400).json({ success: false, error: 'Некорректные данные' });
+    }
+
     try {
-        const { initData, masterId, date, time, services } = req.body;
-        console.log('🔍 Данные запроса:', { masterId, date, time, services });
-
-        if (!initData) {
-            console.log('❌ initData не передан');
-            return res.status(400).json({ success: false, error: 'initData не передан' });
-        }
-
-        const validation = validateInitData(initData, process.env.TELEGRAM_BOT_TOKEN);
-        if (!validation.ok) {
-            console.log('❌ Невалидный initData:', validation);
-            return res.status(400).json({ success: false, error: 'Невалидный initData' });
-        }
-
-        if (!masterId || !date || !time || !services || services.length === 0) {
-            console.log('❌ Некорректные данные:', { masterId, date, time, services });
-            return res.status(400).json({ success: false, error: 'Некорректные данные' });
-        }
-
         const placeResult = await pool.query(
             `SELECT place_id FROM masters WHERE master_id = $1`,
             [masterId]
         );
 
         if (placeResult.rows.length === 0) {
-            console.log('❌ Мастер не найден с id:', masterId);
             return res.status(400).json({ success: false, error: 'Мастер не найден' });
         }
 
@@ -98,33 +96,12 @@ async function createBooking(req, res) {
         const clientId = validation.user.id;
         const totalDuration = services.reduce((sum, s) => sum + s.duration, 0);
 
-        console.log('📌 Запись в appointments:', {
-            masterId, placeId, date, time, totalDuration, clientId
-        });
-
-        const insertResult = await pool.query(
+        await pool.query(
             `INSERT INTO appointments (master_id, place_id, date, time, duration, client_id)
-       VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
+       VALUES ($1, $2, $3, $4, $5, $6)`,
             [masterId, placeId, date, time, totalDuration, clientId]
         );
 
-        const appointmentId = insertResult.rows[0].id;
-        console.log('✅ Запись добавлена, appointment_id:', appointmentId);
-
-        for (const service of services) {
-            console.log('🛠 Добавляем услугу в appointment_services:', {
-                appointmentId,
-                serviceId: service.id
-            });
-
-            await pool.query(
-                `INSERT INTO appointment_services (appointment_id, service_id)
-         VALUES ($1, $2)`,
-                [appointmentId, service.id]
-            );
-        }
-
-        console.log('🎉 Все услуги добавлены. Запись завершена.');
         res.json({ success: true });
 
     } catch (error) {
