@@ -672,19 +672,30 @@ function switchTab(tab) {
   const screens = document.querySelectorAll('.screen');
   screens.forEach(screen => screen.style.display = 'none');
 
-  // 👉 показываем заголовок только на главной вкладке
-  // const title = document.getElementById('mainTitle');
-  // if (title) {
-  //   title.style.display = (tab === 'home') ? 'block' : 'none';
-  // }
+  const title = document.getElementById('mainTitle');
 
   if (tab === 'home') {
     document.getElementById('mainScreen').style.display = 'block';
+    if (title) {
+      title.style.display = 'block';
+      title.textContent = 'Ваши сервисы:';
+    }
   } else if (tab === 'bookings') {
     document.getElementById('bookingsScreen').style.display = 'block';
     loadBookings();
+    if (title) {
+      title.style.display = 'block';
+      title.textContent = 'Ваши записи:';
+    }
+  } else if (tab === 'profile') {
+    document.getElementById('profileScreen').style.display = 'block';
+    if (title) {
+      title.style.display = 'block';
+      title.textContent = 'Профиль';
+    }
   }
 }
+
 
 
 
