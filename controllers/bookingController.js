@@ -93,4 +93,44 @@ async function createBooking(req, res) {
 
 
 
+
+
+
+
+
+
+
+// ПОДГРУЗКА ЗАПИСЕЙ ВО ВТОРОМ ОКНЕ
+async function getUserBookings(req, res) {
+    const { initData } = req.body;
+
+    if (!initData) {
+        return res.status(400).json({ success: false, error: 'initData is required' });
+    }
+
+    try {
+        const tgUserId = extractTelegramUserId(initData); // тебе нужно реализовать эту функцию (или заглушку)
+
+        const result = await pool.query(`
+      SELECT a.date, a.time, a.duration, m.name AS master_name, s.name AS service_name
+      FROM appointments a
+      JOIN masters m ON a.master_id = m.master_id
+      JOIN appointment_services aps ON aps.appointment_id = a.id
+      JOIN services s ON aps.service_id = s.service_id
+      WHERE a.telegram_user_id = $1
+      ORDER BY a.date, a.time
+    `, [tgUserId]);
+
+        res.json({ success: true, bookings: result.rows });
+    } catch (error) {
+        console.error('Ошибка при получении записей:', error);
+        res.status(500).json({ success: false, error: 'Ошибка сервера' });
+    }
+}
+
+
+
+
+
+
 module.exports = { getFreeSlots, createBooking };

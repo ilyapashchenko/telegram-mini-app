@@ -676,12 +676,47 @@ function switchTab(tab) {
     document.getElementById('mainScreen').style.display = 'block';
   } else if (tab === 'bookings') {
     document.getElementById('bookingsScreen').style.display = 'block';
-    loadUserBookings(); // вызываем функцию загрузки записей
+    loadBookings(); // вызываем функцию загрузки записей
   }
 }
 
 
 
+// ФУНКЦИЯ ЗАГРУЗКИ ЗАПИСЕЙ
+function loadBookings() {
+  const initData = window.Telegram.WebApp.initData;
+
+  fetch('/getUserBookings', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ initData })
+  })
+    .then(res => res.json())
+    .then(data => {
+      const list = document.getElementById('bookingList');
+      list.innerHTML = '';
+
+      if (data.success && data.bookings.length > 0) {
+        data.bookings.forEach(booking => {
+          const div = document.createElement('div');
+          div.className = 'booking-card';
+          div.innerHTML = `
+            <strong>${booking.service_name}</strong><br>
+            ${booking.date} в ${booking.time}<br>
+            Мастер: ${booking.master_name}<br>
+            Длительность: ${booking.duration} мин
+          `;
+          list.appendChild(div);
+        });
+      } else {
+        list.innerHTML = '<div>У вас пока нет записей.</div>';
+      }
+    })
+    .catch(err => {
+      console.error('Ошибка при получении записей:', err);
+      showNotification('Не удалось загрузить записи');
+    });
+}
 
 
 
