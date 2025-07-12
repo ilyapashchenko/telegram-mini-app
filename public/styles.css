@@ -474,3 +474,10 @@ body {
   border-radius: 10px;
   padding: 10px;
 }
+
+
+/* СТИЛЬ ОКНА С ЗАПИСЯМИ */
+#bookingsScreen {
+  padding-top: 60px;
+  /* или больше, если нужно ниже */
+}
