@@ -443,7 +443,7 @@ body {
   padding: 10px;
 }
 
-/* #bookingsScreen {
+#bookingsScreen {
   padding-top: 80px;
-  подгоняем под высоту header-bar
-} */
+  z-index: 1300;
+}
