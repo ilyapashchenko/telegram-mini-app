@@ -724,6 +724,10 @@ function loadBookings() {
 
 
 
+// ПОКАЗЫВАТЬ ГЛАВНЫЙ ЭКРАН ПРИ ЗАПУСКЕ
+document.addEventListener('DOMContentLoaded', () => {
+  switchTab('home');
+});
 
 
 
