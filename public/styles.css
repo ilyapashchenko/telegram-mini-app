@@ -190,7 +190,9 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 80;
+  /* height: 80;
+  сейчас сделал так */
+  height: 80px;
   background-color: #E5EDF8;
   display: flex;
   flex-direction: column;
@@ -438,4 +440,9 @@ body {
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 10px;
+}
+
+#bookingsScreen {
+  padding-top: 80px;
+  /* подгоняем под высоту header-bar */
 }
