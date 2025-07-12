@@ -431,7 +431,6 @@ body {
   flex-direction: column;
   gap: 12px;
   padding: 16px;
-  padding-top: 60px;
 }
 
 .booking-card {
@@ -439,4 +438,8 @@ body {
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 10px;
+}
+
+#bookingsScreen {
+  padding-top: 150px;
 }
