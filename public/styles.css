@@ -443,7 +443,7 @@ body {
   padding: 10px;
 }
 
-/* #bookingsScreen {
-  padding-top: 80px;
-  z-index: 1300;
-} */
+#bookingsScreen {
+  padding-top: 85px;
+  /* z-index: 1300; */
+}
