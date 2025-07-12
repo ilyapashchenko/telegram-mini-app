@@ -63,26 +63,33 @@ const { initDataValidator } = require('@telegram-apps/init-data-node');
 
 const validator = initDataValidator(process.env.TELEGRAM_BOT_TOKEN);
 
+const { isValid, parse } = require('@telegram-apps/init-data-node');
+const pool = require('../db/pool');
+
+const BOT_TOKEN = process.env.BOT_TOKEN;
+
 async function createBooking(req, res) {
     console.log('📥 Получен запрос на создание записи');
-    const { initData, masterId, date, time, services } = req.body;
-
-    console.log('🔍 Данные запроса:', req.body);
-
-    if (!initData) {
-        return res.status(400).json({ success: false, error: 'initData не передан' });
-    }
-
-    const validation = validator(initData);
-    if (!validation.ok) {
-        return res.status(400).json({ success: false, error: 'Невалидный initData' });
-    }
-
-    if (!masterId || !date || !time || !services || services.length === 0) {
-        return res.status(400).json({ success: false, error: 'Некорректные данные' });
-    }
 
     try {
+        const { initData, masterId, date, time, services } = req.body;
+
+        console.log('🔍 Данные запроса:', { masterId, date, time, services });
+
+        if (!initData || !masterId || !date || !time || !services || services.length === 0) {
+            return res.status(400).json({ success: false, error: 'Некорректные данные' });
+        }
+
+        // 🔐 Проверка initData
+        const valid = isValid(initData, BOT_TOKEN);
+        if (!valid) {
+            return res.status(401).json({ success: false, error: 'Невалидный initData' });
+        }
+
+        const user = parse(initData).user;
+        const clientId = user.id;
+
+        // 🔎 Получаем place_id по masterId
         const placeResult = await pool.query(
             `SELECT place_id FROM masters WHERE master_id = $1`,
             [masterId]
@@ -93,9 +100,10 @@ async function createBooking(req, res) {
         }
 
         const placeId = placeResult.rows[0].place_id;
-        const clientId = validation.user.id;
+
         const totalDuration = services.reduce((sum, s) => sum + s.duration, 0);
 
+        // ✅ Добавляем запись
         await pool.query(
             `INSERT INTO appointments (master_id, place_id, date, time, duration, client_id)
        VALUES ($1, $2, $3, $4, $5, $6)`,
@@ -109,6 +117,7 @@ async function createBooking(req, res) {
         res.status(500).json({ success: false, error: 'Ошибка сервера' });
     }
 }
+
 
 
 
