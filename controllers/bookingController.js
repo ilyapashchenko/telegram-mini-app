@@ -133,4 +133,4 @@ async function getUserBookings(req, res) {
 
 
 
-module.exports = { getFreeSlots, createBooking };
+module.exports = { getFreeSlots, createBooking, getUserBookings };
