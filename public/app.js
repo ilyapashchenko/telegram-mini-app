@@ -666,6 +666,12 @@ function submitBooking() {
 
 
 
+// ПЕРЕКЛЮЧАТЕЛЬ МЕЖДУ ОСНОВНЫМИ ОКНАМИ 
+
+function switchTab(tabName) {
+  showNotification(`Переключено на вкладку: ${tabName}`);
+  // позже здесь можно будет переключать видимость блоков
+}
 
 
 
@@ -677,14 +683,15 @@ function submitBooking() {
 
 
 
-// Автоматически скрывать меню при клике вне его
-document.addEventListener('click', function (event) {
-  const menu = document.getElementById('dropdownMenu');
-  const button = document.getElementById('menuButton');
-  if (menu.style.display === 'block' &&
-    !menu.contains(event.target) &&
-    event.target !== button) {
-    menu.style.display = 'none';
-    button.textContent = '☰';
-  }
-});
+
+// // Автоматически скрывать меню при клике вне его
+// document.addEventListener('click', function (event) {
+//   const menu = document.getElementById('dropdownMenu');
+//   const button = document.getElementById('menuButton');
+//   if (menu.style.display === 'block' &&
+//     !menu.contains(event.target) &&
+//     event.target !== button) {
+//     menu.style.display = 'none';
+//     button.textContent = '☰';
+//   }
+// });
