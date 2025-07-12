@@ -50,6 +50,13 @@ async function getFreeSlots(req, res) {
 }
 
 
+function extractTelegramUserId(initData) {
+    const validation = validateInitData(initData, process.env.TELEGRAM_BOT_TOKEN);
+    if (!validation.ok) {
+        throw new Error('Invalid initData');
+    }
+    return validation.user.id;
+}
 
 // СЕРВЕРНАЯ РУЧКА ДЛЯ ЗАПИСИ
 const { validateInitData } = require('@telegram-apps/init-data-node');
@@ -58,7 +65,6 @@ async function createBooking(req, res) {
     try {
         const { initData, masterId, date, time, services } = req.body;
 
-        // Проверяем initData
         if (!initData) {
             return res.status(400).json({ success: false, error: 'initData не передан' });
         }
@@ -68,12 +74,10 @@ async function createBooking(req, res) {
             return res.status(400).json({ success: false, error: 'Невалидный initData' });
         }
 
-        // Проверяем остальные параметры
         if (!masterId || !date || !time || !services || services.length === 0) {
             return res.status(400).json({ success: false, error: 'Некорректные данные' });
         }
 
-        // Получаем place_id
         const placeResult = await pool.query(
             `SELECT place_id FROM masters WHERE master_id = $1`,
             [masterId]
@@ -84,18 +88,26 @@ async function createBooking(req, res) {
         }
 
         const placeId = placeResult.rows[0].place_id;
-
-        // Получаем id пользователя из initData
         const clientId = validation.user.id;
-
         const totalDuration = services.reduce((sum, s) => sum + s.duration, 0);
 
-        // Добавляем запись с client_id
-        await pool.query(
+        // Вставляем запись и получаем id
+        const insertResult = await pool.query(
             `INSERT INTO appointments (master_id, place_id, date, time, duration, client_id)
-       VALUES ($1, $2, $3, $4, $5, $6)`,
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
             [masterId, placeId, date, time, totalDuration, clientId]
         );
+
+        const appointmentId = insertResult.rows[0].id;
+
+        // Вставляем услуги в appointment_services
+        for (const service of services) {
+            await pool.query(
+                `INSERT INTO appointment_services (appointment_id, service_id)
+         VALUES ($1, $2)`,
+                [appointmentId, service.id]
+            );
+        }
 
         res.json({ success: true });
 
@@ -125,7 +137,7 @@ async function getUserBookings(req, res) {
     }
 
     try {
-        const tgUserId = extractTelegramUserId(initData); // тебе нужно реализовать эту функцию (или заглушку)
+        const tgUserId = extractTelegramUserId(initData);
 
         const result = await pool.query(`
       SELECT a.date, a.time, a.duration, m.name AS master_name, s.name AS service_name
@@ -133,7 +145,7 @@ async function getUserBookings(req, res) {
       JOIN masters m ON a.master_id = m.master_id
       JOIN appointment_services aps ON aps.appointment_id = a.id
       JOIN services s ON aps.service_id = s.service_id
-      WHERE a.telegram_user_id = $1
+      WHERE a.client_id = $1
       ORDER BY a.date, a.time
     `, [tgUserId]);
 
@@ -143,6 +155,7 @@ async function getUserBookings(req, res) {
         res.status(500).json({ success: false, error: 'Ошибка сервера' });
     }
 }
+
 
 
 
