@@ -102,12 +102,23 @@ async function createBooking(req, res) {
 
         const totalDuration = services.reduce((sum, s) => sum + s.duration, 0);
 
-        // ✅ Добавляем запись
-        await pool.query(
+        // ✅ Добавляем запись и получаем appointment_id
+        const insertAppointment = await pool.query(
             `INSERT INTO appointments (master_id, place_id, date, time, duration, client_id)
-       VALUES ($1, $2, $3, $4, $5, $6)`,
+             VALUES ($1, $2, $3, $4, $5, $6) RETURNING appointment_id`,
             [masterId, placeId, date, time, totalDuration, clientId]
         );
+
+        const appointmentId = insertAppointment.rows[0].appointment_id;
+
+        // 🔁 Вставляем связи в appointment_services
+        for (const service of services) {
+            await pool.query(
+                `INSERT INTO appointment_services (appointment_id, service_id)
+                 VALUES ($1, $2)`,
+                [appointmentId, service.id]
+            );
+        }
 
         res.json({ success: true });
 
@@ -116,6 +127,7 @@ async function createBooking(req, res) {
         res.status(500).json({ success: false, error: 'Ошибка сервера' });
     }
 }
+
 
 
 
