@@ -49,14 +49,15 @@ async function getFreeSlots(req, res) {
     }
 }
 
-
 function extractTelegramUserId(initData) {
-    const validation = validateInitData(initData, process.env.TELEGRAM_BOT_TOKEN);
-    if (!validation.ok) {
-        throw new Error('Invalid initData');
+    const valid = isValid(initData, BOT_TOKEN);
+    if (!valid) {
+        throw new Error('Невалидный initData');
     }
-    return validation.user.id;
+    const user = parse(initData).user;
+    return user.id;
 }
+
 
 // СЕРВЕРНАЯ РУЧКА ДЛЯ ЗАПИСИ
 
