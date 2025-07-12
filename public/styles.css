@@ -444,10 +444,17 @@ body {
   margin-top: 2px;
 }
 
+.bottom-nav button.active {
+  color: #1a73e8;
+  font-weight: bold;
+}
+
+
 
 /* ЧТОБЫ КОНТЕНТ НА ЭКРАНЕ НЕ ПЕРЕСЕКАЛСЯ С НИЖНИМ МЕНЮ */
 
 .screen {
   display: none;
-  padding-bottom: 60px; /* чтобы не пересекалось с нижним меню */
+  padding-bottom: 60px;
+  /* чтобы не пересекалось с нижним меню */
 }
