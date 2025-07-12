@@ -1,6 +1,12 @@
 // controllers/bookingController.js
-
+// КОНСТАНТЫ
 const pool = require('../db/pool');
+const { isValid, parse } = require('@telegram-apps/init-data-node');
+const BOT_TOKEN = process.env.BOT_TOKEN;
+
+
+
+
 
 async function getFreeSlots(req, res) {
     console.log('🔧 Запрос на /getFreeSlots', req.body);
@@ -60,10 +66,6 @@ function extractTelegramUserId(initData) {
 
 
 // СЕРВЕРНАЯ РУЧКА ДЛЯ ЗАПИСИ
-
-const { isValid, parse } = require('@telegram-apps/init-data-node');
-
-const BOT_TOKEN = process.env.BOT_TOKEN;
 
 async function createBooking(req, res) {
     console.log('📥 Получен запрос на создание записи');
