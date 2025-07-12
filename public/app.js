@@ -672,13 +672,20 @@ function switchTab(tab) {
   const screens = document.querySelectorAll('.screen');
   screens.forEach(screen => screen.style.display = 'none');
 
+  // 👉 показываем заголовок только на главной вкладке
+  const title = document.getElementById('mainTitle');
+  if (title) {
+    title.style.display = (tab === 'home') ? 'block' : 'none';
+  }
+
   if (tab === 'home') {
     document.getElementById('mainScreen').style.display = 'block';
   } else if (tab === 'bookings') {
     document.getElementById('bookingsScreen').style.display = 'block';
-    loadBookings(); // вызываем функцию загрузки записей
+    loadBookings();
   }
 }
+
 
 
 
