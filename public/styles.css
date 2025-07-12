@@ -156,10 +156,6 @@ body {
   /* Немного светлее при наведении */
 }
 
-/* #confirmModal {
-  position: relative; 
-} */
-
 #confirmModal {
   position: fixed;
   top: 35%;
@@ -186,37 +182,6 @@ body {
   color: black;
   cursor: pointer;
 }
-
-
-
-/* #cancelDeleteBtn {
-  all: unset;
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  color: black;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-  z-index: 1100;
-} */
-
-/* #cancelDeleteBtn {
-  background-color: white;
-  color: #333;
-  border: 1px solid #aaa;
-  font-weight: bold;
-}
-
-#cancelDeleteBtn:hover {
-  background-color: #eee;
-} */
-
-
-/* #confirmModal {
-  text-align: center;
-  z-index: 3000;
-} */
 
 
 /* оформление гамбургера */
@@ -305,7 +270,7 @@ body {
 
 
 .content {
-  margin-top: 50px;
+  /* margin-top: 50px; */
   /* отступ равен высоте header-bar */
   padding: 16px;
 }
@@ -473,10 +438,4 @@ body {
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 10px;
-}
-
-
-/* СТИЛЬ ОКНА С ЗАПИСЯМИ */
-#bookingList {
-  margin-top: 60px;
 }
