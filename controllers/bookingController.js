@@ -165,6 +165,7 @@ JOIN services s ON s.service_id = aps.service_id
 WHERE a.place_id = $1
 ORDER BY a.date, a.time;
 
+
 `, [tgUserId]);
 
 
