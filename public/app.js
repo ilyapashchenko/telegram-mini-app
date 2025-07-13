@@ -687,14 +687,15 @@ function switchTab(tab) {
       title.style.display = 'block';
       title.textContent = 'Ваши записи:';
     }
-  } else if (tab === 'profile') {
-    document.getElementById('profileScreen').style.display = 'block';
+  } else if (tab === 'business') {
+    document.getElementById('businessScreen').style.display = 'block';
     if (title) {
-      title.style.display = 'none';
-      title.textContent = 'Профиль';
+      title.style.display = 'none'; // спрячем основной заголовок, т.к. у бизнес-экрана свой заголовок
     }
+    loadBusinessContent(); // функция для загрузки контента бизнес-экрана
   }
 }
+
 
 
 
@@ -747,7 +748,88 @@ function loadBookings() {
 }
 
 
+// ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНТЕНТА ДЛЯ ЭКРАНА БИЗНЕС
+async function loadBusinessContent() {
+  const businessContent = document.getElementById('businessContent');
+  businessContent.innerHTML = 'Загрузка...';
 
+  try {
+    // 1) Получить initData пользователя (через Telegram)
+    const initData = window.Telegram.WebApp.initData;
+
+    // 2) Отправить запрос на сервер, чтобы определить роль пользователя
+    const response = await fetch('/api/getUserRole', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData })
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      businessContent.innerHTML = '<p>Не удалось определить роль пользователя.</p>';
+      return;
+    }
+
+    if (data.role === 'client') {
+      // Обычный пользователь — текст + кнопка
+      businessContent.innerHTML = `
+        <p>Если вы хотите подключить свой бизнес к нашему сервису, напишите нам</p>
+        <button id="contactButton" class="modal-button">Связаться</button>
+      `;
+
+      document.getElementById('contactButton').onclick = () => {
+        // вызов той же функции, что и кнопка поддержки
+        showSupport();
+      };
+
+    } else if (data.role === 'staff') {
+      // Сотрудник — показать список записей (загрузить с сервера)
+      businessContent.innerHTML = '<p>Загрузка записей клиентов...</p>';
+
+      const bookingsResponse = await fetch('/api/getStaffBookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initData })
+      });
+
+      const bookingsData = await bookingsResponse.json();
+
+      if (!bookingsData.success) {
+        businessContent.innerHTML = '<p>Ошибка при загрузке записей.</p>';
+        return;
+      }
+
+      if (bookingsData.bookings.length === 0) {
+        businessContent.innerHTML = '<p>У вас пока нет записей.</p>';
+        return;
+      }
+
+      // Выводим список записей, например таблицу
+      let html = '<table><thead><tr><th>Дата</th><th>Время</th><th>Клиент</th><th>Услуга</th></tr></thead><tbody>';
+
+      bookingsData.bookings.forEach(b => {
+        html += `<tr>
+          <td>${formatDate(b.date)}</td>
+          <td>${b.time}</td>
+          <td>${b.client_name}</td>
+          <td>${b.service_name}</td>
+        </tr>`;
+      });
+
+      html += '</tbody></table>';
+
+      businessContent.innerHTML = html;
+
+    } else {
+      businessContent.innerHTML = '<p>Роль пользователя не определена.</p>';
+    }
+
+  } catch (error) {
+    console.error('Ошибка загрузки бизнес-экрана:', error);
+    businessContent.innerHTML = '<p>Ошибка при загрузке данных.</p>';
+  }
+}
 
 
 

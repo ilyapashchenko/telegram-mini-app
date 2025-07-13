@@ -45,6 +45,16 @@
     </div>
   </div>
 
+  <!-- Экран бизнес -->
+  <div class="screen" id="businessScreen" style="display: none;">
+    <div class="modal-title" id="businessTitle">Бизнес</div>
+
+    <div id="businessContent">
+      <!-- Контент будет динамически подставляться -->
+    </div>
+  </div>
+
+
   <!-- Модалки и оверлеи -->
 
   <div class="modal" id="addModal">
@@ -102,7 +112,7 @@
   <div class="bottom-nav">
     <button onclick="switchTab('home')">🏠<br><span>Главная</span></button>
     <button onclick="switchTab('bookings')">📅<br><span>Записи</span></button>
-    <button onclick="switchTab('profile')">👤<br><span>Профиль</span></button>
+    <button onclick="switchTab('business')">🏢<br><span>Бизнес</span></button>
   </div>
 
   <div class="overlay" id="overlay" onclick="closeAllModals()"></div>
