@@ -669,18 +669,22 @@ function submitBooking() {
 // ПЕРЕКЛЮЧАТЕЛЬ МЕЖДУ ОСНОВНЫМИ ОКНАМИ 
 
 function switchTab(tab) {
+  console.log('👉 Переключение вкладки на:', tab);
+
   const screens = document.querySelectorAll('.screen');
   screens.forEach(screen => screen.style.display = 'none');
 
   const title = document.getElementById('mainTitle');
 
   if (tab === 'home') {
+    console.log('➡️ Открываем главный экран');
     document.getElementById('mainScreen').style.display = 'block';
     if (title) {
       title.style.display = 'block';
       title.textContent = 'Ваши сервисы:';
     }
   } else if (tab === 'bookings') {
+    console.log('➡️ Открываем экран записей');
     document.getElementById('bookingsScreen').style.display = 'block';
     loadBookings();
     if (title) {
@@ -688,13 +692,15 @@ function switchTab(tab) {
       title.textContent = 'Ваши записи:';
     }
   } else if (tab === 'business') {
+    console.log('➡️ Открываем экран Бизнес');
     document.getElementById('businessScreen').style.display = 'block';
     if (title) {
-      title.style.display = 'none'; // спрячем основной заголовок, т.к. у бизнес-экрана свой заголовок
+      title.style.display = 'none'; // у бизнес-экрана свой заголовок
     }
-    loadBusinessContent(); // функция для загрузки контента бизнес-экрана
+    loadBusinessContent(); // вызываем загрузку бизнес-контента
   }
 }
+
 
 
 
@@ -748,45 +754,52 @@ function loadBookings() {
 }
 
 
+
+
+
+
+
 // ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНТЕНТА ДЛЯ ЭКРАНА БИЗНЕС
 async function loadBusinessContent() {
-  console.log('initData для запроса роли:', window.Telegram.WebApp.initData);
+  console.log('🚀 Загружаем бизнес-контент...');
 
   const businessContent = document.getElementById('businessContent');
   businessContent.innerHTML = 'Загрузка...';
 
   try {
-    // 1) Получить initData пользователя (через Telegram)
     const initData = window.Telegram.WebApp.initData;
+    console.log('📦 initData:', initData);
 
-    // 2) Отправить запрос на сервер, чтобы определить роль пользователя
     const response = await fetch('/api/getUserRole', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ initData })
     });
 
+    console.log('📨 Ответ от /api/getUserRole получен');
     const data = await response.json();
+    console.log('📨 Распарсенный ответ:', data);
 
     if (!data.success) {
+      console.warn('❌ Ошибка определения роли:', data.error || 'unknown');
       businessContent.innerHTML = '<p>Не удалось определить роль пользователя.</p>';
       return;
     }
 
     if (data.role === 'client') {
-      // Обычный пользователь — текст + кнопка
+      console.log('👤 Пользователь — обычный клиент');
       businessContent.innerHTML = `
         <p>Если вы хотите подключить свой бизнес к нашему сервису, напишите нам</p>
         <button id="contactButton" class="modal-button">Связаться</button>
       `;
-
       document.getElementById('contactButton').onclick = () => {
-        // вызов той же функции, что и кнопка поддержки
+        console.log('📞 Нажата кнопка "Связаться"');
         showSupport();
       };
 
     } else if (data.role === 'staff') {
-      // Сотрудник — показать список записей (загрузить с сервера)
+      console.log('🧑‍💼 Пользователь — сотрудник. Загружаем записи...');
+
       businessContent.innerHTML = '<p>Загрузка записей клиентов...</p>';
 
       const bookingsResponse = await fetch('/api/getStaffBookings', {
@@ -795,19 +808,24 @@ async function loadBusinessContent() {
         body: JSON.stringify({ initData })
       });
 
+      console.log('📨 Ответ от /api/getStaffBookings получен');
       const bookingsData = await bookingsResponse.json();
+      console.log('📨 Распарсенные записи:', bookingsData);
 
       if (!bookingsData.success) {
+        console.warn('❌ Ошибка при загрузке записей:', bookingsData.error || 'unknown');
         businessContent.innerHTML = '<p>Ошибка при загрузке записей.</p>';
         return;
       }
 
       if (bookingsData.bookings.length === 0) {
+        console.log('ℹ️ У сотрудника нет записей');
         businessContent.innerHTML = '<p>У вас пока нет записей.</p>';
         return;
       }
 
-      // Выводим список записей, например таблицу
+      // Выводим список
+      console.log('✅ Показываем записи');
       let html = '<table><thead><tr><th>Дата</th><th>Время</th><th>Клиент</th><th>Услуга</th></tr></thead><tbody>';
 
       bookingsData.bookings.forEach(b => {
@@ -820,18 +838,19 @@ async function loadBusinessContent() {
       });
 
       html += '</tbody></table>';
-
       businessContent.innerHTML = html;
 
     } else {
+      console.warn('⚠️ Неизвестная роль:', data.role);
       businessContent.innerHTML = '<p>Роль пользователя не определена.</p>';
     }
 
   } catch (error) {
-    console.error('Ошибка загрузки бизнес-экрана:', error);
+    console.error('💥 Ошибка в loadBusinessContent:', error);
     businessContent.innerHTML = '<p>Ошибка при загрузке данных.</p>';
   }
 }
+
 
 
 
