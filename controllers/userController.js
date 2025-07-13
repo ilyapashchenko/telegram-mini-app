@@ -81,3 +81,5 @@ exports.getStaffBookings = async (req, res) => {
         return res.json({ success: false, error: 'Database error' });
     }
 };
+
+module.exports = { getUserRole, getStaffBookings };
