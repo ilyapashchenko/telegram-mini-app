@@ -406,13 +406,13 @@ body {
   text-align: center;
   flex-grow: 1;
   padding: 4px 0;
-  color: black;
 }
 
 .bottom-nav button span {
   display: block;
   font-size: 12px;
   margin-top: 2px;
+  color: black;
 }
 
 .bottom-nav button.active {
