@@ -394,7 +394,7 @@ body {
   justify-content: space-around;
   padding: 4px 0;
   z-index: 1000;
-  height: 100px;
+  height: 80px;
   align-items: flex-start;
 }
 
@@ -416,7 +416,8 @@ body {
 .bottom-nav button {
   background: none;
   border: none;
-  font-size: 14px;
+  /* font-size: 14px; */
+  font-size: 20px;
   text-align: center;
   flex-grow: 1;
   padding: 4px 0;
