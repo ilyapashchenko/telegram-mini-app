@@ -839,7 +839,7 @@ async function loadBusinessContent() {
       bookingsData.bookings.forEach(b => {
         html += `<tr>
           <td>${formatDate(b.date)}</td>
-          <td>${b.time}</td>
+          <td>${b.time.slice(0, 5)}</td>
           <td>${b.client_name}</td>
           <td>${b.services_names}</td>
         </tr>`;
