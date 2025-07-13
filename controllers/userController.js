@@ -40,32 +40,45 @@ const BOT_TOKEN = process.env.BOT_TOKEN;
 
 
 exports.getStaffBookings = async (req, res) => {
+    console.log('📥 /api/getStaffBookings вызван');
     const { initData } = req.body;
 
     if (!initData) {
+        console.log('❌ initData отсутствует в теле запроса');
         return res.json({ success: false, error: 'initData missing' });
     }
 
+    console.log('🔍 Проверка валидности initData...');
     const valid = isValid(initData, BOT_TOKEN);
     if (!valid) {
+        console.log('❌ initData невалиден');
         return res.json({ success: false, error: 'Invalid initData' });
     }
 
-    const user = parse(initData).user;
+    let user;
+    try {
+        user = parse(initData).user;
+        console.log('✅ Пользователь распарсен:', user);
+    } catch (e) {
+        console.log('❌ Ошибка парсинга initData:', e);
+        return res.json({ success: false, error: 'Parse initData error' });
+    }
 
     try {
-        // Получить данные сотрудника
+        console.log(`🔍 Поиск сотрудника с user_id = ${user.id} в таблице staff...`);
         const staffResult = await pool.query(`
       SELECT * FROM staff WHERE user_id = $1
     `, [user.id]);
 
         if (staffResult.rows.length === 0) {
+            console.log('❌ Сотрудник не найден в таблице staff');
             return res.json({ success: false, error: 'Staff not found' });
         }
 
         const placeId = staffResult.rows[0].place_id;
+        console.log(`✅ Найден сотрудник. place_id = ${placeId}`);
 
-        // Получить записи по этому месту
+        console.log(`🔍 Получение записей для place_id = ${placeId}...`);
         const bookingsResult = await pool.query(`
       SELECT
         a.appointment_id,
@@ -81,11 +94,16 @@ exports.getStaffBookings = async (req, res) => {
       ORDER BY a.date, a.time
     `, [placeId]);
 
+        console.log(`✅ Найдено записей: ${bookingsResult.rows.length}`);
+        // Можно еще вывести сами записи, если не очень много:
+        console.log('Записи:', bookingsResult.rows);
+
         return res.json({ success: true, bookings: bookingsResult.rows });
 
     } catch (e) {
-        console.error('Ошибка при получении записей сотрудника:', e);
+        console.error('❌ Ошибка при получении записей сотрудника:', e);
         return res.json({ success: false, error: 'Database error' });
     }
 };
+
 
