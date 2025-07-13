@@ -750,6 +750,8 @@ function loadBookings() {
 
 // ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНТЕНТА ДЛЯ ЭКРАНА БИЗНЕС
 async function loadBusinessContent() {
+  console.log('initData для запроса роли:', window.Telegram.WebApp.initData);
+
   const businessContent = document.getElementById('businessContent');
   businessContent.innerHTML = 'Загрузка...';
 
