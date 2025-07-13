@@ -833,7 +833,7 @@ async function loadBusinessContent() {
           <td>${formatDate(b.date)}</td>
           <td>${b.time}</td>
           <td>${b.client_name}</td>
-          <td>${b.service_name}</td>
+          <td>${b.service_names}</td>
         </tr>`;
       });
 
