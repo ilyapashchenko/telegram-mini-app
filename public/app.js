@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
+  window.Telegram.WebApp.expand();
+
   try {
     const initData = window.Telegram.WebApp.initData;
 
