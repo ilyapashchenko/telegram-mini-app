@@ -11,6 +11,8 @@ router.post('/deletePlace', authController.deletePlace);
 router.post('/getMastersByPlace', masterController.getMastersByPlace);
 router.post('/getServicesByPlace', masterController.getServicesByPlace);
 router.post('/getUserRole', userController.getUserRole);
+router.post('/getStaffBookings', userController.getStaffBookings);
+
 
 
 module.exports = router;
