@@ -90,7 +90,7 @@ exports.getStaffBookings = async (req, res) => {
       LEFT JOIN appointment_services aps ON a.appointment_id = aps.appointment_id
       LEFT JOIN services s ON aps.service_id = s.service_id
       WHERE a.place_id = $1
-      GROUP BY a.appointment_id, a.date, a.time, a.client_name
+      GROUP BY a.appointment_id
       ORDER BY a.date, a.time
     `, [placeId]);
 
@@ -101,9 +101,10 @@ exports.getStaffBookings = async (req, res) => {
         return res.json({ success: true, bookings: bookingsResult.rows });
 
     } catch (e) {
-        console.error('❌ Ошибка при получении записей сотрудника:', e);
-        return res.json({ success: false, error: 'Database error' });
+        console.error('🔥 Ошибка при получении записей сотрудника:', e.message, '\n', e.stack);
+        return res.json({ success: false, error: e.message });
     }
+
 };
 
 
