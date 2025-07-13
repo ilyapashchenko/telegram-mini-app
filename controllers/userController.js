@@ -67,11 +67,17 @@ exports.getStaffBookings = async (req, res) => {
 
         // Получить записи по этому месту
         const bookingsResult = await pool.query(`
-      SELECT a.date, a.time, c.name AS client_name, s.name AS service_name
+      SELECT
+        a.appointment_id,
+        a.date,
+        a.time,
+        a.client_name,
+        STRING_AGG(s.name, ', ') AS services_names
       FROM appointments a
-      JOIN clients c ON a.client_id = c.id
-      JOIN services s ON a.service_id = s.id
+      LEFT JOIN appointment_services aps ON a.appointment_id = aps.appointment_id
+      LEFT JOIN services s ON aps.service_id = s.service_id
       WHERE a.place_id = $1
+      GROUP BY a.appointment_id, a.date, a.time, a.client_name
       ORDER BY a.date, a.time
     `, [placeId]);
 
