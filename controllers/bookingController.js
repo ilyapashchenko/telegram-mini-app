@@ -154,13 +154,17 @@ async function getUserBookings(req, res) {
         const tgUserId = extractTelegramUserId(initData);
 
         const result = await pool.query(`
-  SELECT a.date, a.time, a.duration, m.name AS master_name, s.name AS service_name
-  FROM appointments a
-  JOIN masters m ON a.master_id = m.master_id
-  JOIN appointment_services aps ON aps.appointment_id = a.appointment_id
-  JOIN services s ON aps.service_id = s.service_id
-  WHERE a.client_id = $1
-  ORDER BY a.date, a.time
+  SELECT 
+  a.date, 
+  a.time, 
+  a.client_name, 
+  s.name AS service_name
+FROM appointments a
+JOIN appointment_services aps ON aps.appointment_id = a.appointment_id
+JOIN services s ON s.service_id = aps.service_id
+WHERE a.place_id = $1
+ORDER BY a.date, a.time;
+
 `, [tgUserId]);
 
 
