@@ -86,6 +86,8 @@ async function createBooking(req, res) {
         }
 
         const user = parse(initData).user;
+        console.log('👤 Пользователь из initData:', user);
+
         const clientId = user.id;
 
         // 🧾 Определяем client_name
