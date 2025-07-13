@@ -398,21 +398,6 @@ body {
   align-items: flex-start;
 }
 
-/* .bottom-nav {
-  position: fixed;
-  bottom: 16px;
-  left: 0;
-  width: 100%;
-  background-color: white;
-  border-top: 1px solid #ccc;
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-  padding: 8px 0;
-  height: 100px;
-  z-index: 1000;
-} */
-
 .bottom-nav button {
   background: none;
   border: none;
@@ -421,6 +406,7 @@ body {
   text-align: center;
   flex-grow: 1;
   padding: 4px 0;
+  color: black;
 }
 
 .bottom-nav button span {
