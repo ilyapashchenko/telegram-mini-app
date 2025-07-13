@@ -17,7 +17,8 @@ const bookingRoutes = require('./routes/bookingRoutes');
 app.use(bookingRoutes);
 
 // Подключаем все роуты
-app.use('/', authRoutes);
+// app.use('/', authRoutes);
+app.use('/api', authRoutes);
 
 // ✅ Healthcheck endpoint для Railway
 app.get('/', (req, res) => {
