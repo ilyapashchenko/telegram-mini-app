@@ -1,38 +1,35 @@
-const { parseInitDataAndGetUser } = require('../utils/parseInitData'); // если он где-то импортируется
-const pool = require('../db'); // если используется отдельный модуль подключения к БД
-
 exports.getUserRole = async (req, res) => {
     const { initData } = req.body;
-    console.log('🔵 [getUserRole] Запрос получен');
-    console.log('📦 initData:', initData);
+
+    console.log('📥 Получен запрос getUserRole с initData:', initData);
 
     if (!initData) {
-        console.warn('❌ initData не передан');
+        console.log('⛔ initData отсутствует');
         return res.json({ success: false, error: 'initData missing' });
     }
 
+    const valid = isValid(initData, BOT_TOKEN);
+    if (!valid) {
+        console.log('⛔ initData невалиден');
+        return res.json({ success: false, error: 'Invalid initData' });
+    }
+
+    const user = parse(initData).user;
+    console.log('✅ Пользователь из initData:', user);
+
     try {
-        const user = parseInitDataAndGetUser(initData);
-        console.log('✅ Пользователь успешно извлечён из initData:', user);
-
-        const staffResult = await pool.query(
-            'SELECT * FROM staff WHERE user_id = $1',
-            [user.id]
-        );
-
-        console.log('📊 Результат запроса в staff:', staffResult.rows);
+        const staffResult = await pool.query('SELECT * FROM staff WHERE user_id = $1', [user.id]);
 
         if (staffResult.rows.length > 0) {
-            console.log('🧑‍💼 Пользователь найден как staff');
+            console.log('👔 Пользователь найден как сотрудник');
             return res.json({ success: true, role: 'staff' });
         }
 
-        console.log('👤 Пользователь не является staff, назначаем как client');
+        console.log('🙋 Пользователь не является сотрудником');
         return res.json({ success: true, role: 'client' });
 
     } catch (e) {
-        console.error('💥 Ошибка в getUserRole:', e);
+        console.error('❌ Ошибка при запросе к базе данных:', e);
         return res.json({ success: false, error: e.message });
     }
 };
-
