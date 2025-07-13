@@ -441,7 +441,7 @@ body {
 .screen {
   /* padding-top: 80px; */
   display: none;
-  padding-bottom: 60px;
+  padding-bottom: 80px;
   /* чтобы не пересекалось с нижним меню */
 }
 
