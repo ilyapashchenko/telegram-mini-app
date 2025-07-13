@@ -768,6 +768,7 @@ function formatDate(dateStr) {
 
 
 // ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНТЕНТА ДЛЯ ЭКРАНА БИЗНЕС
+// Обновлённая функция loadBusinessContent с фильтрацией по дате и отображением мастера
 async function loadBusinessContent() {
   console.log('🚀 Загружаем бизнес-контент...');
 
@@ -808,45 +809,62 @@ async function loadBusinessContent() {
     } else if (data.role === 'staff') {
       console.log('🧑‍💼 Пользователь — сотрудник. Загружаем записи...');
 
-      businessContent.innerHTML = '<p>Загрузка записей клиентов...</p>';
+      // 👉 Добавим поле выбора даты
+      const today = new Date().toISOString().split('T')[0];
+      businessContent.innerHTML = `
+        <label for="datePicker">Выберите дату:</label>
+        <input type="date" id="datePicker" value="${today}">
+        <div id="recordsTable">Загрузка записей...</div>
+      `;
 
-      const bookingsResponse = await fetch('/api/getStaffBookings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ initData })
+      const datePicker = document.getElementById('datePicker');
+      const recordsTable = document.getElementById('recordsTable');
+
+      const fetchBookings = async (selectedDate) => {
+        const bookingsResponse = await fetch('/api/getStaffBookings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ initData, selectedDate })
+        });
+
+        console.log('📨 Ответ от /api/getStaffBookings получен');
+        const bookingsData = await bookingsResponse.json();
+        console.log('📨 Распарсенные записи:', bookingsData);
+
+        if (!bookingsData.success) {
+          console.warn('❌ Ошибка при загрузке записей:', bookingsData.error || 'unknown');
+          recordsTable.innerHTML = '<p>Ошибка при загрузке записей.</p>';
+          return;
+        }
+
+        if (bookingsData.bookings.length === 0) {
+          console.log('ℹ️ У сотрудника нет записей');
+          recordsTable.innerHTML = '<p>У вас пока нет записей на эту дату.</p>';
+          return;
+        }
+
+        console.log('✅ Показываем записи');
+        let html = '<table><thead><tr><th>Время</th><th>Клиент</th><th>Услуга</th><th>Мастер</th></tr></thead><tbody>';
+
+        bookingsData.bookings.forEach(b => {
+          html += `<tr>
+            <td>${b.time.slice(0, 5)}</td>
+            <td>${b.client_name || 'неизвестный'}</td>
+            <td>${b.services_names}</td>
+            <td>${b.master_name || '—'}</td>
+          </tr>`;
+        });
+
+        html += '</tbody></table>';
+        recordsTable.innerHTML = html;
+      };
+
+      await fetchBookings(today);
+
+      datePicker.addEventListener('change', (e) => {
+        const selectedDate = e.target.value;
+        fetchBookings(selectedDate);
       });
-
-      console.log('📨 Ответ от /api/getStaffBookings получен');
-      const bookingsData = await bookingsResponse.json();
-      console.log('📨 Распарсенные записи:', bookingsData);
-
-      if (!bookingsData.success) {
-        console.warn('❌ Ошибка при загрузке записей:', bookingsData.error || 'unknown');
-        businessContent.innerHTML = '<p>Ошибка при загрузке записей.</p>';
-        return;
-      }
-
-      if (bookingsData.bookings.length === 0) {
-        console.log('ℹ️ У сотрудника нет записей');
-        businessContent.innerHTML = '<p>У вас пока нет записей.</p>';
-        return;
-      }
-
-      // Выводим список
-      console.log('✅ Показываем записи');
-      let html = '<table><thead><tr><th>Дата</th><th>Время</th><th>Клиент</th><th>Услуга</th></tr></thead><tbody>';
-
-      bookingsData.bookings.forEach(b => {
-        html += `<tr>
-          <td>${formatDate(b.date)}</td>
-          <td>${b.time.slice(0, 5)}</td>
-          <td>${b.client_name}</td>
-          <td>${b.services_names}</td>
-        </tr>`;
-      });
-
-      html += '</tbody></table>';
-      businessContent.innerHTML = html;
 
     } else {
       console.warn('⚠️ Неизвестная роль:', data.role);
@@ -858,6 +876,7 @@ async function loadBusinessContent() {
     businessContent.innerHTML = '<p>Ошибка при загрузке данных.</p>';
   }
 }
+
 
 
 
