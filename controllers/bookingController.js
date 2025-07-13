@@ -88,6 +88,17 @@ async function createBooking(req, res) {
         const user = parse(initData).user;
         const clientId = user.id;
 
+        // 🧾 Определяем client_name
+        let clientName = "неизвестный";
+
+        if (user.username) {
+            clientName = `@${user.username}`;
+        } else if (user.first_name || user.last_name) {
+            clientName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+        }
+
+        console.log('👤 Имя клиента для записи:', clientName);
+
         // 🔎 Получаем place_id по masterId
         const placeResult = await pool.query(
             `SELECT place_id FROM masters WHERE master_id = $1`,
@@ -104,9 +115,9 @@ async function createBooking(req, res) {
 
         // ✅ Добавляем запись и получаем appointment_id
         const insertAppointment = await pool.query(
-            `INSERT INTO appointments (master_id, place_id, date, time, duration, client_id)
-             VALUES ($1, $2, $3, $4, $5, $6) RETURNING appointment_id`,
-            [masterId, placeId, date, time, totalDuration, clientId]
+            `INSERT INTO appointments (master_id, place_id, date, time, duration, client_id, client_name)
+             VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING appointment_id`,
+            [masterId, placeId, date, time, totalDuration, clientId, clientName]
         );
 
         const appointmentId = insertAppointment.rows[0].appointment_id;
@@ -127,6 +138,7 @@ async function createBooking(req, res) {
         res.status(500).json({ success: false, error: 'Ошибка сервера' });
     }
 }
+
 
 
 
