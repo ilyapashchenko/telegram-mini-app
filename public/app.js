@@ -573,6 +573,7 @@ function openChooseTimeModal(date, totalDuration) {
           return;
         }
 
+        
         data.slots.forEach(slot => {
           const btn = document.createElement('button');
           btn.textContent = slot;
