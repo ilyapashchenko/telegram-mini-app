@@ -569,7 +569,7 @@ function openChooseTimeModal(date, totalDuration) {
         slotList.innerHTML = '';
 
         if (data.slots.length === 0) {
-          slotList.innerHTML = '<div>Нет доступного времени на эту дату</div>';
+          showNotification('В этот день нет свободных мест. Пожалуйста, выберите другую');
           return;
         }
 
