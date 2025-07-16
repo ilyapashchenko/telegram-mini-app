@@ -39,6 +39,27 @@ document.addEventListener('DOMContentLoaded', async () => {
   const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
   const startParam = initDataUnsafe?.start_param;
 
+  // Функция для загрузки и отображения сервисов
+  async function loadAndRenderServices() {
+    try {
+      const servicesResponse = await fetch('/api/getUserServices', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initData: window.Telegram.WebApp.initData })
+      });
+
+      const servicesData = await servicesResponse.json();
+
+      if (servicesData.success) {
+        renderServices(servicesData.services);
+      } else {
+        console.warn('❗ Не удалось получить сервисы:', servicesData.error);
+      }
+    } catch (error) {
+      console.error('💥 Ошибка при получении сервисов:', error);
+    }
+  }
+
   if (startParam?.startsWith('add_place_')) {
     const placeId = startParam.replace('add_place_', '');
 
@@ -56,21 +77,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (result.success) {
         showNotification('Сервис успешно добавлен!');
-        location.reload(); // покажет сервис после добавления
+        await loadAndRenderServices(); // ✅ загружаем и отображаем сервисы
+        switchTab('home');
       } else {
         showNotification('Ошибка: ' + result.error);
-        switchTab('home'); // 👈 Показать интерфейс, если ошибка
+        await loadAndRenderServices(); // 🔁 даже если сервис уже добавлен, всё равно отображаем
+        switchTab('home');
       }
     } catch (err) {
       console.error('Ошибка подключения по QR:', err);
       showNotification('Ошибка подключения сервиса.');
-      switchTab('home'); // 👈 Показать интерфейс, если ошибка
+      await loadAndRenderServices(); // ✅ показать интерфейс
+      switchTab('home');
     }
   } else {
     // 🟢 Если нет start_param — просто показываем приложение
+    await loadAndRenderServices();
     switchTab('home');
   }
 });
+
 
 
 
