@@ -790,7 +790,7 @@ function switchTab(tab) {
   const title = document.getElementById('mainTitle');
   const dateControls = document.getElementById('businessDateControls');
 
-  // Скрываем блок выбора даты по умолчанию
+  // Скрываем контролы выбора даты по умолчанию
   if (dateControls) dateControls.style.display = 'none';
 
   if (tab === 'home') {
@@ -813,16 +813,24 @@ function switchTab(tab) {
     document.getElementById('businessScreen').style.display = 'block';
 
     if (title) {
-      title.style.display = 'none';
+      title.style.display = 'none'; // заголовок скрываем
     }
 
     if (dateControls) {
-      dateControls.style.display = 'flex'; // показываем выбор даты
+      dateControls.style.display = 'flex';
+
+      // Устанавливаем сегодняшнюю дату
+      const input = document.getElementById('businessDate');
+      if (input) {
+        const today = new Date().toISOString().split('T')[0];
+        input.value = today;
+      }
     }
 
-    loadBusinessContent(); // загружаем контент
+    loadBusinessContent();
   }
 }
+
 
 
 
@@ -927,7 +935,6 @@ function formatDate(dateStr) {
 
 
 // ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНТЕНТА ДЛЯ ЭКРАНА БИЗНЕС
-// Обновлённая функция loadBusinessContent с фильтрацией по дате и отображением мастера
 async function loadBusinessContent() {
   console.log('🚀 Загружаем бизнес-контент...');
 
@@ -944,9 +951,8 @@ async function loadBusinessContent() {
       body: JSON.stringify({ initData })
     });
 
-    console.log('📨 Ответ от /api/getUserRole получен');
     const data = await response.json();
-    console.log('📨 Распарсенный ответ:', data);
+    console.log('📨 Ответ от /api/getUserRole получен:', data);
 
     if (!data.success) {
       console.warn('❌ Ошибка определения роли:', data.error || 'unknown');
@@ -955,7 +961,7 @@ async function loadBusinessContent() {
     }
 
     if (data.role === 'client') {
-      console.log('👤 Пользователь — обычный клиент');
+      console.log('👤 Пользователь — клиент');
       businessContent.innerHTML = `
         <p>Если вы хотите подключить свой бизнес к нашему сервису, напишите нам</p>
         <button id="contactButton" class="modal-button">Связаться</button>
@@ -966,18 +972,18 @@ async function loadBusinessContent() {
       };
 
     } else if (data.role === 'staff') {
-      console.log('🧑‍💼 Пользователь — сотрудник. Загружаем записи...');
+      console.log('🧑‍💼 Пользователь — сотрудник');
 
-      // 👉 Добавим поле выбора даты
-      const today = new Date().toISOString().split('T')[0];
-      businessContent.innerHTML = `
-        <label for="datePicker">Выберите дату:</label>
-        <input type="date" id="datePicker" value="${today}">
-        <div id="recordsTable">Загрузка записей...</div>
-      `;
+      businessContent.innerHTML = `<div id="recordsTable">Загрузка записей...</div>`;
 
-      const datePicker = document.getElementById('datePicker');
+      const datePicker = document.getElementById('businessDate');
       const recordsTable = document.getElementById('recordsTable');
+
+      if (!datePicker) {
+        console.warn('❗ Элемент #businessDate не найден в header-bar');
+        recordsTable.innerHTML = '<p>Ошибка: не найден элемент выбора даты.</p>';
+        return;
+      }
 
       const fetchBookings = async (selectedDate) => {
         const bookingsResponse = await fetch('/api/getStaffBookings', {
@@ -986,9 +992,8 @@ async function loadBusinessContent() {
           body: JSON.stringify({ initData, selectedDate })
         });
 
-        console.log('📨 Ответ от /api/getStaffBookings получен');
         const bookingsData = await bookingsResponse.json();
-        console.log('📨 Распарсенные записи:', bookingsData);
+        console.log('📨 Ответ от /api/getStaffBookings получен:', bookingsData);
 
         if (!bookingsData.success) {
           console.warn('❌ Ошибка при загрузке записей:', bookingsData.error || 'unknown');
@@ -997,12 +1002,11 @@ async function loadBusinessContent() {
         }
 
         if (bookingsData.bookings.length === 0) {
-          console.log('ℹ️ У сотрудника нет записей');
+          console.log('ℹ️ Нет записей на эту дату');
           recordsTable.innerHTML = '<p>У вас пока нет записей на эту дату.</p>';
           return;
         }
 
-        console.log('✅ Показываем записи');
         let html = '<table><thead><tr><th>Время</th><th>Клиент</th><th>Услуга</th><th>Мастер</th></tr></thead><tbody>';
 
         bookingsData.bookings.forEach(b => {
@@ -1018,11 +1022,10 @@ async function loadBusinessContent() {
         recordsTable.innerHTML = html;
       };
 
-      await fetchBookings(today);
+      await fetchBookings(datePicker.value);
 
       datePicker.addEventListener('change', (e) => {
-        const selectedDate = e.target.value;
-        fetchBookings(selectedDate);
+        fetchBookings(e.target.value);
       });
 
     } else {
@@ -1035,6 +1038,7 @@ async function loadBusinessContent() {
     businessContent.innerHTML = '<p>Ошибка при загрузке данных.</p>';
   }
 }
+
 
 
 function closeAllModals() {
