@@ -33,40 +33,45 @@ async function getUserRoleOnce() {
 }
 
 // QR КОД
-// window.Telegram.WebApp.ready();
+window.Telegram.WebApp.ready();
 
-// document.addEventListener('DOMContentLoaded', async () => {
-//   const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
+document.addEventListener('DOMContentLoaded', async () => {
+  const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
+  const startParam = initDataUnsafe?.start_param;
 
-//   const startParam = initDataUnsafe?.start_param;
+  if (startParam?.startsWith('add_place_')) {
+    const placeId = startParam.replace('add_place_', '');
 
-//   if (startParam?.startsWith('add_place_')) {
-//     const placeId = startParam.replace('add_place_', '');
+    try {
+      const response = await fetch('/addPlaceById', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          initData: window.Telegram.WebApp.initData,
+          placeId
+        })
+      });
 
-//     try {
-//       const response = await fetch('/addPlaceById', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({
-//           initData: window.Telegram.WebApp.initData,
-//           placeId
-//         })
-//       });
+      const result = await response.json();
 
-//       const result = await response.json();
+      if (result.success) {
+        showNotification('Сервис успешно добавлен!');
+        location.reload(); // покажет сервис после добавления
+      } else {
+        showNotification('Ошибка: ' + result.error);
+        switchTab('home'); // 👈 Показать интерфейс, если ошибка
+      }
+    } catch (err) {
+      console.error('Ошибка подключения по QR:', err);
+      showNotification('Ошибка подключения сервиса.');
+      switchTab('home'); // 👈 Показать интерфейс, если ошибка
+    }
+  } else {
+    // 🟢 Если нет start_param — просто показываем приложение
+    switchTab('home');
+  }
+});
 
-//       if (result.success) {
-//         showNotification('Сервис успешно добавлен!');
-//         location.reload(); // Перезагружаем, чтобы показать сервис
-//       } else {
-//         showNotification('Ошибка: ' + result.error);
-//       }
-//     } catch (err) {
-//       console.error('Ошибка подключения по QR:', err);
-//       showNotification('Ошибка подключения сервиса.');
-//     }
-//   }
-// });
 
 
 
