@@ -1,3 +1,11 @@
+/* Основной фоновый цвет: #E5EDF8
+цвет кнопки: #fdf9f1
+Цвет текста кнопки: black
+обводка вокруг кнопки:
+border: 1px solid black;
+  border-radius: 8px; */
+
+
 html,
 body {
   font-family: Arial, sans-serif;
@@ -339,7 +347,7 @@ body {
   padding: 10px;
   border: none;
   background-color: #fdf9f1;
-  color: white;
+  border: 1px solid black;
   border-radius: 8px;
   cursor: pointer;
   color: black;
