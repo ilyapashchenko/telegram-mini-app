@@ -54,25 +54,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const result = await response.json();
 
+      // Удаляем start_param из URL
+      history.replaceState(null, '', window.location.pathname);
+
       if (result.success) {
         showNotification('Сервис успешно добавлен!');
-        await loadServices(); // 👈 если такая функция есть
+        await fetchAndRenderServices(); // если есть такая функция
+        switchTab('home');
+      } else {
+        showNotification('Ошибка: ' + result.error);
         switchTab('home');
       }
-      else {
-        showNotification('Ошибка: ' + result.error);
-        switchTab('home'); // 👈 Показать интерфейс, если ошибка
-      }
+
     } catch (err) {
       console.error('Ошибка подключения по QR:', err);
       showNotification('Ошибка подключения сервиса.');
-      switchTab('home'); // 👈 Показать интерфейс, если ошибка
+      history.replaceState(null, '', window.location.pathname);
+      switchTab('home');
     }
   } else {
     // 🟢 Если нет start_param — просто показываем приложение
     switchTab('home');
   }
 });
+
 
 
 
