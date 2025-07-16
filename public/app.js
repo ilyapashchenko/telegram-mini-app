@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
   const startParam = initDataUnsafe?.start_param;
 
-  // Функция для загрузки и отображения сервисов
+  // Загружаем и отображаем сервисы
   async function loadAndRenderServices() {
     try {
       const servicesResponse = await fetch('/api/getUserServices', {
@@ -77,25 +77,34 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (result.success) {
         showNotification('Сервис успешно добавлен!');
-        await loadAndRenderServices(); // ✅ загружаем и отображаем сервисы
-        switchTab('home');
       } else {
-        showNotification('Ошибка: ' + result.error);
-        await loadAndRenderServices(); // 🔁 даже если сервис уже добавлен, всё равно отображаем
-        switchTab('home');
+        // 👇 Более дружелюбное сообщение, если сервис уже добавлен
+        if (result.error === 'Сервис уже добавлен') {
+          console.log('ℹ️ Сервис уже был у пользователя');
+          // Можно не показывать вообще или показать мягкое уведомление
+          showNotification('Этот сервис уже был добавлен');
+        } else {
+          showNotification('Ошибка: ' + result.error);
+        }
       }
+
+      await loadAndRenderServices();
+      switchTab('home');
+
     } catch (err) {
       console.error('Ошибка подключения по QR:', err);
       showNotification('Ошибка подключения сервиса.');
-      await loadAndRenderServices(); // ✅ показать интерфейс
+      await loadAndRenderServices();
       switchTab('home');
     }
+
   } else {
-    // 🟢 Если нет start_param — просто показываем приложение
+    // Обычный запуск без QR
     await loadAndRenderServices();
     switchTab('home');
   }
 });
+
 
 
 
