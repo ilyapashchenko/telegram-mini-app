@@ -473,7 +473,14 @@ body {
   z-index: 10;
 }
 
-#businessContent {
+/* #businessContent {
   padding-top: 50px;
-  padding-bottom: 90px; /* немного больше, чем высота нижнего меню */
+  padding-bottom: 90px;
+} */
+
+
+
+#businessScreen {
+  padding-top: 5px;
+  /* z-index: 1300; */
 }
