@@ -32,6 +32,41 @@ async function getUserRoleOnce() {
   return userRole;
 }
 
+QR КОД
+window.Telegram.WebApp.ready();
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
+
+  const startParam = initDataUnsafe?.start_param;
+
+  if (startParam?.startsWith('add_place_')) {
+    const placeId = startParam.replace('add_place_', '');
+
+    try {
+      const response = await fetch('/addPlaceById', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          initData: window.Telegram.WebApp.initData,
+          placeId
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        showNotification('Сервис успешно добавлен!');
+        location.reload(); // Перезагружаем, чтобы показать сервис
+      } else {
+        showNotification('Ошибка: ' + result.error);
+      }
+    } catch (err) {
+      console.error('Ошибка подключения по QR:', err);
+      showNotification('Ошибка подключения сервиса.');
+    }
+  }
+});
 
 
 
