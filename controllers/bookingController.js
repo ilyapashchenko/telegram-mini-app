@@ -18,7 +18,7 @@ async function getFreeSlots(req, res) {
     }
 
     try {
-        const startTime = 10 * 60;
+        const startTime = 3 * 60;
         const endTime = 20 * 60;
 
         const result = await pool.query(`
