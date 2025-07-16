@@ -7,6 +7,8 @@ let totalDuration = 0;
 let selectedSlot = null;
 let bookingDuration = 0;
 let handleOutsideClick;
+let selectedTime = null;
+
 
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -663,7 +665,8 @@ function submitSelectedDate() {
 function openChooseTimeModal(date, totalDuration) {
   console.log('🔍 masterId:', selectedMaster?.master_id);
   console.log('📅 date:', date);
-  console.log('⏱ duration:', totalDuration);
+  console.log('⏱️ duration:', totalDuration);
+
   fetch('/getFreeSlots', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -675,29 +678,29 @@ function openChooseTimeModal(date, totalDuration) {
   })
     .then(res => res.json())
     .then(data => {
-      if (data.success) {
-        const slotList = document.getElementById('slotList');
-        slotList.innerHTML = '';
+      const slotList = document.getElementById('slotList');
+      slotList.innerHTML = '';
 
+      if (data.success) {
         if (data.slots.length === 0) {
           showNotification('В этот день нет свободных мест. Пожалуйста, выберите другой');
           return;
         }
 
+        let selectedTime = null;
+
         data.slots.forEach(slot => {
           const btn = document.createElement('button');
           btn.textContent = slot;
-          btn.className = 'slot-button';
+          btn.className = 'time-slot-button';
 
           btn.onclick = () => {
-            // сбрасываем выделение
-            document.querySelectorAll('.slot-button').forEach(b => b.classList.remove('selected'));
+            document.querySelectorAll('.time-slot-button').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-
-            // запоминаем выбранный слот
             selectedSlot = slot;
+            selectedTime = slot;
+            console.log('✅ Выбрано время:', selectedTime);
 
-            // активируем кнопку записи
             document.getElementById('confirmBookingBtn').disabled = false;
           };
 
@@ -715,6 +718,64 @@ function openChooseTimeModal(date, totalDuration) {
       showNotification('Ошибка сервера');
     });
 }
+
+
+
+// function openChooseTimeModal(date, totalDuration) {
+//   console.log('🔍 masterId:', selectedMaster?.master_id);
+//   console.log('📅 date:', date);
+//   console.log('⏱ duration:', totalDuration);
+//   fetch('/getFreeSlots', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify({
+//       masterId: selectedMaster.master_id,
+//       date: date,
+//       duration: totalDuration
+//     })
+//   })
+//     .then(res => res.json())
+//     .then(data => {
+//       if (data.success) {
+//         const slotList = document.getElementById('slotList');
+//         slotList.innerHTML = '';
+
+//         if (data.slots.length === 0) {
+//           showNotification('В этот день нет свободных мест. Пожалуйста, выберите другой');
+//           return;
+//         }
+
+//         data.slots.forEach(slot => {
+//           const btn = document.createElement('button');
+//           btn.textContent = slot;
+//           btn.className = 'slot-button';
+
+//           btn.onclick = () => {
+//             // сбрасываем выделение
+//             document.querySelectorAll('.slot-button').forEach(b => b.classList.remove('selected'));
+//             btn.classList.add('selected');
+
+//             // запоминаем выбранный слот
+//             selectedSlot = slot;
+
+//             // активируем кнопку записи
+//             document.getElementById('confirmBookingBtn').disabled = false;
+//           };
+
+//           slotList.appendChild(btn);
+//         });
+
+//         document.getElementById('chooseTimeModal').style.display = 'block';
+//         document.getElementById('overlay').style.display = 'block';
+//       } else {
+//         showNotification('Ошибка при получении свободного времени');
+//       }
+//     })
+//     .catch(err => {
+//       console.error('Ошибка при получении слотов:', err);
+//       showNotification('Ошибка сервера');
+//     });
+// }
 
 function closeChooseTimeModal() {
   document.getElementById('chooseTimeModal').style.display = 'none';
