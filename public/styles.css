@@ -565,3 +565,8 @@ body {
   background-color: #fdf9f1;
   cursor: not-allowed;
 }
+
+
+#contactButton {
+  max-width: 60%;
+}
