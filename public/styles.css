@@ -474,5 +474,6 @@ body {
 }
 
 #businessContent {
+  padding-top: 50px;
   padding-bottom: 90px; /* немного больше, чем высота нижнего меню */
 }
