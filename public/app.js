@@ -101,17 +101,17 @@ function openModal() {
 }
 
 
-// function closeModal() {
-//   document.getElementById('overlay').style.display = 'none';
-//   document.getElementById('addModal').style.display = 'none';
-//   document.getElementById('idInputModal').style.display = 'none';
+function closeModal() {
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('addModal').style.display = 'none';
+  document.getElementById('idInputModal').style.display = 'none';
 
-//   const input = document.getElementById('serviceIdInput');
-//   if (input) {
-//     input.disabled = false;
-//     input.value = '';
-//   }
-// }
+  const input = document.getElementById('serviceIdInput');
+  if (input) {
+    input.disabled = false;
+    input.value = '';
+  }
+}
 
 // function closeAllModals() {
 //   document.getElementById('overlay').style.display = 'none';
