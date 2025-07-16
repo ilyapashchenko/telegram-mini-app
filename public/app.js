@@ -10,6 +10,29 @@ let handleOutsideClick;
 let selectedTime = null;
 let userRole = null;
 
+// ОПРЕДЕЛЕНИЕ РОЛИ
+async function getUserRoleOnce() {
+  if (userRole !== null) return userRole;
+
+  const initData = window.Telegram.WebApp.initData;
+  const response = await fetch('/api/getUserRole', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ initData })
+  });
+
+  const data = await response.json();
+  if (data.success) {
+    userRole = data.role;
+  } else {
+    console.warn('❌ Не удалось получить роль:', data.error || 'unknown');
+    userRole = 'unknown';
+  }
+
+  return userRole;
+}
+
+
 
 
 
@@ -843,7 +866,7 @@ function submitBooking() {
 
 
 // ПЕРЕКЛЮЧАТЕЛЬ МЕЖДУ ОСНОВНЫМИ ОКНАМИ 
-function switchTab(tab) {
+async function switchTab(tab) {
   console.log('👉 Переключение вкладки на:', tab);
 
   const screens = document.querySelectorAll('.screen');
@@ -862,6 +885,7 @@ function switchTab(tab) {
       title.style.display = 'block';
       title.textContent = 'Ваши сервисы:';
     }
+
   } else if (tab === 'bookings') {
     console.log('➡️ Открываем экран записей');
     document.getElementById('bookingsScreen').style.display = 'block';
@@ -870,27 +894,30 @@ function switchTab(tab) {
       title.style.display = 'block';
       title.textContent = 'Ваши записи:';
     }
+
   } else if (tab === 'business') {
     console.log('➡️ Открываем экран Бизнес');
     document.getElementById('businessScreen').style.display = 'block';
 
-    if (title) {
-      title.style.display = 'none'; // скрываем заголовок
-    }
+    if (title) title.style.display = 'none';
 
-    if (dateControls && userRole === 'staff') {
-      dateControls.style.display = 'flex';
+    const role = await getUserRoleOnce();
 
-      const input = document.getElementById('businessDate');
-      if (input) {
-        const today = new Date().toISOString().split('T')[0];
-        input.value = today;
+    if (role === 'staff') {
+      if (dateControls) {
+        dateControls.style.display = 'flex';
+        const input = document.getElementById('businessDate');
+        if (input) {
+          const today = new Date().toISOString().split('T')[0];
+          input.value = today;
+        }
       }
     }
 
-    loadBusinessContent();
+    loadBusinessContent(); // вызываем загрузку записей
   }
 }
+
 
 // function switchTab(tab) {
 //   console.log('👉 Переключение вкладки на:', tab);
@@ -1043,6 +1070,11 @@ function formatDate(dateStr) {
 
 
 
+
+
+
+
+
 // ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНТЕНТА ДЛЯ ЭКРАНА БИЗНЕС
 async function loadBusinessContent() {
   console.log('🚀 Загружаем бизнес-контент...');
@@ -1054,16 +1086,16 @@ async function loadBusinessContent() {
     const initData = window.Telegram.WebApp.initData;
     console.log('📦 initData:', initData);
 
-    const response = await fetch('/api/getUserRole', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ initData })
-    });
+    // const response = await fetch('/api/getUserRole', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ initData })
+    // });
 
-    const data = await response.json();
+    // const data = await response.json();
     console.log('📨 Ответ от /api/getUserRole получен:', data);
 
-    userRole = data.role; // Сохраняем роль
+    // userRole = data.role; // Сохраняем роль
 
     if (!data.success) {
       console.warn('❌ Ошибка определения роли:', data.error || 'unknown');
