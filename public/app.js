@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (result.error === 'Сервис уже добавлен') {
           console.log('ℹ️ Сервис уже был у пользователя');
           // Можно не показывать вообще или показать мягкое уведомление
-          showNotification('Этот сервис уже был добавлен');
+          // showNotification('Этот сервис уже был добавлен');
         } else {
           showNotification('Ошибка: ' + result.error);
         }
