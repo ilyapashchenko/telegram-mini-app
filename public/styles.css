@@ -338,10 +338,11 @@ body {
   width: 100%;
   padding: 10px;
   border: none;
-  background-color: #0088cc;
+  background-color: #fdf9f1;
   color: white;
   border-radius: 8px;
   cursor: pointer;
+  color: black;
 }
 
 /* Контейнер для списка услуг */
