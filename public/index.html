@@ -12,7 +12,7 @@
 
 <body>
 
-  <div class="header-bar">
+  <!-- <div class="header-bar">
     <div class="overlay" id="overlay" onclick="closeAllModals()"></div>
     <button class="menu-btn" id="menuButton" onclick="toggleMenu()">☰</button>
     <div class="dropdown-menu" id="dropdownMenu">
@@ -20,7 +20,26 @@
       <button onclick="showSupport()">Поддержка</button>
     </div>
     <div class="title" id="mainTitle">Ваши сервисы:</div>
+  </div> -->
+  <div class="header-bar">
+    <div class="overlay" id="overlay" onclick="closeAllModals()"></div>
+
+    <button class="menu-btn" id="menuButton" onclick="toggleMenu()">☰</button>
+
+    <div class="dropdown-menu" id="dropdownMenu">
+      <button class="close-btn" onclick="toggleMenu()">×</button>
+      <button onclick="showSupport()">Поддержка</button>
+    </div>
+
+    <div class="title" id="mainTitle">Ваши сервисы:</div>
+
+    <!-- 👇 Добавлено: выбор даты для экрана Бизнес -->
+    <div id="businessDateControls" style="display: none;" class="business-date-controls">
+      <label for="businessDate">Выберите дату:</label>
+      <input type="date" id="businessDate" />
+    </div>
   </div>
+
 
   <!-- Контейнер всех экранов -->
   <div class="content">

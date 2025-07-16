@@ -488,3 +488,12 @@ body {
 .businessContent {
   padding: 16px;
 }
+
+.business-date-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  margin-top: 5px;
+  font-size: 14px;
+}
