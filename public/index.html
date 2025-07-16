@@ -39,101 +39,94 @@
       <div id="bookingList">Загрузка записей...</div>
     </div>
 
-    <!-- Экран профиля -->
-    <div class="screen" id="profileScreen" style="display: none;">
-      <!-- <div class="modal-title">Профиль</div> -->
-      <div style="padding: 1rem;">(Раздел профиля пока пуст)</div>
-    </div>
-  </div>
+    <!-- Экран бизнес -->
+    <div class="screen" id="businessScreen" style="display: none;">
+      <!-- <div class="modal-title" id="businessTitle">Бизнес</div> -->
+      <div id="businessContent">
+        <div class="date-picker">
+          <label for="dateInput">Выберите дату:</label>
+          <input type="date" id="dateInput" />
+        </div>
 
-  <!-- Экран бизнес -->
-  <div class="screen" id="businessScreen" style="display: none;">
-    <!-- <div class="modal-title" id="businessTitle">Бизнес</div> -->
-    <div id="businessContent">
-      <div class="date-picker">
-        <label for="dateInput">Выберите дату:</label>
-        <input type="date" id="dateInput" />
+        <!-- Здесь таблица записей -->
       </div>
 
-      <!-- Здесь таблица записей -->
+
+
+
+
+      <!-- <div id="businessContent">
+    </div> -->
     </div>
 
 
+    <!-- Модалки и оверлеи -->
 
+    <div class="modal" id="addModal">
+      <button class="close-btn" onclick="closeModal()">×</button>
+      <div class="modal-title">Выберите способ добавления</div>
+      <button class="modal-button" onclick="addByID()">Добавить по ID</button>
+      <button class="modal-button" onclick="addByQR()">Добавить через QR</button>
+    </div>
 
+    <div class="modal" id="idInputModal">
+      <button class="close-btn" onclick="closeModal()">×</button>
+      <div class="modal-title">Введите ID</div>
+      <input id="serviceIdInput" type="text" placeholder="Например: 12345" autocomplete="off" />
+      <button class="add-button" onclick="submitId()">Добавить</button>
+    </div>
 
-    <!-- <div id="businessContent">
-    </div> -->
-  </div>
+    <div class="modal" id="confirmModal">
+      <button class="close-btn" onclick="closeConfirmModal()">×</button>
+      <div class="modal-title">Удалить этот сервис?</div>
+      <button class="modal-button" onclick="deleteConfirmedService()">Удалить</button>
+    </div>
 
+    <!-- Модалка выбора мастера -->
+    <div class="modal" id="chooseMasterModal">
+      <button class="close-btn" onclick="closeChooseMasterModal()">×</button>
+      <div class="modal-title">Выберите мастера</div>
+      <div id="masterList"></div>
+    </div>
 
-  <!-- Модалки и оверлеи -->
+    <!-- Модалка выбора услуг -->
+    <div class="modal" id="chooseServiceModal">
+      <button class="close-btn" onclick="closeChooseServiceModal()">×</button>
+      <div class="modal-title">Выберите услуги</div>
+      <div id="serviceSelectList" class="service-select-list"></div>
+      <button class="modal-button" onclick="submitSelectedServices()">Продолжить</button>
+    </div>
 
-  <div class="modal" id="addModal">
-    <button class="close-btn" onclick="closeModal()">×</button>
-    <div class="modal-title">Выберите способ добавления</div>
-    <button class="modal-button" onclick="addByID()">Добавить по ID</button>
-    <button class="modal-button" onclick="addByQR()">Добавить через QR</button>
-  </div>
+    <!-- Модалка выбора даты -->
+    <div class="modal" id="chooseDateModal">
+      <button class="close-btn" onclick="closeChooseDateModal()">×</button>
+      <div class="modal-title">Выберите дату</div>
+      <input type="date" id="bookingDatePicker" min="" class="date-input">
+      <button class="modal-button" onclick="submitSelectedDate()">Продолжить</button>
+    </div>
 
-  <div class="modal" id="idInputModal">
-    <button class="close-btn" onclick="closeModal()">×</button>
-    <div class="modal-title">Введите ID</div>
-    <input id="serviceIdInput" type="text" placeholder="Например: 12345" autocomplete="off" />
-    <button class="add-button" onclick="submitId()">Добавить</button>
-  </div>
+    <!-- Модалка выбора времени -->
+    <div class="modal" id="chooseTimeModal">
+      <button class="close-btn" onclick="closeChooseTimeModal()">×</button>
+      <div class="modal-title">Выберите время</div>
+      <div id="slotList" class="slot-list"></div>
+      <button class="modal-button" id="confirmBookingBtn" onclick="submitBooking()" disabled>Записаться</button>
+    </div>
 
-  <div class="modal" id="confirmModal">
-    <button class="close-btn" onclick="closeConfirmModal()">×</button>
-    <div class="modal-title">Удалить этот сервис?</div>
-    <button class="modal-button" onclick="deleteConfirmedService()">Удалить</button>
-  </div>
-
-  <!-- Модалка выбора мастера -->
-  <div class="modal" id="chooseMasterModal">
-    <button class="close-btn" onclick="closeChooseMasterModal()">×</button>
-    <div class="modal-title">Выберите мастера</div>
-    <div id="masterList"></div>
-  </div>
-
-  <!-- Модалка выбора услуг -->
-  <div class="modal" id="chooseServiceModal">
-    <button class="close-btn" onclick="closeChooseServiceModal()">×</button>
-    <div class="modal-title">Выберите услуги</div>
-    <div id="serviceSelectList" class="service-select-list"></div>
-    <button class="modal-button" onclick="submitSelectedServices()">Продолжить</button>
-  </div>
-
-  <!-- Модалка выбора даты -->
-  <div class="modal" id="chooseDateModal">
-    <button class="close-btn" onclick="closeChooseDateModal()">×</button>
-    <div class="modal-title">Выберите дату</div>
-    <input type="date" id="bookingDatePicker" min="" class="date-input">
-    <button class="modal-button" onclick="submitSelectedDate()">Продолжить</button>
-  </div>
-
-  <!-- Модалка выбора времени -->
-  <div class="modal" id="chooseTimeModal">
-    <button class="close-btn" onclick="closeChooseTimeModal()">×</button>
-    <div class="modal-title">Выберите время</div>
-    <div id="slotList" class="slot-list"></div>
-    <button class="modal-button" id="confirmBookingBtn" onclick="submitBooking()" disabled>Записаться</button>
-  </div>
-
-  <!-- Нижнее меню -->
-  <div class="bottom-nav">
-    <!-- <button class="active"><i class="fas fa-home"></i><span>Главная</span></button>
+    <!-- Нижнее меню -->
+    <div class="bottom-nav">
+      <!-- <button class="active"><i class="fas fa-home"></i><span>Главная</span></button>
     <button><i class="fas fa-calendar-alt"></i><span>Записи</span></button>
     <button><i class="fas fa-briefcase"></i><span>Бизнес</span></button> -->
 
-    <button onclick="switchTab('home')">🏠<br><span>Главная</span></button>
-    <button onclick="switchTab('bookings')">📅<br><span>Записи</span></button>
-    <button onclick="switchTab('business')">🏢<br><span>Бизнес</span></button>
-  </div>
+      <button onclick="switchTab('home')">🏠<br><span>Главная</span></button>
+      <button onclick="switchTab('bookings')">📅<br><span>Записи</span></button>
+      <button onclick="switchTab('business')">🏢<br><span>Бизнес</span></button>
+    </div>
 
-  <div class="overlay" id="overlay" onclick="closeAllModals()"></div>
-  <script src="app.js"></script>
-  <div id="customAlert" class="custom-alert"></div>
+    <div class="overlay" id="overlay" onclick="closeAllModals()"></div>
+    <script src="app.js"></script>
+    <div id="customAlert" class="custom-alert"></div>
 </body>
 
 </html>
