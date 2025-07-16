@@ -6,6 +6,7 @@ let selectedDate = null;
 let totalDuration = 0;
 let selectedSlot = null;
 let bookingDuration = 0;
+let handleOutsideClick;
 
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -312,8 +313,6 @@ async function deleteConfirmedService() {
 
 
 // ВЫБОР МАСТЕРА
-// Объяви глобально, чтобы потом удалить
-let handleOutsideClick;
 
 function openChooseMasterModal(placeId) {
   currentBookingPlaceId = placeId;
