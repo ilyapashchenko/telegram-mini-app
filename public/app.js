@@ -553,6 +553,27 @@ function openChooseTimeModal(date, totalDuration) {
   console.log('🔍 masterId:', selectedMaster?.master_id);
   console.log('📅 date:', date);
   console.log('⏱ duration:', totalDuration);
+
+  // Reset modal state
+  selectedSlot = null;
+  document.getElementById('confirmBookingBtn').disabled = true;
+  
+  // Validate required data
+  if (!selectedMaster || !selectedMaster.master_id) {
+    showNotification('Ошибка: мастер не выбран');
+    return;
+  }
+
+  if (!date) {
+    showNotification('Ошибка: дата не указана');
+    return;
+  }
+
+  if (!totalDuration || totalDuration <= 0) {
+    showNotification('Ошибка: некорректная длительность услуги');
+    return;
+  }
+
   fetch('/getFreeSlots', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -562,7 +583,12 @@ function openChooseTimeModal(date, totalDuration) {
       duration: totalDuration
     })
   })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
     .then(data => {
       if (data.success) {
         const slotList = document.getElementById('slotList');
@@ -596,20 +622,32 @@ function openChooseTimeModal(date, totalDuration) {
         document.getElementById('chooseTimeModal').style.display = 'block';
         document.getElementById('overlay').style.display = 'block';
       } else {
-        showNotification('Ошибка при получении свободного времени');
+        const errorMessage = data.error || 'Неизвестная ошибка при получении свободного времени';
+        showNotification('Ошибка: ' + errorMessage);
       }
     })
     .catch(err => {
       console.error('Ошибка при получении слотов:', err);
-      showNotification('Ошибка сервера');
+      if (err.name === 'TypeError' && err.message.includes('fetch')) {
+        showNotification('Ошибка соединения с сервером');
+      } else if (err.message.includes('HTTP error')) {
+        showNotification('Ошибка сервера: ' + err.message);
+      } else {
+        showNotification('Произошла ошибка при загрузке расписания');
+      }
     });
 }
 
 function closeChooseTimeModal() {
   document.getElementById('chooseTimeModal').style.display = 'none';
   document.getElementById('overlay').style.display = 'none';
+  
+  // Reset modal state
   selectedSlot = null;
   document.getElementById('confirmBookingBtn').disabled = true;
+  
+  // Clear any selected slot buttons
+  document.querySelectorAll('.slot-button').forEach(b => b.classList.remove('selected'));
 }
 
 
