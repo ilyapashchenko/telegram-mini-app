@@ -39,27 +39,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
   const startParam = initDataUnsafe?.start_param;
 
-  // Загружаем и отображаем сервисы
-  async function loadAndRenderServices() {
-    try {
-      const servicesResponse = await fetch('/api/getUserServices', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ initData: window.Telegram.WebApp.initData })
-      });
-
-      const servicesData = await servicesResponse.json();
-
-      if (servicesData.success) {
-        renderServices(servicesData.services);
-      } else {
-        console.warn('❗ Не удалось получить сервисы:', servicesData.error);
-      }
-    } catch (error) {
-      console.error('💥 Ошибка при получении сервисов:', error);
-    }
-  }
-
   if (startParam?.startsWith('add_place_')) {
     const placeId = startParam.replace('add_place_', '');
 
@@ -77,30 +56,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (result.success) {
         showNotification('Сервис успешно добавлен!');
-      } else {
-        // 👇 Более дружелюбное сообщение, если сервис уже добавлен
-        if (result.error === 'Сервис уже добавлен') {
-          console.log('ℹ️ Сервис уже был у пользователя');
-          // Можно не показывать вообще или показать мягкое уведомление
-          // showNotification('Этот сервис уже был добавлен');
-        } else {
-          showNotification('Ошибка: ' + result.error);
-        }
+        await loadServices(); // 👈 если такая функция есть
+        switchTab('home');
       }
-
-      await loadAndRenderServices();
-      switchTab('home');
-
+      else {
+        showNotification('Ошибка: ' + result.error);
+        switchTab('home'); // 👈 Показать интерфейс, если ошибка
+      }
     } catch (err) {
       console.error('Ошибка подключения по QR:', err);
       showNotification('Ошибка подключения сервиса.');
-      await loadAndRenderServices();
-      switchTab('home');
+      switchTab('home'); // 👈 Показать интерфейс, если ошибка
     }
-
   } else {
-    // Обычный запуск без QR
-    await loadAndRenderServices();
+    // 🟢 Если нет start_param — просто показываем приложение
     switchTab('home');
   }
 });
