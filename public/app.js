@@ -1,3 +1,13 @@
+// ПЕРЕМЕННЫЕ
+let currentBookingPlaceId = null;
+let selectedMaster = null;
+let selectedServices = [];
+let selectedDate = null;
+let totalDuration = 0;
+let selectedSlot = null;
+let bookingDuration = 0;
+
+
 document.addEventListener('DOMContentLoaded', async () => {
   window.Telegram.WebApp.expand();
 
@@ -300,20 +310,14 @@ async function deleteConfirmedService() {
 
 // Функция открытия модалки выбора мастера
 
-// ПЕРЕМЕННЫЕ
-let currentBookingPlaceId = null;
-let selectedMaster = null;
-let selectedServices = [];
-let selectedDate = null;
-let totalDuration = 0;
-let selectedSlot = null;
-let bookingDuration = 0;
-
-
 
 // ВЫБОР МАСТЕРА
+// Объяви глобально, чтобы потом удалить
+let handleOutsideClick;
+
 function openChooseMasterModal(placeId) {
   currentBookingPlaceId = placeId;
+
   fetch('/getMastersByPlace', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -330,23 +334,30 @@ function openChooseMasterModal(placeId) {
           btn.textContent = master.name;
           btn.onclick = () => {
             selectedMaster = master;
-            closeChooseMasterModal();
+            closeAllModals();
             openChooseServiceModal(currentBookingPlaceId);
           };
           masterList.appendChild(btn);
         });
 
+        const modal = document.getElementById('chooseMasterModal');
         const overlay = document.getElementById('overlay');
+        modal.style.display = 'block';
         overlay.style.display = 'block';
-        overlay.onclick = (event) => {
-          // Проверяем, что клик был вне модалки
-          const modal = document.getElementById('chooseMasterModal');
+
+        // Удалим старый обработчик
+        window.removeEventListener('click', handleOutsideClick);
+
+        // Новый обработчик
+        handleOutsideClick = function (event) {
           if (!modal.contains(event.target)) {
-            closeChooseMasterModal();
+            closeAllModals();
           }
         };
 
-        document.getElementById('chooseMasterModal').style.display = 'block';
+        setTimeout(() => {
+          window.addEventListener('click', handleOutsideClick);
+        }, 0);
       } else {
         showNotification('Ошибка при получении мастеров');
       }
@@ -356,6 +367,55 @@ function openChooseMasterModal(placeId) {
       showNotification('Сетевая ошибка');
     });
 }
+
+
+
+
+
+// function openChooseMasterModal(placeId) {
+//   currentBookingPlaceId = placeId;
+//   fetch('/getMastersByPlace', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify({ placeId })
+//   })
+//     .then(res => res.json())
+//     .then(data => {
+//       if (data.success) {
+//         const masterList = document.getElementById('masterList');
+//         masterList.innerHTML = '';
+
+//         data.masters.forEach(master => {
+//           const btn = document.createElement('button');
+//           btn.textContent = master.name;
+//           btn.onclick = () => {
+//             selectedMaster = master;
+//             closeChooseMasterModal();
+//             openChooseServiceModal(currentBookingPlaceId);
+//           };
+//           masterList.appendChild(btn);
+//         });
+
+//         const overlay = document.getElementById('overlay');
+//         overlay.style.display = 'block';
+//         overlay.onclick = (event) => {
+//           // Проверяем, что клик был вне модалки
+//           const modal = document.getElementById('chooseMasterModal');
+//           if (!modal.contains(event.target)) {
+//             closeChooseMasterModal();
+//           }
+//         };
+
+//         document.getElementById('chooseMasterModal').style.display = 'block';
+//       } else {
+//         showNotification('Ошибка при получении мастеров');
+//       }
+//     })
+//     .catch(err => {
+//       console.error('Ошибка при получении мастеров:', err);
+//       showNotification('Сетевая ошибка');
+//     });
+// }
 
 function closeChooseMasterModal() {
   document.getElementById('chooseMasterModal').style.display = 'none';
