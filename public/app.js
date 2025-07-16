@@ -94,46 +94,46 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // Модалки:
-function openModal() {
-  const overlay = document.getElementById('overlay');
-  overlay.style.display = 'block'; // включаем overlay
-  document.getElementById('addModal').style.display = 'block';
-}
+// function openModal() {
+//   const overlay = document.getElementById('overlay');
+//   overlay.style.display = 'block'; // включаем overlay
+//   document.getElementById('addModal').style.display = 'block';
+// }
 
 
-function closeModal() {
-  document.getElementById('overlay').style.display = 'none';
-  document.getElementById('addModal').style.display = 'none';
-  document.getElementById('idInputModal').style.display = 'none';
+// function closeModal() {
+//   document.getElementById('overlay').style.display = 'none';
+//   document.getElementById('addModal').style.display = 'none';
+//   document.getElementById('idInputModal').style.display = 'none';
 
-  const input = document.getElementById('serviceIdInput');
-  if (input) {
-    input.disabled = false;
-    input.value = '';
-  }
-}
+//   const input = document.getElementById('serviceIdInput');
+//   if (input) {
+//     input.disabled = false;
+//     input.value = '';
+//   }
+// }
 
-function closeAllModals() {
-  document.getElementById('overlay').style.display = 'none';
+// function closeAllModals() {
+//   document.getElementById('overlay').style.display = 'none';
 
-  document.getElementById('addModal').style.display = 'none';
-  document.getElementById('idInputModal').style.display = 'none';
-  document.getElementById('confirmModal').style.display = 'none';
+//   document.getElementById('addModal').style.display = 'none';
+//   document.getElementById('idInputModal').style.display = 'none';
+//   document.getElementById('confirmModal').style.display = 'none';
 
-  // Закрытие меню
-  const menu = document.getElementById('dropdownMenu');
-  const button = document.getElementById('menuButton');
-  menu.style.display = 'none';
-  button.textContent = '☰';
+//   // Закрытие меню
+//   const menu = document.getElementById('dropdownMenu');
+//   const button = document.getElementById('menuButton');
+//   menu.style.display = 'none';
+//   button.textContent = '☰';
 
-  const input = document.getElementById('serviceIdInput');
-  if (input) {
-    input.disabled = false;
-    input.value = '';
-  }
+//   const input = document.getElementById('serviceIdInput');
+//   if (input) {
+//     input.disabled = false;
+//     input.value = '';
+//   }
 
-  placeIdToDelete = null;
-}
+//   placeIdToDelete = null;
+// }
 
 
 
@@ -1019,13 +1019,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // Автоматически скрывать меню при клике вне его
-// document.addEventListener('click', function (event) {
-//   const menu = document.getElementById('dropdownMenu');
-//   const button = document.getElementById('menuButton');
-//   if (menu.style.display === 'block' &&
-//     !menu.contains(event.target) &&
-//     event.target !== button) {
-//     menu.style.display = 'none';
-//     button.textContent = '☰';
-//   }
-// });
+document.addEventListener('click', function (event) {
+  const menu = document.getElementById('dropdownMenu');
+  const button = document.getElementById('menuButton');
+  if (menu.style.display === 'block' &&
+    !menu.contains(event.target) &&
+    event.target !== button) {
+    menu.style.display = 'none';
+    button.textContent = '☰';
+  }
+});
