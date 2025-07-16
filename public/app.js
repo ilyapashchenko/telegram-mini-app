@@ -991,6 +991,20 @@ async function loadBusinessContent() {
 }
 
 
+function closeAllModals() {
+  // Скрываем все возможные модальные окна
+  const modals = document.querySelectorAll('.modal');
+  modals.forEach(modal => {
+    modal.style.display = 'none';
+  });
+
+  // Скрываем оверлей
+  const overlay = document.getElementById('overlay');
+  if (overlay) overlay.style.display = 'none';
+
+  // Удаляем глобальный обработчик клика вне модалок (если был)
+  window.removeEventListener('click', handleOutsideClick);
+}
 
 
 
