@@ -788,6 +788,10 @@ function switchTab(tab) {
   screens.forEach(screen => screen.style.display = 'none');
 
   const title = document.getElementById('mainTitle');
+  const dateControls = document.getElementById('businessDateControls');
+
+  // Скрываем блок выбора даты по умолчанию
+  if (dateControls) dateControls.style.display = 'none';
 
   if (tab === 'home') {
     console.log('➡️ Открываем главный экран');
@@ -807,12 +811,54 @@ function switchTab(tab) {
   } else if (tab === 'business') {
     console.log('➡️ Открываем экран Бизнес');
     document.getElementById('businessScreen').style.display = 'block';
+
     if (title) {
-      title.style.display = 'none'; // у бизнес-экрана свой заголовок
+      title.style.display = 'none';
     }
-    loadBusinessContent(); // вызываем загрузку бизнес-контента
+
+    if (dateControls) {
+      dateControls.style.display = 'flex'; // показываем выбор даты
+    }
+
+    loadBusinessContent(); // загружаем контент
   }
 }
+
+
+
+
+// function switchTab(tab) {
+//   console.log('👉 Переключение вкладки на:', tab);
+
+//   const screens = document.querySelectorAll('.screen');
+//   screens.forEach(screen => screen.style.display = 'none');
+
+//   const title = document.getElementById('mainTitle');
+
+//   if (tab === 'home') {
+//     console.log('➡️ Открываем главный экран');
+//     document.getElementById('mainScreen').style.display = 'block';
+//     if (title) {
+//       title.style.display = 'block';
+//       title.textContent = 'Ваши сервисы:';
+//     }
+//   } else if (tab === 'bookings') {
+//     console.log('➡️ Открываем экран записей');
+//     document.getElementById('bookingsScreen').style.display = 'block';
+//     loadBookings();
+//     if (title) {
+//       title.style.display = 'block';
+//       title.textContent = 'Ваши записи:';
+//     }
+//   } else if (tab === 'business') {
+//     console.log('➡️ Открываем экран Бизнес');
+//     document.getElementById('businessScreen').style.display = 'block';
+//     if (title) {
+//       title.style.display = 'none';
+//     }
+//     loadBusinessContent(); 
+//   }
+// }
 
 
 
