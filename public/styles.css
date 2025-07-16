@@ -1,5 +1,6 @@
 /* Основной фоновый цвет: #E5EDF8
 цвет кнопки: #fdf9f1
+цвет кнопки при наведении: #f0e9d8
 Цвет текста кнопки: black
 обводка вокруг кнопки:
 border: 1px solid black;
@@ -511,14 +512,14 @@ body {
 }
 
 .time-slot-button:hover {
-  background-color: #d5d5d5;
+  background-color: #f0e9d8;
 }
 
 /* Активная кнопка времени */
 .time-slot-button.selected {
-  background-color: #bdbdbd;
+  background-color: #f0e9d9;
   font-weight: bold;
-  color: #000;
+  color: black;
 }
 
 /* МОДАЛКА С ВЫБОРОМ ВРЕМЕНИ */
