@@ -336,7 +336,16 @@ function openChooseMasterModal(placeId) {
           masterList.appendChild(btn);
         });
 
-        document.getElementById('overlay').style.display = 'block';
+        const overlay = document.getElementById('overlay');
+        overlay.style.display = 'block';
+        overlay.onclick = (event) => {
+          // Проверяем, что клик был вне модалки
+          const modal = document.getElementById('chooseMasterModal');
+          if (!modal.contains(event.target)) {
+            closeChooseMasterModal();
+          }
+        };
+
         document.getElementById('chooseMasterModal').style.display = 'block';
       } else {
         showNotification('Ошибка при получении мастеров');
@@ -350,8 +359,51 @@ function openChooseMasterModal(placeId) {
 
 function closeChooseMasterModal() {
   document.getElementById('chooseMasterModal').style.display = 'none';
-  document.getElementById('overlay').style.display = 'none';
+  const overlay = document.getElementById('overlay');
+  overlay.style.display = 'none';
+  overlay.onclick = null; // Удаляем обработчик клика
 }
+
+// function openChooseMasterModal(placeId) {
+//   currentBookingPlaceId = placeId;
+//   fetch('/getMastersByPlace', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify({ placeId })
+//   })
+//     .then(res => res.json())
+//     .then(data => {
+//       if (data.success) {
+//         const masterList = document.getElementById('masterList');
+//         masterList.innerHTML = '';
+
+//         data.masters.forEach(master => {
+//           const btn = document.createElement('button');
+//           btn.textContent = master.name;
+//           btn.onclick = () => {
+//             selectedMaster = master;
+//             closeChooseMasterModal();
+//             openChooseServiceModal(currentBookingPlaceId);
+//           };
+//           masterList.appendChild(btn);
+//         });
+
+//         document.getElementById('overlay').style.display = 'block';
+//         document.getElementById('chooseMasterModal').style.display = 'block';
+//       } else {
+//         showNotification('Ошибка при получении мастеров');
+//       }
+//     })
+//     .catch(err => {
+//       console.error('Ошибка при получении мастеров:', err);
+//       showNotification('Сетевая ошибка');
+//     });
+// }
+
+// function closeChooseMasterModal() {
+//   document.getElementById('chooseMasterModal').style.display = 'none';
+//   document.getElementById('overlay').style.display = 'none';
+// }
 
 
 
