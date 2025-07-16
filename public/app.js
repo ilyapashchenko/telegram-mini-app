@@ -82,6 +82,31 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 
+async function fetchAndRenderServices() {
+  const initData = window.Telegram.WebApp.initData;
+
+  try {
+    const response = await fetch('/getUserServices', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData })
+    });
+
+    const result = await response.json();
+
+    if (result.success && Array.isArray(result.services)) {
+      renderServices(result.services); // использует твою функцию
+    } else {
+      console.warn('Ошибка при получении сервисов:', result.error || 'unknown');
+      showNotification('Не удалось загрузить сервисы');
+    }
+  } catch (err) {
+    console.error('Ошибка при загрузке сервисов:', err);
+    showNotification('Ошибка загрузки сервисов');
+  }
+}
+
+
 
 
 
