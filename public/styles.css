@@ -462,3 +462,17 @@ body {
   padding-top: 5px;
   /* z-index: 1300; */
 }
+
+/* ОКНО ДЛЯ БИЗНЕСА */
+
+.date-picker {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  padding: 10px 0;
+  z-index: 10;
+}
+
+#businessContent {
+  padding-bottom: 90px; /* немного больше, чем высота нижнего меню */
+}
