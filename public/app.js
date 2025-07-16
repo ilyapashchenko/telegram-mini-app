@@ -1086,16 +1086,16 @@ async function loadBusinessContent() {
     const initData = window.Telegram.WebApp.initData;
     console.log('📦 initData:', initData);
 
-    // const response = await fetch('/api/getUserRole', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ initData })
-    // });
+    const response = await fetch('/api/getUserRole', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData })
+    });
 
-    // const data = await response.json();
+    const data = await response.json();
     console.log('📨 Ответ от /api/getUserRole получен:', data);
 
-    // userRole = data.role; // Сохраняем роль
+    userRole = data.role; // Сохраняем роль
 
     if (!data.success) {
       console.warn('❌ Ошибка определения роли:', data.error || 'unknown');
