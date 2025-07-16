@@ -94,11 +94,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // Модалки:
-// function openModal() {
-//   const overlay = document.getElementById('overlay');
-//   overlay.style.display = 'block'; // включаем overlay
-//   document.getElementById('addModal').style.display = 'block';
-// }
+function openModal() {
+  const overlay = document.getElementById('overlay');
+  overlay.style.display = 'block'; // включаем overlay
+  document.getElementById('addModal').style.display = 'block';
+}
 
 
 // function closeModal() {
