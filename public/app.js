@@ -1019,13 +1019,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // Автоматически скрывать меню при клике вне его
-document.addEventListener('click', function (event) {
-  const menu = document.getElementById('dropdownMenu');
-  const button = document.getElementById('menuButton');
-  if (menu.style.display === 'block' &&
-    !menu.contains(event.target) &&
-    event.target !== button) {
-    menu.style.display = 'none';
-    button.textContent = '☰';
-  }
-});
+// document.addEventListener('click', function (event) {
+//   const menu = document.getElementById('dropdownMenu');
+//   const button = document.getElementById('menuButton');
+//   if (menu.style.display === 'block' &&
+//     !menu.contains(event.target) &&
+//     event.target !== button) {
+//     menu.style.display = 'none';
+//     button.textContent = '☰';
+//   }
+// });
