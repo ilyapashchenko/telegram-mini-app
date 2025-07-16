@@ -1107,7 +1107,9 @@ async function loadBusinessContent() {
       console.log('👤 Пользователь — клиент');
       businessContent.innerHTML = `
         <p>Данный раздел предназначен для сотрудников Ваших сервисов. Если вы хотите подключить свой бизнес к нашему сервису, напишите нам</p>
-        <button id="contactButton" class="modal-button">Связаться</button>
+        <div style="display: flex; justify-content: center; margin-top: 16px;">
+          <button id="contactButton" class="modal-button">Связаться</button>
+        </div>
       `;
       document.getElementById('contactButton').onclick = () => {
         console.log('📞 Нажата кнопка "Связаться"');
