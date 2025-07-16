@@ -484,3 +484,7 @@ body {
   padding-top: 5px;
   /* z-index: 1300; */
 }
+
+.businessContent {
+  padding: 16px;
+}
