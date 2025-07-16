@@ -549,6 +549,8 @@ function submitSelectedDate() {
 
 
 //ВЫБОР ВРЕМЕНИ
+
+
 function openChooseTimeModal(date, totalDuration) {
   console.log('🔍 masterId:', selectedMaster?.master_id);
   console.log('📅 date:', date);
@@ -578,10 +580,35 @@ function openChooseTimeModal(date, totalDuration) {
           btn.textContent = slot;
           btn.className = 'slot-button';
 
+          // Добавляем стили для кнопки
+          btn.style.padding = '10px 20px';
+          btn.style.margin = '5px';
+          btn.style.border = '1px solid #ccc';
+          btn.style.borderRadius = '5px';
+          btn.style.cursor = 'pointer';
+          btn.style.backgroundColor = '#f0f0f0';
+
+          btn.onmouseover = () => {
+            btn.style.backgroundColor = '#e0e0e0';
+          };
+          btn.onmouseout = () => {
+            if (!btn.classList.contains('selected')) {
+              btn.style.backgroundColor = '#f0f0f0';
+            }
+          };
+
           btn.onclick = () => {
             // сбрасываем выделение
-            document.querySelectorAll('.slot-button').forEach(b => b.classList.remove('selected'));
+            document.querySelectorAll('.slot-button').forEach(b => {
+              b.classList.remove('selected');
+              b.style.backgroundColor = '#f0f0f0';
+              b.style.color = '#000';
+            });
+
+            // устанавливаем выделение на выбранной кнопке
             btn.classList.add('selected');
+            btn.style.backgroundColor = '#4CAF50';
+            btn.style.color = '#fff';
 
             // запоминаем выбранный слот
             selectedSlot = slot;
@@ -604,6 +631,61 @@ function openChooseTimeModal(date, totalDuration) {
       showNotification('Ошибка сервера');
     });
 }
+// function openChooseTimeModal(date, totalDuration) {
+//   console.log('🔍 masterId:', selectedMaster?.master_id);
+//   console.log('📅 date:', date);
+//   console.log('⏱ duration:', totalDuration);
+//   fetch('/getFreeSlots', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify({
+//       masterId: selectedMaster.master_id,
+//       date: date,
+//       duration: totalDuration
+//     })
+//   })
+//     .then(res => res.json())
+//     .then(data => {
+//       if (data.success) {
+//         const slotList = document.getElementById('slotList');
+//         slotList.innerHTML = '';
+
+//         if (data.slots.length === 0) {
+//           showNotification('В этот день нет свободных мест. Пожалуйста, выберите другой');
+//           return;
+//         }
+
+//         data.slots.forEach(slot => {
+//           const btn = document.createElement('button');
+//           btn.textContent = slot;
+//           btn.className = 'slot-button';
+
+//           btn.onclick = () => {
+//             // сбрасываем выделение
+//             document.querySelectorAll('.slot-button').forEach(b => b.classList.remove('selected'));
+//             btn.classList.add('selected');
+
+//             // запоминаем выбранный слот
+//             selectedSlot = slot;
+
+//             // активируем кнопку записи
+//             document.getElementById('confirmBookingBtn').disabled = false;
+//           };
+
+//           slotList.appendChild(btn);
+//         });
+
+//         document.getElementById('chooseTimeModal').style.display = 'block';
+//         document.getElementById('overlay').style.display = 'block';
+//       } else {
+//         showNotification('Ошибка при получении свободного времени');
+//       }
+//     })
+//     .catch(err => {
+//       console.error('Ошибка при получении слотов:', err);
+//       showNotification('Ошибка сервера');
+//     });
+// }
 
 function closeChooseTimeModal() {
   document.getElementById('chooseTimeModal').style.display = 'none';
