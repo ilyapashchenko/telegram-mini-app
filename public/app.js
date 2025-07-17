@@ -428,8 +428,6 @@ function closeModal() {
 
 
 
-
-
 async function addByQR() {
   try {
     const initData = window.Telegram.WebApp.initData;
@@ -437,20 +435,19 @@ async function addByQR() {
     Telegram.WebApp.showScanQrPopup({
       text: 'Наведите камеру на QR-код сервиса',
     }, async (scannedText) => {
-      console.log('[DEBUG] QR result:', scannedText);
+      console.log('[QR] Отсканированное содержимое:', scannedText);
 
       if (!scannedText) {
         showNotification('QR-код не был отсканирован');
         return;
       }
 
-      // Попробуем извлечь startapp из ссылки, если это URL
       let rawParam;
       try {
         const url = new URL(scannedText, window.location.origin);
         rawParam = url.searchParams.get('startapp') || scannedText;
       } catch {
-        rawParam = scannedText; // если это просто текст
+        rawParam = scannedText; // Просто текст
       }
 
       if (!rawParam.startsWith('add_place_')) {
@@ -468,46 +465,105 @@ async function addByQR() {
         });
 
         const result = await response.json();
+        console.log('[QR] Ответ от /addPlaceById:', result);
 
         if (result.success) {
           showNotification('Сервис успешно добавлен!');
-          await waitForPlaceToAppear(placeId, initData); // ⬅️ ждём появления
+          await waitForPlaceToAppear(placeId, initData); // Ждем появления
+          await fetchAndRenderServices(); // Перезагружаем список
           switchTab('home');
-
-          try {
-            const response = await fetch('/auth', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ initData })
-            });
-
-            const result = await response.json();
-            console.log('[QR] Повторный /auth:', result);
-
-            if (result.success) {
-              renderPlaces(result.places);
-            } else {
-              showNotification('[QR] Ошибка при загрузке после добавления');
-            }
-          } catch (err) {
-            console.error('[QR] Ошибка при повторной загрузке:', err);
-            showNotification('[QR] Ошибка загрузки сервисов');
-          }
-        }
-
-        else {
+        } else {
           showNotification('Ошибка: ' + result.error);
         }
       } catch (err) {
-        console.error('[ERROR] Ошибка при добавлении через QR:', err);
+        console.error('[QR] Ошибка при добавлении:', err);
         showNotification('Ошибка подключения сервиса.');
       }
     });
-  } catch (e) {
-    console.error('[ERROR] Ошибка при сканировании QR:', e);
+  } catch (err) {
+    console.error('[QR] Ошибка запуска сканера:', err);
     showNotification('Произошла ошибка при запуске сканера');
   }
 }
+
+// async function addByQR() {
+//   try {
+//     const initData = window.Telegram.WebApp.initData;
+
+//     Telegram.WebApp.showScanQrPopup({
+//       text: 'Наведите камеру на QR-код сервиса',
+//     }, async (scannedText) => {
+//       console.log('[DEBUG] QR result:', scannedText);
+
+//       if (!scannedText) {
+//         showNotification('QR-код не был отсканирован');
+//         return;
+//       }
+
+//       // Попробуем извлечь startapp из ссылки, если это URL
+//       let rawParam;
+//       try {
+//         const url = new URL(scannedText, window.location.origin);
+//         rawParam = url.searchParams.get('startapp') || scannedText;
+//       } catch {
+//         rawParam = scannedText; // если это просто текст
+//       }
+
+//       if (!rawParam.startsWith('add_place_')) {
+//         showNotification('Неверный формат QR-кода');
+//         return;
+//       }
+
+//       const placeId = rawParam.replace('add_place_', '');
+
+//       try {
+//         const response = await fetch('/addPlaceById', {
+//           method: 'POST',
+//           headers: { 'Content-Type': 'application/json' },
+//           body: JSON.stringify({ initData, placeId })
+//         });
+
+//         const result = await response.json();
+
+//         if (result.success) {
+//           showNotification('Сервис успешно добавлен!');
+//           await waitForPlaceToAppear(placeId, initData); // ⬅️ ждём появления
+//           switchTab('home');
+
+//           try {
+//             const response = await fetch('/auth', {
+//               method: 'POST',
+//               headers: { 'Content-Type': 'application/json' },
+//               body: JSON.stringify({ initData })
+//             });
+
+//             const result = await response.json();
+//             console.log('[QR] Повторный /auth:', result);
+
+//             if (result.success) {
+//               renderPlaces(result.places);
+//             } else {
+//               showNotification('[QR] Ошибка при загрузке после добавления');
+//             }
+//           } catch (err) {
+//             console.error('[QR] Ошибка при повторной загрузке:', err);
+//             showNotification('[QR] Ошибка загрузки сервисов');
+//           }
+//         }
+
+//         else {
+//           showNotification('Ошибка: ' + result.error);
+//         }
+//       } catch (err) {
+//         console.error('[ERROR] Ошибка при добавлении через QR:', err);
+//         showNotification('Ошибка подключения сервиса.');
+//       }
+//     });
+//   } catch (e) {
+//     console.error('[ERROR] Ошибка при сканировании QR:', e);
+//     showNotification('Произошла ошибка при запуске сканера');
+//   }
+// }
 
 
 
