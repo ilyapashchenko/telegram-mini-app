@@ -512,10 +512,11 @@ async function addByQR() {
 
         if (result.success) {
           showNotification('Сервис успешно добавлен!');
-          await waitForPlaceToAppear(placeId);
+          await waitForPlaceToAppear(placeId, initData); // ⬅️ добавили сюда
           await fetchAndRenderServices();
           switchTab('home');
         }
+
         else {
           showNotification('Ошибка: ' + result.error);
         }
@@ -530,13 +531,21 @@ async function addByQR() {
   }
 }
 
-async function waitForPlaceToAppear(placeId, maxAttempts = 10, delay = 300) {
+async function waitForPlaceToAppear(placeId, initData, maxAttempts = 10, delay = 300) {
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      const res = await fetch('/getMyPlaces');
-      const places = await res.json();
-      const found = places.find(place => place.id === parseInt(placeId));
+      const res = await fetch('/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initData })
+      });
+
+      const result = await res.json();
+      if (!result.success || !result.places) continue;
+
+      const found = result.places.find(place => String(place.place_id) === String(placeId));
       if (found) return;
+
     } catch (err) {
       console.error('Ошибка при проверке наличия сервиса:', err);
     }
@@ -546,6 +555,7 @@ async function waitForPlaceToAppear(placeId, maxAttempts = 10, delay = 300) {
 
   console.warn(`Сервис с ID ${placeId} не появился после ${maxAttempts} попыток`);
 }
+
 
 
 
