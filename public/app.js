@@ -339,124 +339,56 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 async function fetchAndRenderServices() {
-  console.log('[Fetch] === Начинаем загрузку сервисов ===');
-
+  console.log('[Fetch] Загружаем список сервисов...');
   try {
-    const initData = window.Telegram?.WebApp?.initData;
-    console.log('[Fetch] Получено initData:', initData);
+    const initData = window.Telegram.WebApp.initData;
 
-    if (!initData) {
-      throw new Error('initData отсутствует. Telegram WebApp не инициализирован?');
-    }
-
-    console.log('[Fetch] Отправляем POST-запрос на /auth...');
     const response = await fetch('/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ initData })
     });
 
-    console.log('[Fetch] Ответ получен, статус:', response.status);
-
-    if (!response.ok) {
-      const text = await response.text();
-      console.error('[Fetch] Сервер вернул ошибку:', text);
-      throw new Error('Ответ от сервера не OK');
-    }
-
     const result = await response.json();
-    console.log('[Fetch] JSON распарсен:', result);
+    console.log('[Fetch] Ответ от /auth:', result);
 
-    if (!result.success) {
-      console.error('[Fetch] success = false:', result.error || result);
-      throw new Error('Сервер вернул success = false');
+    if (!result.success || !Array.isArray(result.places)) {
+      throw new Error('Ошибка загрузки сервисов');
     }
 
-    if (!Array.isArray(result.places)) {
-      console.error('[Fetch] result.places не массив:', result.places);
-      throw new Error('Некорректный формат places');
-    }
+    // ВСТАВЛЯЕМ ТВОЮ ПРЯМУЮ ОТРИСОВКУ СЮДА
+    const servicesContainer = document.getElementById('servicesList'); // замените на свой id
+    servicesContainer.innerHTML = '';
 
-    console.log(`[Fetch] Найдено ${result.places.length} сервисов. Начинаем отрисовку...`);
-
-    const container = document.getElementById('servicesList');
-    if (!container) {
-      console.error('[Fetch] Элемент #servicesList не найден в DOM');
-      throw new Error('Контейнер для отображения сервисов не найден');
-    }
-
-    container.innerHTML = ''; // Очищаем список
-
-    result.places.forEach((place, index) => {
-      console.log(`[Render] Отрисовка сервиса #${index + 1}:`, place);
-
+    result.places.forEach(place => {
       const div = document.createElement('div');
       div.className = 'service-card';
-      div.textContent = place.name`Без названия (id: ${place.id  'нет'
-    })`;
+      div.textContent = place.name; // или другая информация
+      servicesContainer.appendChild(div);
+    });
 
-  container.appendChild(div);
-});
+    console.log('[Fetch] Сервисы успешно отрисованы');
 
-    console.log('[Fetch] ✅ Сервисы успешно отрисованы');
   } catch (err) {
-    console.error('[Fetch] ❌ Ошибка при загрузке сервисов:', err);
+    console.error('[Fetch] Ошибка при загрузке сервисов:', err);
     showNotification('Ошибка загрузки сервисов.');
   }
-
-  console.log('[Fetch] === Завершено ===');
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// async function fetchAndRenderServices() {
-//   console.log('[Fetch] Загружаем список сервисов...');
-//   try {
-//     const initData = window.Telegram.WebApp.initData;
-
-//     const response = await fetch('/auth', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ initData })
-//     });
-
-//     const result = await response.json();
-//     console.log('[Fetch] Ответ от /auth:', result);
-
-//     if (!result.success || !Array.isArray(result.places)) {
-//       throw new Error('Ошибка загрузки сервисов');
-//     }
-
-//     // ВСТАВЛЯЕМ ТВОЮ ПРЯМУЮ ОТРИСОВКУ СЮДА
-//     const servicesContainer = document.getElementById('servicesList'); // замените на свой id
-//     servicesContainer.innerHTML = '';
-
-//     result.places.forEach(place => {
-//       const div = document.createElement('div');
-//       div.className = 'service-card';
-//       div.textContent = place.name; // или другая информация
-//       servicesContainer.appendChild(div);
-//     });
-
-//     console.log('[Fetch] Сервисы успешно отрисованы');
-
-//   } catch (err) {
-//     console.error('[Fetch] Ошибка при загрузке сервисов:', err);
-//     showNotification('Ошибка загрузки сервисов.');
-//   }
-// }
 
 
 
