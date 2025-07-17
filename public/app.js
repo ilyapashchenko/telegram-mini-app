@@ -562,9 +562,10 @@ async function addByQR() {
 
         if (result.success) {
           showNotification('Сервис успешно добавлен!');
-          await waitForPlaceToAppear(placeId, initData); // Ждем появления
-          await fetchAndRenderServices(); // Перезагружаем список
-          switchTab('home');
+          location.reload()
+          // await waitForPlaceToAppear(placeId, initData); // Ждем появления
+          // await fetchAndRenderServices(); // Перезагружаем список
+          // switchTab('home');
         } else {
           showNotification('Ошибка: ' + result.error);
         }
