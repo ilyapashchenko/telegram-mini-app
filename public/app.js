@@ -173,186 +173,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 
-
-
-
-// window.Telegram.WebApp.ready();
-
-// document.addEventListener('DOMContentLoaded', async () => {
-//   window.Telegram.WebApp.expand();
-//   const initData = window.Telegram.WebApp.initData;
-//   const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
-//   const startParam = initDataUnsafe?.start_param;
-
-//   if (startParam?.startsWith('add_place_')) {
-//     const placeId = startParam.replace('add_place_', '');
-//     try {
-//       const response = await fetch('/addPlaceById', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ initData, placeId })
-//       });
-
-//       const result = await response.json();
-
-//       // Удаляем start_param из URL
-//       history.replaceState(null, '', window.location.pathname);
-
-//       if (result.success) {
-//         showNotification('Сервис успешно добавлен!');
-//       } else {
-//         showNotification('Ошибка: ' + result.error);
-//       }
-//     } catch (err) {
-//       console.error('Ошибка подключения по QR:', err);
-//       showNotification('Ошибка подключения сервиса.');
-//       history.replaceState(null, '', window.location.pathname);
-//     }
-//   }
-
-//   // 🟢 Загружаем список сервисов после всех вышеуказанных действий
-//   try {
-//     const response = await fetch('/auth', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ initData })
-//     });
-
-//     const result = await response.json();
-
-//     if (result.success) {
-//       const serviceList = document.getElementById('serviceList');
-//       serviceList.innerHTML = '';
-
-//       if (result.places.length > 0) {
-//         result.places.forEach((place, index) => {
-//           const div = document.createElement('div');
-//           div.className = 'service-item';
-
-//           const title = document.createElement('div');
-//           title.textContent = place.place_name;
-
-//           const buttonGroup = document.createElement('div');
-//           buttonGroup.style.display = 'flex';
-//           buttonGroup.style.gap = '8px';
-
-//           const deleteBtn = document.createElement('button');
-//           deleteBtn.className = 'delete-button';
-//           deleteBtn.innerHTML = '🗑️';
-//           deleteBtn.onclick = () => confirmDelete(place.place_id);
-
-//           const bookBtn = document.createElement('button');
-//           bookBtn.textContent = 'Записаться';
-//           bookBtn.className = 'book-button';
-//           bookBtn.onclick = () => openChooseMasterModal(place.place_id);
-
-//           buttonGroup.appendChild(deleteBtn);
-//           buttonGroup.appendChild(bookBtn);
-//           div.appendChild(title);
-//           div.appendChild(buttonGroup);
-//           serviceList.appendChild(div);
-
-//           if (
-//             index < result.places.length - 1 &&
-//             serviceList.lastChild?.classList?.contains('service-divider') === false
-//           ) {
-//             const divider = document.createElement('div');
-//             divider.className = 'service-divider';
-//             serviceList.appendChild(divider);
-//           }
-//         });
-//       } else {
-//         serviceList.textContent = 'Сервисов пока нет';
-//       }
-//     } else {
-//       showNotification('Ошибка аутентификации');
-//     }
-//   } catch (error) {
-//     console.error('Ошибка при загрузке:', error);
-//     showNotification('Ошибка загрузки сервисов');
-//   }
-
-//   // В конце: переключение на домашнюю вкладку
-//   switchTab('home');
-// });
-
-
-
-// window.Telegram.WebApp.ready();
-
-// document.addEventListener('DOMContentLoaded', async () => {
-//   console.log('[init] DOMContentLoaded');
-
-//   const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
-//   console.log('[init] initDataUnsafe:', initDataUnsafe);
-
-//   const startParam = initDataUnsafe?.start_param;
-//   console.log('[init] start_param:', startParam);
-
-//   if (startParam?.startsWith('add_place_')) {
-//     const placeId = startParam.replace('add_place_', '');
-//     console.log('[add_place] Detected placeId:', placeId);
-
-//     try {
-//       const response = await fetch('/addPlaceById', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({
-//           initData: window.Telegram.WebApp.initData,
-//           placeId
-//         })
-//       });
-
-//       const result = await response.json();
-//       console.log('[add_place] Server response:', result);
-
-//       // Удаляем start_param из истории URL
-//       history.replaceState(null, '', window.location.pathname);
-
-//       if (result.success) {
-//         console.log('[add_place] Place successfully added');
-//         showNotification('Сервис успешно добавлен!');
-//         await fetchAndRenderServices();
-//         switchTab('home');
-//       } else {
-//         console.warn('[add_place] Server returned error:', result.error);
-//         showNotification('Ошибка: ' + result.error);
-//         switchTab('home');
-//       }
-
-//     } catch (err) {
-//       console.error('[add_place] Ошибка запроса на сервер:', err);
-//       showNotification('Ошибка подключения сервиса.');
-//       history.replaceState(null, '', window.location.pathname);
-//       switchTab('home');
-//     }
-
-//   } else {
-//     console.log('[init] No start_param, loading normally');
-//     switchTab('home');
-//     await fetchAndRenderServices();
-//   }
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 async function fetchAndRenderServices() {
   console.log('[Fetch] Загружаем список сервисов...');
   try {
@@ -389,99 +209,6 @@ async function fetchAndRenderServices() {
     showNotification('Ошибка загрузки сервисов.');
   }
 }
-
-
-
-// async function fetchAndRenderServices() {
-//   try {
-//     showNotification('[Fetch] Загружаем список сервисов...');
-
-//     const initData = window.Telegram.WebApp.initData;
-
-//     const response = await fetch('/auth', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ initData })
-//     });
-
-//     const result = await response.json();
-
-//     // Показываем ключевые данные
-//     showNotification('result.success: ' + result.success);
-//     showNotification('places isArray: ' + Array.isArray(result.places));
-//     showNotification('places raw: ' + JSON.stringify(result.places));
-
-//     // Условие
-//     if (result.success && Array.isArray(result.places)) {
-//       renderPlaces(result.places);
-//       showNotification('[Fetch] Сервисы успешно отрисованы');
-//     } else {
-//       showNotification('[Fetch] Ошибка: result.success или places невалидны');
-//     }
-
-//   } catch (err) {
-//     showNotification('[Fetch] Ошибка при загрузке: ' + err.message);
-//   }
-// }
-
-
-
-
-
-
-// async function fetchAndRenderServices() {
-//   console.log('[Fetch] Загружаем список сервисов...');
-//   try {
-//     const initData = window.Telegram.WebApp.initData;
-
-//     const response = await fetch('/auth', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ initData })
-//     });
-
-//     const result = await response.json();
-//     console.log('[Fetch] Ответ от /auth:', result);
-
-//     if (!result.success || !Array.isArray(result.places)) {
-//       throw new Error('Ошибка загрузки сервисов');
-//     }
-
-//     renderPlaces(result.places);
-//     console.log('[Fetch] Сервисы успешно отрисованы');
-
-//   } catch (err) {
-//     console.error('[Fetch] Ошибка при загрузке сервисов:', err);
-//     showNotification('Ошибка загрузки сервисов.');
-//   }
-// }
-
-
-// async function fetchAndRenderServices() {
-//   console.log('[services] Fetching services...');
-//   try {
-//     const response = await fetch('/getUserPlaces', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({
-//         initData: window.Telegram.WebApp.initData
-//       })
-//     });
-
-//     const result = await response.json();
-//     console.log('[services] Response from server:', result);
-
-//     if (result.success) {
-//       renderServices(result.places);
-//     } else {
-//       console.warn('[services] Failed to load services:', result.error);
-//       showNotification('Ошибка загрузки сервисов: ' + result.error);
-//     }
-//   } catch (err) {
-//     console.error('[services] Network error:', err);
-//     showNotification('Ошибка загрузки сервисов.');
-//   }
-// }
 
 
 // Модалки:
@@ -580,91 +307,6 @@ async function addByQR() {
   }
 }
 
-// async function addByQR() {
-//   try {
-//     const initData = window.Telegram.WebApp.initData;
-
-//     Telegram.WebApp.showScanQrPopup({
-//       text: 'Наведите камеру на QR-код сервиса',
-//     }, async (scannedText) => {
-//       console.log('[DEBUG] QR result:', scannedText);
-
-//       if (!scannedText) {
-//         showNotification('QR-код не был отсканирован');
-//         return;
-//       }
-
-//       // Попробуем извлечь startapp из ссылки, если это URL
-//       let rawParam;
-//       try {
-//         const url = new URL(scannedText, window.location.origin);
-//         rawParam = url.searchParams.get('startapp') || scannedText;
-//       } catch {
-//         rawParam = scannedText; // если это просто текст
-//       }
-
-//       if (!rawParam.startsWith('add_place_')) {
-//         showNotification('Неверный формат QR-кода');
-//         return;
-//       }
-
-//       const placeId = rawParam.replace('add_place_', '');
-
-//       try {
-//         const response = await fetch('/addPlaceById', {
-//           method: 'POST',
-//           headers: { 'Content-Type': 'application/json' },
-//           body: JSON.stringify({ initData, placeId })
-//         });
-
-//         const result = await response.json();
-
-//         if (result.success) {
-//           showNotification('Сервис успешно добавлен!');
-//           await waitForPlaceToAppear(placeId, initData); // ⬅️ ждём появления
-//           switchTab('home');
-
-//           try {
-//             const response = await fetch('/auth', {
-//               method: 'POST',
-//               headers: { 'Content-Type': 'application/json' },
-//               body: JSON.stringify({ initData })
-//             });
-
-//             const result = await response.json();
-//             console.log('[QR] Повторный /auth:', result);
-
-//             if (result.success) {
-//               renderPlaces(result.places);
-//             } else {
-//               showNotification('[QR] Ошибка при загрузке после добавления');
-//             }
-//           } catch (err) {
-//             console.error('[QR] Ошибка при повторной загрузке:', err);
-//             showNotification('[QR] Ошибка загрузки сервисов');
-//           }
-//         }
-
-//         else {
-//           showNotification('Ошибка: ' + result.error);
-//         }
-//       } catch (err) {
-//         console.error('[ERROR] Ошибка при добавлении через QR:', err);
-//         showNotification('Ошибка подключения сервиса.');
-//       }
-//     });
-//   } catch (e) {
-//     console.error('[ERROR] Ошибка при сканировании QR:', e);
-//     showNotification('Произошла ошибка при запуске сканера');
-//   }
-// }
-
-
-
-
-
-
-
 
 
 
@@ -675,11 +317,11 @@ async function addByQR() {
 
 async function waitForPlaceToAppear(placeId, initData, maxAttempts = 10, delay = 300) {
   console.log('[Wait] Начинаем ожидание места:', placeId);
-  showNotification(`[Wait] Ожидаем появления ID ${ placeId } `);
+  showNotification(`[Wait] Ожидаем появления ID ${placeId} `);
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    console.log(`[Wait] Попытка ${ attempt } из ${ maxAttempts } `);
-    showNotification(`[Wait] Попытка ${ attempt }...`);
+    console.log(`[Wait] Попытка ${attempt} из ${maxAttempts} `);
+    showNotification(`[Wait] Попытка ${attempt}...`);
 
     try {
       const res = await fetch('/auth', {
@@ -716,7 +358,7 @@ async function waitForPlaceToAppear(placeId, initData, maxAttempts = 10, delay =
   }
 
   showNotification('[Wait] Сервис не найден. Проверьте позже.');
-  console.warn(`[Wait] Место не найдено после ${ maxAttempts } попыток`);
+  console.warn(`[Wait] Место не найдено после ${maxAttempts} попыток`);
 }
 
 
@@ -949,113 +591,12 @@ function openChooseMasterModal(placeId) {
 }
 
 
-
-
-
-// function openChooseMasterModal(placeId) {
-//   currentBookingPlaceId = placeId;
-//   fetch('/getMastersByPlace', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({ placeId })
-//   })
-//     .then(res => res.json())
-//     .then(data => {
-//       if (data.success) {
-//         const masterList = document.getElementById('masterList');
-//         masterList.innerHTML = '';
-
-//         data.masters.forEach(master => {
-//           const btn = document.createElement('button');
-//           btn.textContent = master.name;
-//           btn.onclick = () => {
-//             selectedMaster = master;
-//             closeChooseMasterModal();
-//             openChooseServiceModal(currentBookingPlaceId);
-//           };
-//           masterList.appendChild(btn);
-//         });
-
-//         const overlay = document.getElementById('overlay');
-//         overlay.style.display = 'block';
-//         overlay.onclick = (event) => {
-//           // Проверяем, что клик был вне модалки
-//           const modal = document.getElementById('chooseMasterModal');
-//           if (!modal.contains(event.target)) {
-//             closeChooseMasterModal();
-//           }
-//         };
-
-//         document.getElementById('chooseMasterModal').style.display = 'block';
-//       } else {
-//         showNotification('Ошибка при получении мастеров');
-//       }
-//     })
-//     .catch(err => {
-//       console.error('Ошибка при получении мастеров:', err);
-//       showNotification('Сетевая ошибка');
-//     });
-// }
-
 function closeChooseMasterModal() {
   document.getElementById('chooseMasterModal').style.display = 'none';
   const overlay = document.getElementById('overlay');
   overlay.style.display = 'none';
   overlay.onclick = null; // Удаляем обработчик клика
 }
-
-// function openChooseMasterModal(placeId) {
-//   currentBookingPlaceId = placeId;
-//   fetch('/getMastersByPlace', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({ placeId })
-//   })
-//     .then(res => res.json())
-//     .then(data => {
-//       if (data.success) {
-//         const masterList = document.getElementById('masterList');
-//         masterList.innerHTML = '';
-
-//         data.masters.forEach(master => {
-//           const btn = document.createElement('button');
-//           btn.textContent = master.name;
-//           btn.onclick = () => {
-//             selectedMaster = master;
-//             closeChooseMasterModal();
-//             openChooseServiceModal(currentBookingPlaceId);
-//           };
-//           masterList.appendChild(btn);
-//         });
-
-//         document.getElementById('overlay').style.display = 'block';
-//         document.getElementById('chooseMasterModal').style.display = 'block';
-//       } else {
-//         showNotification('Ошибка при получении мастеров');
-//       }
-//     })
-//     .catch(err => {
-//       console.error('Ошибка при получении мастеров:', err);
-//       showNotification('Сетевая ошибка');
-//     });
-// }
-
-// function closeChooseMasterModal() {
-//   document.getElementById('chooseMasterModal').style.display = 'none';
-//   document.getElementById('overlay').style.display = 'none';
-// }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1102,7 +643,7 @@ function openChooseServiceModal(placeId) {
           };
 
           label.appendChild(checkbox);
-          label.appendChild(document.createTextNode(` ${ service.name } (${ service.duration_minutes } мин)`));
+          label.appendChild(document.createTextNode(` ${service.name} (${service.duration_minutes} мин)`));
           serviceList.appendChild(label);
         });
 
@@ -1139,12 +680,6 @@ function submitSelectedServices() {
   console.log('Выбран мастер:', selectedMaster.name);
   console.log('Услуги:', selectedServices.map(s => s.name));
   console.log('Общая длительность:', totalDuration, 'минут');
-
-  // дальше вызовем функцию показа календаря
-  // const selectedDate = '2025-07-11'; // временная дата для теста
-
-  // openChooseTimeModal(selectedDate, totalDuration);
-  // Показываем календарь вместо слотов сразу
   openChooseDateModal();
 
 }
@@ -1167,7 +702,7 @@ function renderServices(services) {
     value = "${service.service_id}"
     data - name="${service.service_name}"
     data - duration="${service.duration}" >
-      ${ service.service_name } (${ service.duration } мин)
+      ${service.service_name} (${service.duration} мин)
     `;
     serviceSelectList.appendChild(label);
   });
@@ -1299,63 +834,6 @@ function openChooseTimeModal(date, totalDuration) {
 }
 
 
-
-// function openChooseTimeModal(date, totalDuration) {
-//   console.log('🔍 masterId:', selectedMaster?.master_id);
-//   console.log('📅 date:', date);
-//   console.log('⏱ duration:', totalDuration);
-//   fetch('/getFreeSlots', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({
-//       masterId: selectedMaster.master_id,
-//       date: date,
-//       duration: totalDuration
-//     })
-//   })
-//     .then(res => res.json())
-//     .then(data => {
-//       if (data.success) {
-//         const slotList = document.getElementById('slotList');
-//         slotList.innerHTML = '';
-
-//         if (data.slots.length === 0) {
-//           showNotification('В этот день нет свободных мест. Пожалуйста, выберите другой');
-//           return;
-//         }
-
-//         data.slots.forEach(slot => {
-//           const btn = document.createElement('button');
-//           btn.textContent = slot;
-//           btn.className = 'slot-button';
-
-//           btn.onclick = () => {
-//             // сбрасываем выделение
-//             document.querySelectorAll('.slot-button').forEach(b => b.classList.remove('selected'));
-//             btn.classList.add('selected');
-
-//             // запоминаем выбранный слот
-//             selectedSlot = slot;
-
-//             // активируем кнопку записи
-//             document.getElementById('confirmBookingBtn').disabled = false;
-//           };
-
-//           slotList.appendChild(btn);
-//         });
-
-//         document.getElementById('chooseTimeModal').style.display = 'block';
-//         document.getElementById('overlay').style.display = 'block';
-//       } else {
-//         showNotification('Ошибка при получении свободного времени');
-//       }
-//     })
-//     .catch(err => {
-//       console.error('Ошибка при получении слотов:', err);
-//       showNotification('Ошибка сервера');
-//     });
-// }
-
 function closeChooseTimeModal() {
   document.getElementById('chooseTimeModal').style.display = 'none';
   document.getElementById('overlay').style.display = 'none';
@@ -1473,96 +951,6 @@ async function switchTab(tab) {
 }
 
 
-// function switchTab(tab) {
-//   console.log('👉 Переключение вкладки на:', tab);
-
-//   const screens = document.querySelectorAll('.screen');
-//   screens.forEach(screen => screen.style.display = 'none');
-
-//   const title = document.getElementById('mainTitle');
-//   const dateControls = document.getElementById('businessDateControls');
-
-//   if (dateControls) dateControls.style.display = 'none';
-
-//   if (tab === 'home') {
-//     console.log('➡️ Открываем главный экран');
-//     document.getElementById('mainScreen').style.display = 'block';
-//     if (title) {
-//       title.style.display = 'block';
-//       title.textContent = 'Ваши сервисы:';
-//     }
-//   } else if (tab === 'bookings') {
-//     console.log('➡️ Открываем экран записей');
-//     document.getElementById('bookingsScreen').style.display = 'block';
-//     loadBookings();
-//     if (title) {
-//       title.style.display = 'block';
-//       title.textContent = 'Ваши записи:';
-//     }
-//   } else if (tab === 'business') {
-//     console.log('➡️ Открываем экран Бизнес');
-//     document.getElementById('businessScreen').style.display = 'block';
-
-//     if (title) {
-//       title.style.display = 'none';
-//     }
-
-//     if (dateControls) {
-//       dateControls.style.display = 'flex';
-
-//       const input = document.getElementById('businessDate');
-//       if (input) {
-//         const today = new Date().toISOString().split('T')[0];
-//         input.value = today;
-//       }
-//     }
-
-//     loadBusinessContent();
-//   }
-// }
-
-
-
-
-
-// function switchTab(tab) {
-//   console.log('👉 Переключение вкладки на:', tab);
-
-//   const screens = document.querySelectorAll('.screen');
-//   screens.forEach(screen => screen.style.display = 'none');
-
-//   const title = document.getElementById('mainTitle');
-
-//   if (tab === 'home') {
-//     console.log('➡️ Открываем главный экран');
-//     document.getElementById('mainScreen').style.display = 'block';
-//     if (title) {
-//       title.style.display = 'block';
-//       title.textContent = 'Ваши сервисы:';
-//     }
-//   } else if (tab === 'bookings') {
-//     console.log('➡️ Открываем экран записей');
-//     document.getElementById('bookingsScreen').style.display = 'block';
-//     loadBookings();
-//     if (title) {
-//       title.style.display = 'block';
-//       title.textContent = 'Ваши записи:';
-//     }
-//   } else if (tab === 'business') {
-//     console.log('➡️ Открываем экран Бизнес');
-//     document.getElementById('businessScreen').style.display = 'block';
-//     if (title) {
-//       title.style.display = 'none';
-//     }
-//     loadBusinessContent(); 
-//   }
-// }
-
-
-
-
-
-
 
 
 // ФУНКЦИЯ ЗАГРУЗКИ ЗАПИСЕЙ
@@ -1592,33 +980,33 @@ function loadBookings() {
           const div = document.createElement('div');
           div.className = 'booking-card';
           div.innerHTML = `
-      < strong > ${ booking.service_name }</strong > <br>
+      < strong > ${booking.service_name}</strong > <br>
         Дата: ${formattedDate}<br>
           Время: ${formattedTime}<br>
             Мастер: ${booking.master_name}<br>
               Длительность: ${booking.duration} мин
               `;
-              list.appendChild(div);
+          list.appendChild(div);
         });
       } else {
-                list.innerHTML = '<div>У вас пока нет записей.</div>';
+        list.innerHTML = '<div>У вас пока нет записей.</div>';
       }
     })
     .catch(err => {
-                console.error('Ошибка при получении записей:', err);
-              showNotification('Не удалось загрузить записи');
+      console.error('Ошибка при получении записей:', err);
+      showNotification('Не удалось загрузить записи');
     });
 }
 
 
 
 
-              function formatDate(dateStr) {
+function formatDate(dateStr) {
   const date = new Date(dateStr);
-              return date.toLocaleDateString('ru-RU', {
-                day: '2-digit',
-              month: '2-digit',
-              year: 'numeric'
+  return date.toLocaleDateString('ru-RU', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
   });
 }
 
@@ -1629,87 +1017,87 @@ function loadBookings() {
 
 
 
-              // ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНТЕНТА ДЛЯ ЭКРАНА БИЗНЕС
-              async function loadBusinessContent() {
-                console.log('🚀 Загружаем бизнес-контент...');
+// ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНТЕНТА ДЛЯ ЭКРАНА БИЗНЕС
+async function loadBusinessContent() {
+  console.log('🚀 Загружаем бизнес-контент...');
 
-              const businessContent = document.getElementById('businessContent');
-              businessContent.innerHTML = 'Загрузка...';
+  const businessContent = document.getElementById('businessContent');
+  businessContent.innerHTML = 'Загрузка...';
 
-              try {
+  try {
     const initData = window.Telegram.WebApp.initData;
-              console.log('📦 initData:', initData);
+    console.log('📦 initData:', initData);
 
-              const response = await fetch('/api/getUserRole', {
-                method: 'POST',
-              headers: {'Content-Type': 'application/json' },
-              body: JSON.stringify({initData})
+    const response = await fetch('/api/getUserRole', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData })
     });
 
-              const data = await response.json();
-              console.log('📨 Ответ от /api/getUserRole получен:', data);
+    const data = await response.json();
+    console.log('📨 Ответ от /api/getUserRole получен:', data);
 
-              userRole = data.role; // Сохраняем роль
+    userRole = data.role; // Сохраняем роль
 
-              if (!data.success) {
-                console.warn('❌ Ошибка определения роли:', data.error || 'unknown');
-              businessContent.innerHTML = '<p>Не удалось определить роль пользователя.</p>';
-              return;
+    if (!data.success) {
+      console.warn('❌ Ошибка определения роли:', data.error || 'unknown');
+      businessContent.innerHTML = '<p>Не удалось определить роль пользователя.</p>';
+      return;
     }
 
-              if (data.role === 'client') {
-                console.log('👤 Пользователь — клиент');
-              businessContent.innerHTML = `
+    if (data.role === 'client') {
+      console.log('👤 Пользователь — клиент');
+      businessContent.innerHTML = `
               <p>Данный раздел предназначен для сотрудников Ваших сервисов. Если вы хотите подключить свой бизнес к нашему сервису, напишите нам</p>
               <div style="display: flex; justify-content: center; margin-top: 16px;">
                 <button id="contactButton" class="modal-button">Связаться</button>
               </div>
               `;
       document.getElementById('contactButton').onclick = () => {
-                console.log('📞 Нажата кнопка "Связаться"');
-              showSupport();
+        console.log('📞 Нажата кнопка "Связаться"');
+        showSupport();
       };
 
     } else if (data.role === 'staff') {
-                console.log('🧑‍💼 Пользователь — сотрудник');
+      console.log('🧑‍💼 Пользователь — сотрудник');
 
-              businessContent.innerHTML = `<div id="recordsTable">Загрузка записей...</div>`;
+      businessContent.innerHTML = `<div id="recordsTable">Загрузка записей...</div>`;
 
-              const datePicker = document.getElementById('businessDate');
-              const recordsTable = document.getElementById('recordsTable');
+      const datePicker = document.getElementById('businessDate');
+      const recordsTable = document.getElementById('recordsTable');
 
-              if (!datePicker) {
-                console.warn('❗ Элемент #businessDate не найден в header-bar');
-              recordsTable.innerHTML = '<p>Ошибка: не найден элемент выбора даты.</p>';
-              return;
+      if (!datePicker) {
+        console.warn('❗ Элемент #businessDate не найден в header-bar');
+        recordsTable.innerHTML = '<p>Ошибка: не найден элемент выбора даты.</p>';
+        return;
       }
 
       const fetchBookings = async (selectedDate) => {
         const bookingsResponse = await fetch('/api/getStaffBookings', {
-                method: 'POST',
-              headers: {'Content-Type': 'application/json' },
-              body: JSON.stringify({initData, selectedDate})
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ initData, selectedDate })
         });
 
-              const bookingsData = await bookingsResponse.json();
-              console.log('📨 Ответ от /api/getStaffBookings получен:', bookingsData);
+        const bookingsData = await bookingsResponse.json();
+        console.log('📨 Ответ от /api/getStaffBookings получен:', bookingsData);
 
-              if (!bookingsData.success) {
-                console.warn('❌ Ошибка при загрузке записей:', bookingsData.error || 'unknown');
-              recordsTable.innerHTML = '<p>Ошибка при загрузке записей.</p>';
-              return;
+        if (!bookingsData.success) {
+          console.warn('❌ Ошибка при загрузке записей:', bookingsData.error || 'unknown');
+          recordsTable.innerHTML = '<p>Ошибка при загрузке записей.</p>';
+          return;
         }
 
-              if (bookingsData.bookings.length === 0) {
-                console.log('ℹ️ Нет записей на эту дату');
-              recordsTable.innerHTML = '<p>У вас пока нет записей на эту дату.</p>';
-              return;
+        if (bookingsData.bookings.length === 0) {
+          console.log('ℹ️ Нет записей на эту дату');
+          recordsTable.innerHTML = '<p>У вас пока нет записей на эту дату.</p>';
+          return;
         }
 
-              let html = '<table><thead><tr><th>Время</th><th>Клиент</th><th>Услуга</th><th>Мастер</th></tr></thead><tbody>';
+        let html = '<table><thead><tr><th>Время</th><th>Клиент</th><th>Услуга</th><th>Мастер</th></tr></thead><tbody>';
 
         bookingsData.bookings.forEach(b => {
-                  html += `<tr>
+          html += `<tr>
             <td>${b.time.slice(0, 5)}</td>
             <td>${b.client_name || 'неизвестный'}</td>
             <td>${b.services_names}</td>
@@ -1717,149 +1105,46 @@ function loadBookings() {
           </tr>`;
         });
 
-                html += '</tbody></table>';
-              recordsTable.innerHTML = html;
+        html += '</tbody></table>';
+        recordsTable.innerHTML = html;
       };
 
-              await fetchBookings(datePicker.value);
+      await fetchBookings(datePicker.value);
 
       datePicker.addEventListener('change', (e) => {
-                fetchBookings(e.target.value);
+        fetchBookings(e.target.value);
       });
 
     } else {
-                console.warn('⚠️ Неизвестная роль:', data.role);
-              businessContent.innerHTML = '<p>Роль пользователя не определена.</p>';
+      console.warn('⚠️ Неизвестная роль:', data.role);
+      businessContent.innerHTML = '<p>Роль пользователя не определена.</p>';
     }
 
   } catch (error) {
-                console.error('💥 Ошибка в loadBusinessContent:', error);
-              businessContent.innerHTML = '<p>Ошибка при загрузке данных.</p>';
+    console.error('💥 Ошибка в loadBusinessContent:', error);
+    businessContent.innerHTML = '<p>Ошибка при загрузке данных.</p>';
   }
 }
 
 
 
-// async function loadBusinessContent() {
-                //   console.log('🚀 Загружаем бизнес-контент...');
-
-                //   const businessContent = document.getElementById('businessContent');
-                //   businessContent.innerHTML = 'Загрузка...';
-
-                //   try {
-                //     const initData = window.Telegram.WebApp.initData;
-                //     console.log('📦 initData:', initData);
-
-                //     const response = await fetch('/api/getUserRole', {
-                //       method: 'POST',
-                //       headers: { 'Content-Type': 'application/json' },
-                //       body: JSON.stringify({ initData })
-                //     });
-
-                //     const data = await response.json();
-                //     console.log('📨 Ответ от /api/getUserRole получен:', data);
-
-                //     if (!data.success) {
-                //       console.warn('❌ Ошибка определения роли:', data.error || 'unknown');
-                //       businessContent.innerHTML = '<p>Не удалось определить роль пользователя.</p>';
-                //       return;
-                //     }
-
-                //     if (data.role === 'client') {
-                //       console.log('👤 Пользователь — клиент');
-                //       businessContent.innerHTML = `
-                //         <p>Если вы хотите подключить свой бизнес к нашему сервису, напишите нам</p>
-                //         <button id="contactButton" class="modal-button">Связаться</button>
-                //       `;
-                //       document.getElementById('contactButton').onclick = () => {
-                //         console.log('📞 Нажата кнопка "Связаться"');
-                //         showSupport();
-                //       };
-
-                //     } else if (data.role === 'staff') {
-                //       console.log('🧑‍💼 Пользователь — сотрудник');
-
-                //       businessContent.innerHTML = `<div id="recordsTable">Загрузка записей...</div>`;
-
-                //       const datePicker = document.getElementById('businessDate');
-                //       const recordsTable = document.getElementById('recordsTable');
-
-                //       if (!datePicker) {
-                //         console.warn('❗ Элемент #businessDate не найден в header-bar');
-                //         recordsTable.innerHTML = '<p>Ошибка: не найден элемент выбора даты.</p>';
-                //         return;
-                //       }
-
-                //       const fetchBookings = async (selectedDate) => {
-                //         const bookingsResponse = await fetch('/api/getStaffBookings', {
-                //           method: 'POST',
-                //           headers: { 'Content-Type': 'application/json' },
-                //           body: JSON.stringify({ initData, selectedDate })
-                //         });
-
-                //         const bookingsData = await bookingsResponse.json();
-                //         console.log('📨 Ответ от /api/getStaffBookings получен:', bookingsData);
-
-                //         if (!bookingsData.success) {
-                //           console.warn('❌ Ошибка при загрузке записей:', bookingsData.error || 'unknown');
-                //           recordsTable.innerHTML = '<p>Ошибка при загрузке записей.</p>';
-                //           return;
-                //         }
-
-                //         if (bookingsData.bookings.length === 0) {
-                //           console.log('ℹ️ Нет записей на эту дату');
-                //           recordsTable.innerHTML = '<p>У вас пока нет записей на эту дату.</p>';
-                //           return;
-                //         }
-
-                //         let html = '<table><thead><tr><th>Время</th><th>Клиент</th><th>Услуга</th><th>Мастер</th></tr></thead><tbody>';
-
-                //         bookingsData.bookings.forEach(b => {
-                //           html += `<tr>
-                //             <td>${b.time.slice(0, 5)}</td>
-                //             <td>${b.client_name || 'неизвестный'}</td>
-                //             <td>${b.services_names}</td>
-                //             <td>${b.master_name || '—'}</td>
-                //           </tr>`;
-                //         });
-
-                //         html += '</tbody></table>';
-                //         recordsTable.innerHTML = html;
-                //       };
-
-                //       await fetchBookings(datePicker.value);
-
-                //       datePicker.addEventListener('change', (e) => {
-                //         fetchBookings(e.target.value);
-                //       });
-
-                //     } else {
-                //       console.warn('⚠️ Неизвестная роль:', data.role);
-                //       businessContent.innerHTML = '<p>Роль пользователя не определена.</p>';
-                //     }
-
-                //   } catch (error) {
-                //     console.error('💥 Ошибка в loadBusinessContent:', error);
-                //     businessContent.innerHTML = '<p>Ошибка при загрузке данных.</p>';
-                //   }
-                // }
 
 
 
-                function closeAllModals() {
-                  // Скрываем все возможные модальные окна
-                  const modals = document.querySelectorAll('.modal');
-                  modals.forEach(modal => {
-                    modal.style.display = 'none';
-                  });
+function closeAllModals() {
+  // Скрываем все возможные модальные окна
+  const modals = document.querySelectorAll('.modal');
+  modals.forEach(modal => {
+    modal.style.display = 'none';
+  });
 
-                  // Скрываем оверлей
-                  const overlay = document.getElementById('overlay');
-                  if (overlay) overlay.style.display = 'none';
+  // Скрываем оверлей
+  const overlay = document.getElementById('overlay');
+  if (overlay) overlay.style.display = 'none';
 
-                  // Удаляем глобальный обработчик клика вне модалок (если был)
-                  window.removeEventListener('click', handleOutsideClick);
-                }
+  // Удаляем глобальный обработчик клика вне модалок (если был)
+  window.removeEventListener('click', handleOutsideClick);
+}
 
 
 
@@ -1868,19 +1153,19 @@ function loadBookings() {
 
 // ПОКАЗЫВАТЬ ГЛАВНЫЙ ЭКРАН ПРИ ЗАПУСКЕ
 document.addEventListener('DOMContentLoaded', () => {
-                switchTab('home');
+  switchTab('home');
 });
 
 
 
-              // Автоматически скрывать меню при клике вне его
-              document.addEventListener('click', function (event) {
+// Автоматически скрывать меню при клике вне его
+document.addEventListener('click', function (event) {
   const menu = document.getElementById('dropdownMenu');
-              const button = document.getElementById('menuButton');
-              if (menu.style.display === 'block' &&
-              !menu.contains(event.target) &&
-              event.target !== button) {
-                menu.style.display = 'none';
-              button.textContent = '☰';
+  const button = document.getElementById('menuButton');
+  if (menu.style.display === 'block' &&
+    !menu.contains(event.target) &&
+    event.target !== button) {
+    menu.style.display = 'none';
+    button.textContent = '☰';
   }
 });
