@@ -485,13 +485,21 @@ async function addByQR() {
         return;
       }
 
-      // Ожидаемый формат: add_place_xxx
-      if (!scannedText.startsWith('add_place_')) {
+      // Попробуем извлечь startapp из ссылки, если это URL
+      let rawParam;
+      try {
+        const url = new URL(scannedText, window.location.origin);
+        rawParam = url.searchParams.get('startapp') || scannedText;
+      } catch {
+        rawParam = scannedText; // если это просто текст
+      }
+
+      if (!rawParam.startsWith('add_place_')) {
         showNotification('Неверный формат QR-кода');
         return;
       }
 
-      const placeId = scannedText.replace('add_place_', '');
+      const placeId = rawParam.replace('add_place_', '');
 
       try {
         const response = await fetch('/addPlaceById', {
@@ -504,7 +512,7 @@ async function addByQR() {
 
         if (result.success) {
           showNotification('Сервис успешно добавлен!');
-          await fetchAndRenderServices(); // Обновим список
+          await fetchAndRenderServices();
         } else {
           showNotification('Ошибка: ' + result.error);
         }
@@ -518,6 +526,7 @@ async function addByQR() {
     showNotification('Произошла ошибка при запуске сканера');
   }
 }
+
 
 
 function addByID() {
