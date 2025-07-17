@@ -372,7 +372,7 @@ async function fetchAndRenderServices() {
     }
 
     // ВСТАВЛЯЕМ ТВОЮ ПРЯМУЮ ОТРИСОВКУ СЮДА
-    const servicesContainer = document.getElementById('servicesList'); // замените на свой id
+    const servicesContainer = document.getElementById('serviceList'); // замените на свой id
     servicesContainer.innerHTML = '';
 
     result.places.forEach(place => {
