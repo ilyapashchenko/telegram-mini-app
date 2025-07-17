@@ -10,7 +10,6 @@ let handleOutsideClick;
 let selectedTime = null;
 let userRole = null;
 
-window.addEventListener('DOMContentLoaded', fetchAndRenderServices);
 
 // ОПРЕДЕЛЕНИЕ РОЛИ
 async function getUserRoleOnce() {
