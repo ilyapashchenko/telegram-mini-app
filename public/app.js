@@ -512,9 +512,11 @@ async function addByQR() {
 
         if (result.success) {
           showNotification('Сервис успешно добавлен!');
-          location.reload();
-          // await fetchAndRenderServices();
-        } else {
+          await waitForPlaceToAppear(placeId);
+          await fetchAndRenderServices();
+          switchTab('home');
+        }
+        else {
           showNotification('Ошибка: ' + result.error);
         }
       } catch (err) {
@@ -527,6 +529,24 @@ async function addByQR() {
     showNotification('Произошла ошибка при запуске сканера');
   }
 }
+
+async function waitForPlaceToAppear(placeId, maxAttempts = 10, delay = 300) {
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const res = await fetch('/getMyPlaces');
+      const places = await res.json();
+      const found = places.find(place => place.id === parseInt(placeId));
+      if (found) return;
+    } catch (err) {
+      console.error('Ошибка при проверке наличия сервиса:', err);
+    }
+
+    await new Promise(resolve => setTimeout(resolve, delay));
+  }
+
+  console.warn(`Сервис с ID ${placeId} не появился после ${maxAttempts} попыток`);
+}
+
 
 
 
