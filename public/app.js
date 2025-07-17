@@ -10,6 +10,8 @@ let handleOutsideClick;
 let selectedTime = null;
 let userRole = null;
 
+window.addEventListener('DOMContentLoaded', fetchAndRenderServices);
+
 // ОПРЕДЕЛЕНИЕ РОЛИ
 async function getUserRoleOnce() {
   if (userRole !== null) return userRole;
@@ -335,9 +337,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 async function fetchAndRenderServices() {
+  console.log('[Fetch] Загружаем список сервисов...');
   try {
-    showNotification('[Fetch] Загружаем список сервисов...');
-
     const initData = window.Telegram.WebApp.initData;
 
     const response = await fetch('/auth', {
@@ -347,24 +348,64 @@ async function fetchAndRenderServices() {
     });
 
     const result = await response.json();
+    console.log('[Fetch] Ответ от /auth:', result);
 
-    // Показываем ключевые данные
-    showNotification('result.success: ' + result.success);
-    showNotification('places isArray: ' + Array.isArray(result.places));
-    showNotification('places raw: ' + JSON.stringify(result.places));
-
-    // Условие
-    if (result.success && Array.isArray(result.places)) {
-      renderPlaces(result.places);
-      showNotification('[Fetch] Сервисы успешно отрисованы');
-    } else {
-      showNotification('[Fetch] Ошибка: result.success или places невалидны');
+    if (!result.success || !Array.isArray(result.places)) {
+      throw new Error('Ошибка загрузки сервисов');
     }
 
+    // ВСТАВЛЯЕМ ТВОЮ ПРЯМУЮ ОТРИСОВКУ СЮДА
+    const servicesContainer = document.getElementById('servicesList'); // замените на свой id
+    servicesContainer.innerHTML = '';
+
+    result.places.forEach(place => {
+      const div = document.createElement('div');
+      div.className = 'service-card';
+      div.textContent = place.name; // или другая информация
+      servicesContainer.appendChild(div);
+    });
+
+    console.log('[Fetch] Сервисы успешно отрисованы');
+
   } catch (err) {
-    showNotification('[Fetch] Ошибка при загрузке: ' + err.message);
+    console.error('[Fetch] Ошибка при загрузке сервисов:', err);
+    showNotification('Ошибка загрузки сервисов.');
   }
 }
+
+
+
+// async function fetchAndRenderServices() {
+//   try {
+//     showNotification('[Fetch] Загружаем список сервисов...');
+
+//     const initData = window.Telegram.WebApp.initData;
+
+//     const response = await fetch('/auth', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ initData })
+//     });
+
+//     const result = await response.json();
+
+//     // Показываем ключевые данные
+//     showNotification('result.success: ' + result.success);
+//     showNotification('places isArray: ' + Array.isArray(result.places));
+//     showNotification('places raw: ' + JSON.stringify(result.places));
+
+//     // Условие
+//     if (result.success && Array.isArray(result.places)) {
+//       renderPlaces(result.places);
+//       showNotification('[Fetch] Сервисы успешно отрисованы');
+//     } else {
+//       showNotification('[Fetch] Ошибка: result.success или places невалидны');
+//     }
+
+//   } catch (err) {
+//     showNotification('[Fetch] Ошибка при загрузке: ' + err.message);
+//   }
+// }
 
 
 
