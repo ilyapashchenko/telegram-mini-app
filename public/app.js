@@ -33,6 +33,20 @@ async function getUserRoleOnce() {
 }
 
 // QR КОД
+
+
+
+
+
+
+
+
+
+
+
+
+window.Telegram.WebApp.ready();
+
 document.addEventListener('DOMContentLoaded', async () => {
   window.Telegram.WebApp.expand();
   const initData = window.Telegram.WebApp.initData;
@@ -43,14 +57,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (startParam?.startsWith('add_place_')) {
     const placeId = startParam.replace('add_place_', '');
-    showNotification('[QR] Запрос на добавление: ' + placeId);
 
+    // Проверяем, обрабатывали ли уже этот start_param в этой сессии
     const alreadyHandled = sessionStorage.getItem(`handled_${startParam}`);
     console.log('[DEBUG] alreadyHandled from sessionStorage:', alreadyHandled);
 
     if (!alreadyHandled) {
       try {
-        showNotification('[QR] Отправляем запрос...');
         const response = await fetch('/addPlaceById', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -58,7 +71,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         const result = await response.json();
-        console.log('[QR] Ответ от /addPlaceById:', result);
 
         // Удаляем start_param из URL
         history.replaceState(null, '', window.location.pathname);
@@ -67,18 +79,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         sessionStorage.setItem(`handled_${startParam}`, 'true');
 
         if (result.success) {
-          showNotification('[QR] Сервис добавлен! Проверяем появление...');
-          await waitForPlaceToAppear(placeId, initData); // <-- ждем появления
-          showNotification('[QR] Загружаем сервисы...');
-          await fetchAndRenderServices();
-          showNotification('[QR] Готово!');
-          switchTab('home');
+          showNotification('Сервис успешно добавлен!');
         } else {
-          showNotification('[QR] Ошибка добавления: ' + result.error);
+          showNotification('Ошибка: ' + result.error);
         }
       } catch (err) {
         console.error('[ERROR] Ошибка подключения по QR:', err);
-        showNotification('[QR] Ошибка подключения сервиса.');
+        showNotification('Ошибка подключения сервиса.');
         history.replaceState(null, '', window.location.pathname);
       }
     } else {
@@ -86,9 +93,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // Загружаем список сервисов
+  // 🟢 Загружаем список сервисов после всех вышеуказанных действий
   try {
-    showNotification('[Auth] Загружаем список сервисов...');
     const response = await fetch('/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -96,12 +102,51 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     const result = await response.json();
-    console.log('[Auth] Ответ от /auth:', result);
 
     if (result.success) {
-      showNotification('[Auth] Сервисы загружены');
+      const serviceList = document.getElementById('serviceList');
+      serviceList.innerHTML = '';
 
-      renderPlaces(result.places);
+      if (result.places.length > 0) {
+        result.places.forEach((place, index) => {
+          const div = document.createElement('div');
+          div.className = 'service-item';
+
+          const title = document.createElement('div');
+          title.textContent = place.place_name;
+
+          const buttonGroup = document.createElement('div');
+          buttonGroup.style.display = 'flex';
+          buttonGroup.style.gap = '8px';
+
+          const deleteBtn = document.createElement('button');
+          deleteBtn.className = 'delete-button';
+          deleteBtn.innerHTML = '🗑️';
+          deleteBtn.onclick = () => confirmDelete(place.place_id);
+
+          const bookBtn = document.createElement('button');
+          bookBtn.textContent = 'Записаться';
+          bookBtn.className = 'book-button';
+          bookBtn.onclick = () => openChooseMasterModal(place.place_id);
+
+          buttonGroup.appendChild(deleteBtn);
+          buttonGroup.appendChild(bookBtn);
+          div.appendChild(title);
+          div.appendChild(buttonGroup);
+          serviceList.appendChild(div);
+
+          if (
+            index < result.places.length - 1 &&
+            serviceList.lastChild?.classList?.contains('service-divider') === false
+          ) {
+            const divider = document.createElement('div');
+            divider.className = 'service-divider';
+            serviceList.appendChild(divider);
+          }
+        });
+      } else {
+        serviceList.textContent = 'Сервисов пока нет';
+      }
     } else {
       showNotification('Ошибка аутентификации');
     }
@@ -110,122 +155,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     showNotification('Ошибка загрузки сервисов');
   }
 
+  // Переключение на домашнюю вкладку
   switchTab('home');
 });
 
-// window.Telegram.WebApp.ready();
 
-// document.addEventListener('DOMContentLoaded', async () => {
-//   window.Telegram.WebApp.expand();
-//   const initData = window.Telegram.WebApp.initData;
-//   const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
-//   const startParam = initDataUnsafe?.start_param;
 
-//   console.log('[DEBUG] startParam:', startParam);
 
-//   if (startParam?.startsWith('add_place_')) {
-//     const placeId = startParam.replace('add_place_', '');
 
-//     // Проверяем, обрабатывали ли уже этот start_param в этой сессии
-//     const alreadyHandled = sessionStorage.getItem(`handled_${startParam}`);
-//     console.log('[DEBUG] alreadyHandled from sessionStorage:', alreadyHandled);
 
-//     if (!alreadyHandled) {
-//       try {
-//         const response = await fetch('/addPlaceById', {
-//           method: 'POST',
-//           headers: { 'Content-Type': 'application/json' },
-//           body: JSON.stringify({ initData, placeId })
-//         });
 
-//         const result = await response.json();
 
-//         // Удаляем start_param из URL
-//         history.replaceState(null, '', window.location.pathname);
 
-//         // Сохраняем в sessionStorage
-//         sessionStorage.setItem(`handled_${startParam}`, 'true');
 
-//         if (result.success) {
-//           showNotification('Сервис успешно добавлен!');
-//         } else {
-//           showNotification('Ошибка: ' + result.error);
-//         }
-//       } catch (err) {
-//         console.error('[ERROR] Ошибка подключения по QR:', err);
-//         showNotification('Ошибка подключения сервиса.');
-//         history.replaceState(null, '', window.location.pathname);
-//       }
-//     } else {
-//       console.log('[DEBUG] Пропущена повторная обработка start_param');
-//     }
-//   }
 
-//   // 🟢 Загружаем список сервисов после всех вышеуказанных действий
-//   try {
-//     const response = await fetch('/auth', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ initData })
-//     });
 
-//     const result = await response.json();
 
-//     if (result.success) {
-//       const serviceList = document.getElementById('serviceList');
-//       serviceList.innerHTML = '';
 
-//       if (result.places.length > 0) {
-//         result.places.forEach((place, index) => {
-//           const div = document.createElement('div');
-//           div.className = 'service-item';
 
-//           const title = document.createElement('div');
-//           title.textContent = place.place_name;
 
-//           const buttonGroup = document.createElement('div');
-//           buttonGroup.style.display = 'flex';
-//           buttonGroup.style.gap = '8px';
-
-//           const deleteBtn = document.createElement('button');
-//           deleteBtn.className = 'delete-button';
-//           deleteBtn.innerHTML = '🗑️';
-//           deleteBtn.onclick = () => confirmDelete(place.place_id);
-
-//           const bookBtn = document.createElement('button');
-//           bookBtn.textContent = 'Записаться';
-//           bookBtn.className = 'book-button';
-//           bookBtn.onclick = () => openChooseMasterModal(place.place_id);
-
-//           buttonGroup.appendChild(deleteBtn);
-//           buttonGroup.appendChild(bookBtn);
-//           div.appendChild(title);
-//           div.appendChild(buttonGroup);
-//           serviceList.appendChild(div);
-
-//           if (
-//             index < result.places.length - 1 &&
-//             serviceList.lastChild?.classList?.contains('service-divider') === false
-//           ) {
-//             const divider = document.createElement('div');
-//             divider.className = 'service-divider';
-//             serviceList.appendChild(divider);
-//           }
-//         });
-//       } else {
-//         serviceList.textContent = 'Сервисов пока нет';
-//       }
-//     } else {
-//       showNotification('Ошибка аутентификации');
-//     }
-//   } catch (error) {
-//     console.error('[ERROR] Ошибка при загрузке:', error);
-//     showNotification('Ошибка загрузки сервисов');
-//   }
-
-//   // Переключение на домашнюю вкладку
-//   switchTab('home');
-// });
 
 // window.Telegram.WebApp.ready();
 
@@ -388,59 +336,59 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 
-async function fetchAndRenderServices() {
-  console.log('[Fetch] Загружаем список сервисов...');
-  try {
-    const initData = window.Telegram.WebApp.initData;
-
-    const response = await fetch('/auth', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ initData })
-    });
-
-    const result = await response.json();
-    console.log('[Fetch] Ответ от /auth:', result);
-
-    if (!result.success || !Array.isArray(result.places)) {
-      throw new Error('Ошибка загрузки сервисов');
-    }
-
-    renderPlaces(result.places);
-    console.log('[Fetch] Сервисы успешно отрисованы');
-
-  } catch (err) {
-    console.error('[Fetch] Ошибка при загрузке сервисов:', err);
-    showNotification('Ошибка загрузки сервисов.');
-  }
-}
-
-
 // async function fetchAndRenderServices() {
-//   console.log('[services] Fetching services...');
+//   console.log('[Fetch] Загружаем список сервисов...');
 //   try {
-//     const response = await fetch('/getUserPlaces', {
+//     const initData = window.Telegram.WebApp.initData;
+
+//     const response = await fetch('/auth', {
 //       method: 'POST',
 //       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({
-//         initData: window.Telegram.WebApp.initData
-//       })
+//       body: JSON.stringify({ initData })
 //     });
 
 //     const result = await response.json();
-//     console.log('[services] Response from server:', result);
+//     console.log('[Fetch] Ответ от /auth:', result);
 
-//     if (result.success) {
-//       renderServices(result.places);
-//     } else {
-//       console.warn('[services] Failed to load services:', result.error);
-//       showNotification('Ошибка загрузки сервисов: ' + result.error);
+//     if (!result.success || !Array.isArray(result.places)) {
+//       throw new Error('Ошибка загрузки сервисов');
 //     }
+
+//     renderPlaces(result.places);
+//     console.log('[Fetch] Сервисы успешно отрисованы');
+
 //   } catch (err) {
-//     console.error('[services] Network error:', err);
+//     console.error('[Fetch] Ошибка при загрузке сервисов:', err);
 //     showNotification('Ошибка загрузки сервисов.');
 //   }
 // }
+
+
+async function fetchAndRenderServices() {
+  console.log('[services] Fetching services...');
+  try {
+    const response = await fetch('/getUserPlaces', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        initData: window.Telegram.WebApp.initData
+      })
+    });
+
+    const result = await response.json();
+    console.log('[services] Response from server:', result);
+
+    if (result.success) {
+      renderServices(result.places);
+    } else {
+      console.warn('[services] Failed to load services:', result.error);
+      showNotification('Ошибка загрузки сервисов: ' + result.error);
+    }
+  } catch (err) {
+    console.error('[services] Network error:', err);
+    showNotification('Ошибка загрузки сервисов.');
+  }
+}
 
 
 // Модалки:
