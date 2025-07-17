@@ -36,20 +36,18 @@ async function getUserRoleOnce() {
 window.Telegram.WebApp.ready();
 
 document.addEventListener('DOMContentLoaded', async () => {
+  window.Telegram.WebApp.expand();
+  const initData = window.Telegram.WebApp.initData;
   const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
   const startParam = initDataUnsafe?.start_param;
 
   if (startParam?.startsWith('add_place_')) {
     const placeId = startParam.replace('add_place_', '');
-
     try {
       const response = await fetch('/addPlaceById', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          initData: window.Telegram.WebApp.initData,
-          placeId
-        })
+        body: JSON.stringify({ initData, placeId })
       });
 
       const result = await response.json();
@@ -59,63 +57,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (result.success) {
         showNotification('Сервис успешно добавлен!');
-        await fetchAndRenderServices(); // если есть такая функция
-        switchTab('home');
       } else {
         showNotification('Ошибка: ' + result.error);
-        switchTab('home');
       }
-
     } catch (err) {
       console.error('Ошибка подключения по QR:', err);
       showNotification('Ошибка подключения сервиса.');
       history.replaceState(null, '', window.location.pathname);
-      switchTab('home');
     }
-  } else {
-    // 🟢 Если нет start_param — просто показываем приложение
-    switchTab('home');
   }
-});
 
-
-
-
-
-async function fetchAndRenderServices() {
-  const initData = window.Telegram.WebApp.initData;
-
+  // 🟢 Загружаем список сервисов после всех вышеуказанных действий
   try {
-    const response = await fetch('/getUserServices', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ initData })
-    });
-
-    const result = await response.json();
-
-    if (result.success && Array.isArray(result.services)) {
-      renderServices(result.services); // использует твою функцию
-    } else {
-      console.warn('Ошибка при получении сервисов:', result.error || 'unknown');
-      showNotification('Не удалось загрузить сервисы');
-    }
-  } catch (err) {
-    console.error('Ошибка при загрузке сервисов:', err);
-    showNotification('Ошибка загрузки сервисов');
-  }
-}
-
-
-
-
-
-document.addEventListener('DOMContentLoaded', async () => {
-  window.Telegram.WebApp.expand();
-
-  try {
-    const initData = window.Telegram.WebApp.initData;
-
     const response = await fetch('/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -125,11 +78,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const result = await response.json();
 
     if (result.success) {
-
-      // походу это поиск имени и аватарки
-      // document.getElementById('username').textContent = result.user.firstName;
-      // document.getElementById('avatar').src = result.user.photoUrl;
-
       const serviceList = document.getElementById('serviceList');
       serviceList.innerHTML = '';
 
@@ -145,29 +93,21 @@ document.addEventListener('DOMContentLoaded', async () => {
           buttonGroup.style.display = 'flex';
           buttonGroup.style.gap = '8px';
 
-          // Кнопка удаления — слева
           const deleteBtn = document.createElement('button');
           deleteBtn.className = 'delete-button';
           deleteBtn.innerHTML = '🗑️';
           deleteBtn.onclick = () => confirmDelete(place.place_id);
 
-          // Кнопка записи — справа
           const bookBtn = document.createElement('button');
           bookBtn.textContent = 'Записаться';
           bookBtn.className = 'book-button';
-          bookBtn.onclick = () => {
-            openChooseMasterModal(place.place_id);
-          };
+          bookBtn.onclick = () => openChooseMasterModal(place.place_id);
 
-
-          // Добавляем кнопки в нужном порядке: сначала 🗑, потом "Записаться"
           buttonGroup.appendChild(deleteBtn);
           buttonGroup.appendChild(bookBtn);
-
           div.appendChild(title);
           div.appendChild(buttonGroup);
           serviceList.appendChild(div);
-
 
           if (
             index < result.places.length - 1 &&
@@ -177,22 +117,199 @@ document.addEventListener('DOMContentLoaded', async () => {
             divider.className = 'service-divider';
             serviceList.appendChild(divider);
           }
-
         });
-
-
-
       } else {
         serviceList.textContent = 'Сервисов пока нет';
       }
-
     } else {
       showNotification('Ошибка аутентификации');
     }
   } catch (error) {
     console.error('Ошибка при загрузке:', error);
+    showNotification('Ошибка загрузки сервисов');
   }
+
+  // В конце: переключение на домашнюю вкладку
+  switchTab('home');
 });
+
+
+
+// window.Telegram.WebApp.ready();
+
+// document.addEventListener('DOMContentLoaded', async () => {
+//   console.log('[init] DOMContentLoaded');
+
+//   const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
+//   console.log('[init] initDataUnsafe:', initDataUnsafe);
+
+//   const startParam = initDataUnsafe?.start_param;
+//   console.log('[init] start_param:', startParam);
+
+//   if (startParam?.startsWith('add_place_')) {
+//     const placeId = startParam.replace('add_place_', '');
+//     console.log('[add_place] Detected placeId:', placeId);
+
+//     try {
+//       const response = await fetch('/addPlaceById', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({
+//           initData: window.Telegram.WebApp.initData,
+//           placeId
+//         })
+//       });
+
+//       const result = await response.json();
+//       console.log('[add_place] Server response:', result);
+
+//       // Удаляем start_param из истории URL
+//       history.replaceState(null, '', window.location.pathname);
+
+//       if (result.success) {
+//         console.log('[add_place] Place successfully added');
+//         showNotification('Сервис успешно добавлен!');
+//         await fetchAndRenderServices();
+//         switchTab('home');
+//       } else {
+//         console.warn('[add_place] Server returned error:', result.error);
+//         showNotification('Ошибка: ' + result.error);
+//         switchTab('home');
+//       }
+
+//     } catch (err) {
+//       console.error('[add_place] Ошибка запроса на сервер:', err);
+//       showNotification('Ошибка подключения сервиса.');
+//       history.replaceState(null, '', window.location.pathname);
+//       switchTab('home');
+//     }
+
+//   } else {
+//     console.log('[init] No start_param, loading normally');
+//     switchTab('home');
+//     await fetchAndRenderServices();
+//   }
+// });
+
+
+
+
+
+
+async function fetchAndRenderServices() {
+  console.log('[services] Fetching services...');
+  try {
+    const response = await fetch('/getUserPlaces', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        initData: window.Telegram.WebApp.initData
+      })
+    });
+
+    const result = await response.json();
+    console.log('[services] Response from server:', result);
+
+    if (result.success) {
+      renderServices(result.places);
+    } else {
+      console.warn('[services] Failed to load services:', result.error);
+      showNotification('Ошибка загрузки сервисов: ' + result.error);
+    }
+  } catch (err) {
+    console.error('[services] Network error:', err);
+    showNotification('Ошибка загрузки сервисов.');
+  }
+}
+
+
+
+
+
+
+// document.addEventListener('DOMContentLoaded', async () => {
+//   window.Telegram.WebApp.expand();
+
+//   try {
+//     const initData = window.Telegram.WebApp.initData;
+
+//     const response = await fetch('/auth', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ initData })
+//     });
+
+//     const result = await response.json();
+
+//     if (result.success) {
+
+//       // походу это поиск имени и аватарки
+//       // document.getElementById('username').textContent = result.user.firstName;
+//       // document.getElementById('avatar').src = result.user.photoUrl;
+
+//       const serviceList = document.getElementById('serviceList');
+//       serviceList.innerHTML = '';
+
+//       if (result.places.length > 0) {
+//         result.places.forEach((place, index) => {
+//           const div = document.createElement('div');
+//           div.className = 'service-item';
+
+//           const title = document.createElement('div');
+//           title.textContent = place.place_name;
+
+//           const buttonGroup = document.createElement('div');
+//           buttonGroup.style.display = 'flex';
+//           buttonGroup.style.gap = '8px';
+
+//           // Кнопка удаления — слева
+//           const deleteBtn = document.createElement('button');
+//           deleteBtn.className = 'delete-button';
+//           deleteBtn.innerHTML = '🗑️';
+//           deleteBtn.onclick = () => confirmDelete(place.place_id);
+
+//           // Кнопка записи — справа
+//           const bookBtn = document.createElement('button');
+//           bookBtn.textContent = 'Записаться';
+//           bookBtn.className = 'book-button';
+//           bookBtn.onclick = () => {
+//             openChooseMasterModal(place.place_id);
+//           };
+
+
+//           // Добавляем кнопки в нужном порядке: сначала 🗑, потом "Записаться"
+//           buttonGroup.appendChild(deleteBtn);
+//           buttonGroup.appendChild(bookBtn);
+
+//           div.appendChild(title);
+//           div.appendChild(buttonGroup);
+//           serviceList.appendChild(div);
+
+
+//           if (
+//             index < result.places.length - 1 &&
+//             serviceList.lastChild?.classList?.contains('service-divider') === false
+//           ) {
+//             const divider = document.createElement('div');
+//             divider.className = 'service-divider';
+//             serviceList.appendChild(divider);
+//           }
+
+//         });
+
+
+
+//       } else {
+//         serviceList.textContent = 'Сервисов пока нет';
+//       }
+
+//     } else {
+//       showNotification('Ошибка аутентификации');
+//     }
+//   } catch (error) {
+//     console.error('Ошибка при загрузке:', error);
+//   }
+// });
 
 // Модалки:
 function openModal() {
