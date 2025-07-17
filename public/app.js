@@ -980,7 +980,7 @@ function loadBookings() {
           const div = document.createElement('div');
           div.className = 'booking-card';
           div.innerHTML = `
-      Услуга ${booking.service_name} <br>
+      Услуга: ${booking.service_name} <br>
         Дата: ${formattedDate}<br>
           Время: ${formattedTime}<br>
             Мастер: ${booking.master_name}<br>
