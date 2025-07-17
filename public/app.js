@@ -471,33 +471,28 @@ async function addByQR() {
 
         if (result.success) {
           showNotification('Сервис успешно добавлен!');
-          await waitForPlaceToAppear(placeId, initData); // ⬅️ добавили сюда
-          if (result.success) {
-            showNotification('Сервис успешно добавлен!');
-            // await waitForPlaceToAppear(placeId, initData); // ⬅️ ждём появления
-            switchTab('home');
-
-            try {
-              const response = await fetch('/auth', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ initData })
-              });
-
-              const result = await response.json();
-              console.log('[QR] Повторный /auth:', result);
-
-              if (result.success) {
-                renderPlaces(result.places);
-              } else {
-                showNotification('[QR] Ошибка при загрузке после добавления');
-              }
-            } catch (err) {
-              console.error('[QR] Ошибка при повторной загрузке:', err);
-              showNotification('[QR] Ошибка загрузки сервисов');
-            }
-          }
+          await waitForPlaceToAppear(placeId, initData); // ⬅️ ждём появления
           switchTab('home');
+
+          try {
+            const response = await fetch('/auth', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ initData })
+            });
+
+            const result = await response.json();
+            console.log('[QR] Повторный /auth:', result);
+
+            if (result.success) {
+              renderPlaces(result.places);
+            } else {
+              showNotification('[QR] Ошибка при загрузке после добавления');
+            }
+          } catch (err) {
+            console.error('[QR] Ошибка при повторной загрузке:', err);
+            showNotification('[QR] Ошибка загрузки сервисов');
+          }
         }
 
         else {
