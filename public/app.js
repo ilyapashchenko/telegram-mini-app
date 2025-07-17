@@ -336,59 +336,59 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 
-// async function fetchAndRenderServices() {
-//   console.log('[Fetch] Загружаем список сервисов...');
-//   try {
-//     const initData = window.Telegram.WebApp.initData;
-
-//     const response = await fetch('/auth', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ initData })
-//     });
-
-//     const result = await response.json();
-//     console.log('[Fetch] Ответ от /auth:', result);
-
-//     if (!result.success || !Array.isArray(result.places)) {
-//       throw new Error('Ошибка загрузки сервисов');
-//     }
-
-//     renderPlaces(result.places);
-//     console.log('[Fetch] Сервисы успешно отрисованы');
-
-//   } catch (err) {
-//     console.error('[Fetch] Ошибка при загрузке сервисов:', err);
-//     showNotification('Ошибка загрузки сервисов.');
-//   }
-// }
-
-
 async function fetchAndRenderServices() {
-  console.log('[services] Fetching services...');
+  console.log('[Fetch] Загружаем список сервисов...');
   try {
-    const response = await fetch('/getUserPlaces', {
+    const initData = window.Telegram.WebApp.initData;
+
+    const response = await fetch('/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        initData: window.Telegram.WebApp.initData
-      })
+      body: JSON.stringify({ initData })
     });
 
     const result = await response.json();
-    console.log('[services] Response from server:', result);
+    console.log('[Fetch] Ответ от /auth:', result);
 
-    if (result.success) {
-      renderServices(result.places);
-    } else {
-      console.warn('[services] Failed to load services:', result.error);
-      showNotification('Ошибка загрузки сервисов: ' + result.error);
+    if (!result.success || !Array.isArray(result.places)) {
+      throw new Error('Ошибка загрузки сервисов');
     }
+
+    renderPlaces(result.places);
+    console.log('[Fetch] Сервисы успешно отрисованы');
+
   } catch (err) {
-    console.error('[services] Network error:', err);
+    console.error('[Fetch] Ошибка при загрузке сервисов:', err);
     showNotification('Ошибка загрузки сервисов.');
   }
 }
+
+
+// async function fetchAndRenderServices() {
+//   console.log('[services] Fetching services...');
+//   try {
+//     const response = await fetch('/getUserPlaces', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({
+//         initData: window.Telegram.WebApp.initData
+//       })
+//     });
+
+//     const result = await response.json();
+//     console.log('[services] Response from server:', result);
+
+//     if (result.success) {
+//       renderServices(result.places);
+//     } else {
+//       console.warn('[services] Failed to load services:', result.error);
+//       showNotification('Ошибка загрузки сервисов: ' + result.error);
+//     }
+//   } catch (err) {
+//     console.error('[services] Network error:', err);
+//     showNotification('Ошибка загрузки сервисов.');
+//   }
+// }
 
 
 // Модалки:
