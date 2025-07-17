@@ -512,7 +512,8 @@ async function addByQR() {
 
         if (result.success) {
           showNotification('Сервис успешно добавлен!');
-          await fetchAndRenderServices();
+          location.reload();
+          // await fetchAndRenderServices();
         } else {
           showNotification('Ошибка: ' + result.error);
         }
