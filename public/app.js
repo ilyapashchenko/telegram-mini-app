@@ -471,10 +471,54 @@ function closeModal() {
 
 
 
-function addByQR() {
-  showNotification('Сканер QR пока не реализован');
-  return;
+async function addByQR() {
+  try {
+    const initData = window.Telegram.WebApp.initData;
+
+    Telegram.WebApp.showScanQrPopup({
+      text: 'Наведите камеру на QR-код сервиса',
+    }, async (scannedText) => {
+      console.log('[DEBUG] QR result:', scannedText);
+
+      if (!scannedText) {
+        showNotification('QR-код не был отсканирован');
+        return;
+      }
+
+      // Ожидаемый формат: add_place_xxx
+      if (!scannedText.startsWith('add_place_')) {
+        showNotification('Неверный формат QR-кода');
+        return;
+      }
+
+      const placeId = scannedText.replace('add_place_', '');
+
+      try {
+        const response = await fetch('/addPlaceById', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ initData, placeId })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showNotification('Сервис успешно добавлен!');
+          await fetchAndRenderServices(); // Обновим список
+        } else {
+          showNotification('Ошибка: ' + result.error);
+        }
+      } catch (err) {
+        console.error('[ERROR] Ошибка при добавлении через QR:', err);
+        showNotification('Ошибка подключения сервиса.');
+      }
+    });
+  } catch (e) {
+    console.error('[ERROR] Ошибка при сканировании QR:', e);
+    showNotification('Произошла ошибка при запуске сканера');
+  }
 }
+
 
 function addByID() {
   console.log('addByID called');
