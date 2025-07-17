@@ -532,7 +532,11 @@ async function addByQR() {
 }
 
 async function waitForPlaceToAppear(placeId, initData, maxAttempts = 10, delay = 300) {
+  console.log('[Wait] Начинаем ожидание места:', placeId);
+
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    console.log(`[Wait] Попытка ${attempt} из ${maxAttempts}`);
+
     try {
       const res = await fetch('/auth', {
         method: 'POST',
@@ -541,20 +545,34 @@ async function waitForPlaceToAppear(placeId, initData, maxAttempts = 10, delay =
       });
 
       const result = await res.json();
-      if (!result.success || !result.places) continue;
+      console.log('[Wait] Ответ от /auth:', result);
 
-      const found = result.places.find(place => String(place.place_id) === String(placeId));
-      if (found) return;
+      if (!result.success) {
+        console.warn('[Wait] Запрос неудачен:', result);
+        continue;
+      }
+
+      if (!Array.isArray(result.places)) {
+        console.warn('[Wait] Некорректный формат places:', result.places);
+        continue;
+      }
+
+      const found = result.places.find(p => String(p.place_id) === String(placeId));
+      if (found) {
+        console.log('[Wait] Место найдено!');
+        return;
+      }
 
     } catch (err) {
-      console.error('Ошибка при проверке наличия сервиса:', err);
+      console.error('[Wait] Ошибка запроса:', err);
     }
 
     await new Promise(resolve => setTimeout(resolve, delay));
   }
 
-  console.warn(`Сервис с ID ${placeId} не появился после ${maxAttempts} попыток`);
+  console.warn(`[Wait] Место не найдено после ${maxAttempts} попыток`);
 }
+
 
 
 
