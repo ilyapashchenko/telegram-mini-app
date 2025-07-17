@@ -474,7 +474,7 @@ async function addByQR() {
           await waitForPlaceToAppear(placeId, initData); // ⬅️ добавили сюда
           if (result.success) {
             showNotification('Сервис успешно добавлен!');
-            await waitForPlaceToAppear(placeId, initData); // ⬅️ ждём появления
+            // await waitForPlaceToAppear(placeId, initData); // ⬅️ ждём появления
             switchTab('home');
 
             try {
