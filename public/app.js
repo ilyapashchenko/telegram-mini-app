@@ -335,8 +335,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 async function fetchAndRenderServices() {
-  console.log('[Fetch] Загружаем список сервисов...');
   try {
+    showNotification('[Fetch] Загружаем список сервисов...');
+
     const initData = window.Telegram.WebApp.initData;
 
     const response = await fetch('/auth', {
@@ -346,19 +347,22 @@ async function fetchAndRenderServices() {
     });
 
     const result = await response.json();
-    console.log('[Fetch] Ответ от /auth:', result);
 
+    // Показываем ключевые данные
+    showNotification('result.success: ' + result.success);
+    showNotification('places isArray: ' + Array.isArray(result.places));
+    showNotification('places raw: ' + JSON.stringify(result.places));
+
+    // Условие
     if (result.success && Array.isArray(result.places)) {
       renderPlaces(result.places);
-      console.log('[Fetch] Сервисы успешно отрисованы');
+      showNotification('[Fetch] Сервисы успешно отрисованы');
     } else {
-      console.warn('[Fetch] Ответ без places или с ошибкой:', result);
-      showNotification('Ошибка загрузки сервисов');
+      showNotification('[Fetch] Ошибка: result.success или places невалидны');
     }
 
   } catch (err) {
-    console.error('[Fetch] Ошибка при загрузке сервисов:', err);
-    showNotification('Ошибка загрузки сервисов.');
+    showNotification('[Fetch] Ошибка при загрузке: ' + err.message);
   }
 }
 
