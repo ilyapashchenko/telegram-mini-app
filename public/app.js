@@ -335,42 +335,128 @@ document.addEventListener('DOMContentLoaded', async () => {
 // });
 
 
-async function fetchAndRenderServices() {
-  console.log('[Fetch] Загружаем список сервисов...');
-  try {
-    const initData = window.Telegram.WebApp.initData;
 
+
+
+
+async function fetchAndRenderServices() {
+  console.log('[Fetch] === Начинаем загрузку сервисов ===');
+
+  try {
+    const initData = window.Telegram?.WebApp?.initData;
+    console.log('[Fetch] Получено initData:', initData);
+
+    if (!initData) {
+      throw new Error('initData отсутствует. Telegram WebApp не инициализирован?');
+    }
+
+    console.log('[Fetch] Отправляем POST-запрос на /auth...');
     const response = await fetch('/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ initData })
     });
 
-    const result = await response.json();
-    console.log('[Fetch] Ответ от /auth:', result);
+    console.log('[Fetch] Ответ получен, статус:', response.status);
 
-    if (!result.success || !Array.isArray(result.places)) {
-      throw new Error('Ошибка загрузки сервисов');
+    if (!response.ok) {
+      const text = await response.text();
+      console.error('[Fetch] Сервер вернул ошибку:', text);
+      throw new Error('Ответ от сервера не OK');
     }
 
-    // ВСТАВЛЯЕМ ТВОЮ ПРЯМУЮ ОТРИСОВКУ СЮДА
-    const servicesContainer = document.getElementById('servicesList'); // замените на свой id
-    servicesContainer.innerHTML = '';
+    const result = await response.json();
+    console.log('[Fetch] JSON распарсен:', result);
 
-    result.places.forEach(place => {
+    if (!result.success) {
+      console.error('[Fetch] success = false:', result.error || result);
+      throw new Error('Сервер вернул success = false');
+    }
+
+    if (!Array.isArray(result.places)) {
+      console.error('[Fetch] result.places не массив:', result.places);
+      throw new Error('Некорректный формат places');
+    }
+
+    console.log(`[Fetch] Найдено ${result.places.length} сервисов. Начинаем отрисовку...`);
+
+    const container = document.getElementById('servicesList');
+    if (!container) {
+      console.error('[Fetch] Элемент #servicesList не найден в DOM');
+      throw new Error('Контейнер для отображения сервисов не найден');
+    }
+
+    container.innerHTML = ''; // Очищаем список
+
+    result.places.forEach((place, index) => {
+      console.log(`[Render] Отрисовка сервиса #${index + 1}:`, place);
+
       const div = document.createElement('div');
       div.className = 'service-card';
-      div.textContent = place.name; // или другая информация
-      servicesContainer.appendChild(div);
-    });
+      div.textContent = place.name`Без названия (id: ${place.id  'нет'
+    })`;
 
-    console.log('[Fetch] Сервисы успешно отрисованы');
+  container.appendChild(div);
+});
 
+    console.log('[Fetch] ✅ Сервисы успешно отрисованы');
   } catch (err) {
-    console.error('[Fetch] Ошибка при загрузке сервисов:', err);
+    console.error('[Fetch] ❌ Ошибка при загрузке сервисов:', err);
     showNotification('Ошибка загрузки сервисов.');
   }
+
+  console.log('[Fetch] === Завершено ===');
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// async function fetchAndRenderServices() {
+//   console.log('[Fetch] Загружаем список сервисов...');
+//   try {
+//     const initData = window.Telegram.WebApp.initData;
+
+//     const response = await fetch('/auth', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ initData })
+//     });
+
+//     const result = await response.json();
+//     console.log('[Fetch] Ответ от /auth:', result);
+
+//     if (!result.success || !Array.isArray(result.places)) {
+//       throw new Error('Ошибка загрузки сервисов');
+//     }
+
+//     // ВСТАВЛЯЕМ ТВОЮ ПРЯМУЮ ОТРИСОВКУ СЮДА
+//     const servicesContainer = document.getElementById('servicesList'); // замените на свой id
+//     servicesContainer.innerHTML = '';
+
+//     result.places.forEach(place => {
+//       const div = document.createElement('div');
+//       div.className = 'service-card';
+//       div.textContent = place.name; // или другая информация
+//       servicesContainer.appendChild(div);
+//     });
+
+//     console.log('[Fetch] Сервисы успешно отрисованы');
+
+//   } catch (err) {
+//     console.error('[Fetch] Ошибка при загрузке сервисов:', err);
+//     showNotification('Ошибка загрузки сервисов.');
+//   }
+// }
 
 
 
@@ -656,11 +742,11 @@ async function addByQR() {
 
 async function waitForPlaceToAppear(placeId, initData, maxAttempts = 10, delay = 300) {
   console.log('[Wait] Начинаем ожидание места:', placeId);
-  showNotification(`[Wait] Ожидаем появления ID ${placeId}`);
+  showNotification(`[Wait] Ожидаем появления ID ${ placeId } `);
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    console.log(`[Wait] Попытка ${attempt} из ${maxAttempts}`);
-    showNotification(`[Wait] Попытка ${attempt}...`);
+    console.log(`[Wait] Попытка ${ attempt } из ${ maxAttempts } `);
+    showNotification(`[Wait] Попытка ${ attempt }...`);
 
     try {
       const res = await fetch('/auth', {
@@ -697,7 +783,7 @@ async function waitForPlaceToAppear(placeId, initData, maxAttempts = 10, delay =
   }
 
   showNotification('[Wait] Сервис не найден. Проверьте позже.');
-  console.warn(`[Wait] Место не найдено после ${maxAttempts} попыток`);
+  console.warn(`[Wait] Место не найдено после ${ maxAttempts } попыток`);
 }
 
 
@@ -1083,7 +1169,7 @@ function openChooseServiceModal(placeId) {
           };
 
           label.appendChild(checkbox);
-          label.appendChild(document.createTextNode(` ${service.name} (${service.duration_minutes} мин)`));
+          label.appendChild(document.createTextNode(` ${ service.name } (${ service.duration_minutes } мин)`));
           serviceList.appendChild(label);
         });
 
@@ -1144,11 +1230,11 @@ function renderServices(services) {
     const label = document.createElement('label');
     label.style.display = 'block'; // чтобы каждый чекбокс был с новой строки
     label.innerHTML = `
-      <input type="checkbox" 
-             value="${service.service_id}" 
-             data-name="${service.service_name}" 
-             data-duration="${service.duration}">
-      ${service.service_name} (${service.duration} мин)
+      < input type = "checkbox"
+    value = "${service.service_id}"
+    data - name="${service.service_name}"
+    data - duration="${service.duration}" >
+      ${ service.service_name } (${ service.duration } мин)
     `;
     serviceSelectList.appendChild(label);
   });
@@ -1573,33 +1659,33 @@ function loadBookings() {
           const div = document.createElement('div');
           div.className = 'booking-card';
           div.innerHTML = `
-            <strong>${booking.service_name}</strong><br>
-            Дата: ${formattedDate}<br>
-            Время: ${formattedTime}<br>
+      < strong > ${ booking.service_name }</strong > <br>
+        Дата: ${formattedDate}<br>
+          Время: ${formattedTime}<br>
             Мастер: ${booking.master_name}<br>
-            Длительность: ${booking.duration} мин
-          `;
-          list.appendChild(div);
+              Длительность: ${booking.duration} мин
+              `;
+              list.appendChild(div);
         });
       } else {
-        list.innerHTML = '<div>У вас пока нет записей.</div>';
+                list.innerHTML = '<div>У вас пока нет записей.</div>';
       }
     })
     .catch(err => {
-      console.error('Ошибка при получении записей:', err);
-      showNotification('Не удалось загрузить записи');
+                console.error('Ошибка при получении записей:', err);
+              showNotification('Не удалось загрузить записи');
     });
 }
 
 
 
 
-function formatDate(dateStr) {
+              function formatDate(dateStr) {
   const date = new Date(dateStr);
-  return date.toLocaleDateString('ru-RU', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
+              return date.toLocaleDateString('ru-RU', {
+                day: '2-digit',
+              month: '2-digit',
+              year: 'numeric'
   });
 }
 
@@ -1610,87 +1696,87 @@ function formatDate(dateStr) {
 
 
 
-// ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНТЕНТА ДЛЯ ЭКРАНА БИЗНЕС
-async function loadBusinessContent() {
-  console.log('🚀 Загружаем бизнес-контент...');
+              // ФУНКЦИЯ ОТОБРАЖЕНИЯ КОНТЕНТА ДЛЯ ЭКРАНА БИЗНЕС
+              async function loadBusinessContent() {
+                console.log('🚀 Загружаем бизнес-контент...');
 
-  const businessContent = document.getElementById('businessContent');
-  businessContent.innerHTML = 'Загрузка...';
+              const businessContent = document.getElementById('businessContent');
+              businessContent.innerHTML = 'Загрузка...';
 
-  try {
+              try {
     const initData = window.Telegram.WebApp.initData;
-    console.log('📦 initData:', initData);
+              console.log('📦 initData:', initData);
 
-    const response = await fetch('/api/getUserRole', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ initData })
+              const response = await fetch('/api/getUserRole', {
+                method: 'POST',
+              headers: {'Content-Type': 'application/json' },
+              body: JSON.stringify({initData})
     });
 
-    const data = await response.json();
-    console.log('📨 Ответ от /api/getUserRole получен:', data);
+              const data = await response.json();
+              console.log('📨 Ответ от /api/getUserRole получен:', data);
 
-    userRole = data.role; // Сохраняем роль
+              userRole = data.role; // Сохраняем роль
 
-    if (!data.success) {
-      console.warn('❌ Ошибка определения роли:', data.error || 'unknown');
-      businessContent.innerHTML = '<p>Не удалось определить роль пользователя.</p>';
-      return;
+              if (!data.success) {
+                console.warn('❌ Ошибка определения роли:', data.error || 'unknown');
+              businessContent.innerHTML = '<p>Не удалось определить роль пользователя.</p>';
+              return;
     }
 
-    if (data.role === 'client') {
-      console.log('👤 Пользователь — клиент');
-      businessContent.innerHTML = `
-        <p>Данный раздел предназначен для сотрудников Ваших сервисов. Если вы хотите подключить свой бизнес к нашему сервису, напишите нам</p>
-        <div style="display: flex; justify-content: center; margin-top: 16px;">
-          <button id="contactButton" class="modal-button">Связаться</button>
-        </div>
-      `;
+              if (data.role === 'client') {
+                console.log('👤 Пользователь — клиент');
+              businessContent.innerHTML = `
+              <p>Данный раздел предназначен для сотрудников Ваших сервисов. Если вы хотите подключить свой бизнес к нашему сервису, напишите нам</p>
+              <div style="display: flex; justify-content: center; margin-top: 16px;">
+                <button id="contactButton" class="modal-button">Связаться</button>
+              </div>
+              `;
       document.getElementById('contactButton').onclick = () => {
-        console.log('📞 Нажата кнопка "Связаться"');
-        showSupport();
+                console.log('📞 Нажата кнопка "Связаться"');
+              showSupport();
       };
 
     } else if (data.role === 'staff') {
-      console.log('🧑‍💼 Пользователь — сотрудник');
+                console.log('🧑‍💼 Пользователь — сотрудник');
 
-      businessContent.innerHTML = `<div id="recordsTable">Загрузка записей...</div>`;
+              businessContent.innerHTML = `<div id="recordsTable">Загрузка записей...</div>`;
 
-      const datePicker = document.getElementById('businessDate');
-      const recordsTable = document.getElementById('recordsTable');
+              const datePicker = document.getElementById('businessDate');
+              const recordsTable = document.getElementById('recordsTable');
 
-      if (!datePicker) {
-        console.warn('❗ Элемент #businessDate не найден в header-bar');
-        recordsTable.innerHTML = '<p>Ошибка: не найден элемент выбора даты.</p>';
-        return;
+              if (!datePicker) {
+                console.warn('❗ Элемент #businessDate не найден в header-bar');
+              recordsTable.innerHTML = '<p>Ошибка: не найден элемент выбора даты.</p>';
+              return;
       }
 
       const fetchBookings = async (selectedDate) => {
         const bookingsResponse = await fetch('/api/getStaffBookings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ initData, selectedDate })
+                method: 'POST',
+              headers: {'Content-Type': 'application/json' },
+              body: JSON.stringify({initData, selectedDate})
         });
 
-        const bookingsData = await bookingsResponse.json();
-        console.log('📨 Ответ от /api/getStaffBookings получен:', bookingsData);
+              const bookingsData = await bookingsResponse.json();
+              console.log('📨 Ответ от /api/getStaffBookings получен:', bookingsData);
 
-        if (!bookingsData.success) {
-          console.warn('❌ Ошибка при загрузке записей:', bookingsData.error || 'unknown');
-          recordsTable.innerHTML = '<p>Ошибка при загрузке записей.</p>';
-          return;
+              if (!bookingsData.success) {
+                console.warn('❌ Ошибка при загрузке записей:', bookingsData.error || 'unknown');
+              recordsTable.innerHTML = '<p>Ошибка при загрузке записей.</p>';
+              return;
         }
 
-        if (bookingsData.bookings.length === 0) {
-          console.log('ℹ️ Нет записей на эту дату');
-          recordsTable.innerHTML = '<p>У вас пока нет записей на эту дату.</p>';
-          return;
+              if (bookingsData.bookings.length === 0) {
+                console.log('ℹ️ Нет записей на эту дату');
+              recordsTable.innerHTML = '<p>У вас пока нет записей на эту дату.</p>';
+              return;
         }
 
-        let html = '<table><thead><tr><th>Время</th><th>Клиент</th><th>Услуга</th><th>Мастер</th></tr></thead><tbody>';
+              let html = '<table><thead><tr><th>Время</th><th>Клиент</th><th>Услуга</th><th>Мастер</th></tr></thead><tbody>';
 
         bookingsData.bookings.forEach(b => {
-          html += `<tr>
+                  html += `<tr>
             <td>${b.time.slice(0, 5)}</td>
             <td>${b.client_name || 'неизвестный'}</td>
             <td>${b.services_names}</td>
@@ -1698,149 +1784,149 @@ async function loadBusinessContent() {
           </tr>`;
         });
 
-        html += '</tbody></table>';
-        recordsTable.innerHTML = html;
+                html += '</tbody></table>';
+              recordsTable.innerHTML = html;
       };
 
-      await fetchBookings(datePicker.value);
+              await fetchBookings(datePicker.value);
 
       datePicker.addEventListener('change', (e) => {
-        fetchBookings(e.target.value);
+                fetchBookings(e.target.value);
       });
 
     } else {
-      console.warn('⚠️ Неизвестная роль:', data.role);
-      businessContent.innerHTML = '<p>Роль пользователя не определена.</p>';
+                console.warn('⚠️ Неизвестная роль:', data.role);
+              businessContent.innerHTML = '<p>Роль пользователя не определена.</p>';
     }
 
   } catch (error) {
-    console.error('💥 Ошибка в loadBusinessContent:', error);
-    businessContent.innerHTML = '<p>Ошибка при загрузке данных.</p>';
+                console.error('💥 Ошибка в loadBusinessContent:', error);
+              businessContent.innerHTML = '<p>Ошибка при загрузке данных.</p>';
   }
 }
 
 
 
 // async function loadBusinessContent() {
-//   console.log('🚀 Загружаем бизнес-контент...');
+                //   console.log('🚀 Загружаем бизнес-контент...');
 
-//   const businessContent = document.getElementById('businessContent');
-//   businessContent.innerHTML = 'Загрузка...';
+                //   const businessContent = document.getElementById('businessContent');
+                //   businessContent.innerHTML = 'Загрузка...';
 
-//   try {
-//     const initData = window.Telegram.WebApp.initData;
-//     console.log('📦 initData:', initData);
+                //   try {
+                //     const initData = window.Telegram.WebApp.initData;
+                //     console.log('📦 initData:', initData);
 
-//     const response = await fetch('/api/getUserRole', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ initData })
-//     });
+                //     const response = await fetch('/api/getUserRole', {
+                //       method: 'POST',
+                //       headers: { 'Content-Type': 'application/json' },
+                //       body: JSON.stringify({ initData })
+                //     });
 
-//     const data = await response.json();
-//     console.log('📨 Ответ от /api/getUserRole получен:', data);
+                //     const data = await response.json();
+                //     console.log('📨 Ответ от /api/getUserRole получен:', data);
 
-//     if (!data.success) {
-//       console.warn('❌ Ошибка определения роли:', data.error || 'unknown');
-//       businessContent.innerHTML = '<p>Не удалось определить роль пользователя.</p>';
-//       return;
-//     }
+                //     if (!data.success) {
+                //       console.warn('❌ Ошибка определения роли:', data.error || 'unknown');
+                //       businessContent.innerHTML = '<p>Не удалось определить роль пользователя.</p>';
+                //       return;
+                //     }
 
-//     if (data.role === 'client') {
-//       console.log('👤 Пользователь — клиент');
-//       businessContent.innerHTML = `
-//         <p>Если вы хотите подключить свой бизнес к нашему сервису, напишите нам</p>
-//         <button id="contactButton" class="modal-button">Связаться</button>
-//       `;
-//       document.getElementById('contactButton').onclick = () => {
-//         console.log('📞 Нажата кнопка "Связаться"');
-//         showSupport();
-//       };
+                //     if (data.role === 'client') {
+                //       console.log('👤 Пользователь — клиент');
+                //       businessContent.innerHTML = `
+                //         <p>Если вы хотите подключить свой бизнес к нашему сервису, напишите нам</p>
+                //         <button id="contactButton" class="modal-button">Связаться</button>
+                //       `;
+                //       document.getElementById('contactButton').onclick = () => {
+                //         console.log('📞 Нажата кнопка "Связаться"');
+                //         showSupport();
+                //       };
 
-//     } else if (data.role === 'staff') {
-//       console.log('🧑‍💼 Пользователь — сотрудник');
+                //     } else if (data.role === 'staff') {
+                //       console.log('🧑‍💼 Пользователь — сотрудник');
 
-//       businessContent.innerHTML = `<div id="recordsTable">Загрузка записей...</div>`;
+                //       businessContent.innerHTML = `<div id="recordsTable">Загрузка записей...</div>`;
 
-//       const datePicker = document.getElementById('businessDate');
-//       const recordsTable = document.getElementById('recordsTable');
+                //       const datePicker = document.getElementById('businessDate');
+                //       const recordsTable = document.getElementById('recordsTable');
 
-//       if (!datePicker) {
-//         console.warn('❗ Элемент #businessDate не найден в header-bar');
-//         recordsTable.innerHTML = '<p>Ошибка: не найден элемент выбора даты.</p>';
-//         return;
-//       }
+                //       if (!datePicker) {
+                //         console.warn('❗ Элемент #businessDate не найден в header-bar');
+                //         recordsTable.innerHTML = '<p>Ошибка: не найден элемент выбора даты.</p>';
+                //         return;
+                //       }
 
-//       const fetchBookings = async (selectedDate) => {
-//         const bookingsResponse = await fetch('/api/getStaffBookings', {
-//           method: 'POST',
-//           headers: { 'Content-Type': 'application/json' },
-//           body: JSON.stringify({ initData, selectedDate })
-//         });
+                //       const fetchBookings = async (selectedDate) => {
+                //         const bookingsResponse = await fetch('/api/getStaffBookings', {
+                //           method: 'POST',
+                //           headers: { 'Content-Type': 'application/json' },
+                //           body: JSON.stringify({ initData, selectedDate })
+                //         });
 
-//         const bookingsData = await bookingsResponse.json();
-//         console.log('📨 Ответ от /api/getStaffBookings получен:', bookingsData);
+                //         const bookingsData = await bookingsResponse.json();
+                //         console.log('📨 Ответ от /api/getStaffBookings получен:', bookingsData);
 
-//         if (!bookingsData.success) {
-//           console.warn('❌ Ошибка при загрузке записей:', bookingsData.error || 'unknown');
-//           recordsTable.innerHTML = '<p>Ошибка при загрузке записей.</p>';
-//           return;
-//         }
+                //         if (!bookingsData.success) {
+                //           console.warn('❌ Ошибка при загрузке записей:', bookingsData.error || 'unknown');
+                //           recordsTable.innerHTML = '<p>Ошибка при загрузке записей.</p>';
+                //           return;
+                //         }
 
-//         if (bookingsData.bookings.length === 0) {
-//           console.log('ℹ️ Нет записей на эту дату');
-//           recordsTable.innerHTML = '<p>У вас пока нет записей на эту дату.</p>';
-//           return;
-//         }
+                //         if (bookingsData.bookings.length === 0) {
+                //           console.log('ℹ️ Нет записей на эту дату');
+                //           recordsTable.innerHTML = '<p>У вас пока нет записей на эту дату.</p>';
+                //           return;
+                //         }
 
-//         let html = '<table><thead><tr><th>Время</th><th>Клиент</th><th>Услуга</th><th>Мастер</th></tr></thead><tbody>';
+                //         let html = '<table><thead><tr><th>Время</th><th>Клиент</th><th>Услуга</th><th>Мастер</th></tr></thead><tbody>';
 
-//         bookingsData.bookings.forEach(b => {
-//           html += `<tr>
-//             <td>${b.time.slice(0, 5)}</td>
-//             <td>${b.client_name || 'неизвестный'}</td>
-//             <td>${b.services_names}</td>
-//             <td>${b.master_name || '—'}</td>
-//           </tr>`;
-//         });
+                //         bookingsData.bookings.forEach(b => {
+                //           html += `<tr>
+                //             <td>${b.time.slice(0, 5)}</td>
+                //             <td>${b.client_name || 'неизвестный'}</td>
+                //             <td>${b.services_names}</td>
+                //             <td>${b.master_name || '—'}</td>
+                //           </tr>`;
+                //         });
 
-//         html += '</tbody></table>';
-//         recordsTable.innerHTML = html;
-//       };
+                //         html += '</tbody></table>';
+                //         recordsTable.innerHTML = html;
+                //       };
 
-//       await fetchBookings(datePicker.value);
+                //       await fetchBookings(datePicker.value);
 
-//       datePicker.addEventListener('change', (e) => {
-//         fetchBookings(e.target.value);
-//       });
+                //       datePicker.addEventListener('change', (e) => {
+                //         fetchBookings(e.target.value);
+                //       });
 
-//     } else {
-//       console.warn('⚠️ Неизвестная роль:', data.role);
-//       businessContent.innerHTML = '<p>Роль пользователя не определена.</p>';
-//     }
+                //     } else {
+                //       console.warn('⚠️ Неизвестная роль:', data.role);
+                //       businessContent.innerHTML = '<p>Роль пользователя не определена.</p>';
+                //     }
 
-//   } catch (error) {
-//     console.error('💥 Ошибка в loadBusinessContent:', error);
-//     businessContent.innerHTML = '<p>Ошибка при загрузке данных.</p>';
-//   }
-// }
+                //   } catch (error) {
+                //     console.error('💥 Ошибка в loadBusinessContent:', error);
+                //     businessContent.innerHTML = '<p>Ошибка при загрузке данных.</p>';
+                //   }
+                // }
 
 
 
-function closeAllModals() {
-  // Скрываем все возможные модальные окна
-  const modals = document.querySelectorAll('.modal');
-  modals.forEach(modal => {
-    modal.style.display = 'none';
-  });
+                function closeAllModals() {
+                  // Скрываем все возможные модальные окна
+                  const modals = document.querySelectorAll('.modal');
+                  modals.forEach(modal => {
+                    modal.style.display = 'none';
+                  });
 
-  // Скрываем оверлей
-  const overlay = document.getElementById('overlay');
-  if (overlay) overlay.style.display = 'none';
+                  // Скрываем оверлей
+                  const overlay = document.getElementById('overlay');
+                  if (overlay) overlay.style.display = 'none';
 
-  // Удаляем глобальный обработчик клика вне модалок (если был)
-  window.removeEventListener('click', handleOutsideClick);
-}
+                  // Удаляем глобальный обработчик клика вне модалок (если был)
+                  window.removeEventListener('click', handleOutsideClick);
+                }
 
 
 
@@ -1849,19 +1935,19 @@ function closeAllModals() {
 
 // ПОКАЗЫВАТЬ ГЛАВНЫЙ ЭКРАН ПРИ ЗАПУСКЕ
 document.addEventListener('DOMContentLoaded', () => {
-  switchTab('home');
+                switchTab('home');
 });
 
 
 
-// Автоматически скрывать меню при клике вне его
-document.addEventListener('click', function (event) {
+              // Автоматически скрывать меню при клике вне его
+              document.addEventListener('click', function (event) {
   const menu = document.getElementById('dropdownMenu');
-  const button = document.getElementById('menuButton');
-  if (menu.style.display === 'block' &&
-    !menu.contains(event.target) &&
-    event.target !== button) {
-    menu.style.display = 'none';
-    button.textContent = '☰';
+              const button = document.getElementById('menuButton');
+              if (menu.style.display === 'block' &&
+              !menu.contains(event.target) &&
+              event.target !== button) {
+                menu.style.display = 'none';
+              button.textContent = '☰';
   }
 });
