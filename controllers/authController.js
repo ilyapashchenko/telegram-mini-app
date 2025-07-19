@@ -7,47 +7,64 @@ async function authHandler(req, res) {
   const { initData } = req.body;
 
   if (!initData) {
+    console.log('[Auth] Ошибка: initData отсутствует');
     return res.status(400).json({ success: false, error: 'initData is missing' });
   }
 
   const valid = isValid(initData, BOT_TOKEN);
 
   if (!valid) {
+    console.log('[Auth] Ошибка: initData не валиден');
     return res.status(401).json({ success: false, error: 'Invalid initData' });
   }
 
   const user = parse(initData).user;
   const userId = user.id;
+  console.log('[Auth] Успешная аутентификация пользователя:', user);
 
   try {
     const { rows } = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
+    console.log(`[Auth] Найдено записей о пользователе ${userId}:`, rows.length);
 
     if (rows.length === 0) {
-      // Новый пользователь — создаём запись
+      console.log(`[Auth] Новый пользователь ${userId}, создаём запись...`);
+
       await pool.query(
         `INSERT INTO users (user_id, place_1, place_2, place_3, place_4, place_5, place_6, place_7, place_8, place_9, place_10) 
          VALUES ($1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)`,
         [userId]
       );
+      console.log('[Auth] Запись о новом пользователе добавлена в БД.');
 
       // Приветственное сообщение
-      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: userId,
-          text: `👋 Привет, ${user.first_name || 'друг'}! Спасибо за регистрацию!`,
-        }),
-      });
+      try {
+        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: userId,
+            text: `👋 Привет, ${user.first_name || 'друг'}! Спасибо за регистрацию!`,
+          }),
+        });
 
+        const data = await response.json();
+        console.log('[Auth] Ответ от Telegram API:', data);
+
+        if (!data.ok) {
+          console.warn('[Auth] Не удалось отправить приветственное сообщение:', data.description);
+        }
+      } catch (sendErr) {
+        console.error('[Auth] Ошибка при отправке приветственного сообщения:', sendErr);
+      }
 
       return res.json({
         success: true,
         user,
         places: [],
       });
+
     } else {
-      // Существующий пользователь — загружаем его места
+      console.log(`[Auth] Существующий пользователь ${userId}, загружаем его места...`);
       const userPlaces = rows[0];
 
       const placesIds = [];
@@ -56,6 +73,8 @@ async function authHandler(req, res) {
         if (place) placesIds.push(place);
       }
 
+      console.log(`[Auth] ID привязанных мест:`, placesIds);
+
       let placesDetails = [];
       if (placesIds.length > 0) {
         const resPlaces = await pool.query(
@@ -63,6 +82,7 @@ async function authHandler(req, res) {
           [placesIds]
         );
         placesDetails = resPlaces.rows;
+        console.log('[Auth] Загружены детали мест:', placesDetails);
       }
 
       return res.json({
@@ -72,10 +92,11 @@ async function authHandler(req, res) {
       });
     }
   } catch (error) {
-    console.error('DB error:', error);
+    console.error('[Auth] Ошибка работы с БД:', error);
     return res.status(500).json({ success: false, error: 'Database error' });
   }
 }
+
 
 
 
