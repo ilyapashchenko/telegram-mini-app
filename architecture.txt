@@ -1,6 +1,9 @@
 telegram-mini-app/
 |----controllers/
 |    |----authController.js
+|    |----bookingController.js
+|    |----masterController.js
+|    |----userController.js
 |----db/
 |    |----pool.js
 |----node_modules/
@@ -10,6 +13,7 @@ telegram-mini-app/
 |----|----app.js
 |----roures/
 |    |----authRoutes.js
+|    |----bookingRoutes.js
 |----architecture.txt
 |----package-lock.json
 |----package.json

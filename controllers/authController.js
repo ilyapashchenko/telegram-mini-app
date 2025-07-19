@@ -29,6 +29,17 @@ async function authHandler(req, res) {
         `INSERT INTO users (user_id, place_1, place_2, place_3, place_4, place_5, place_6, place_7, place_8, place_9, place_10) VALUES ($1, NULL, NULL, NULL, NULL)`,
         [userId]
       );
+      // Отправим приветственное сообщение через Telegram Bot API
+      // Отправим приветственное сообщение через Telegram Bot API
+      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: userId,
+          text: `👋 Привет, ${user.first_name || 'друг'}! Спасибо за регистрацию!`,
+        }),
+      });
+
 
       return res.json({
         success: true,
