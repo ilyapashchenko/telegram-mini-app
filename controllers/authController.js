@@ -1,6 +1,5 @@
 const { isValid, parse } = require('@telegram-apps/init-data-node');
 const pool = require('../db/pool');
-const fetch = require('node-fetch');
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 
@@ -41,6 +40,7 @@ async function authHandler(req, res) {
         }),
       });
 
+
       return res.json({
         success: true,
         user,
@@ -76,6 +76,8 @@ async function authHandler(req, res) {
     return res.status(500).json({ success: false, error: 'Database error' });
   }
 }
+
+
 
 
 
