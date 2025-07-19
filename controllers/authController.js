@@ -1,5 +1,6 @@
 const { isValid, parse } = require('@telegram-apps/init-data-node');
 const pool = require('../db/pool');
+const fetch = require('node-fetch');
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 
@@ -20,49 +21,45 @@ async function authHandler(req, res) {
   const userId = user.id;
 
   try {
-    // Проверяем, есть ли пользователь в таблице users
     const { rows } = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
 
     if (rows.length === 0) {
-      // Если пользователя нет — создаём новую запись с пустыми местами
+      // Новый пользователь — создаём запись
       await pool.query(
-        `INSERT INTO users (user_id, place_1, place_2, place_3, place_4, place_5, place_6, place_7, place_8, place_9, place_10) VALUES ($1, NULL, NULL, NULL, NULL)`,
+        `INSERT INTO users (user_id, place_1, place_2, place_3, place_4, place_5, place_6, place_7, place_8, place_9, place_10) 
+         VALUES ($1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)`,
         [userId]
       );
-      // Отправим приветственное сообщение через Telegram Bot API
-      // Отправим приветственное сообщение через Telegram Bot API
-      // await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     chat_id: userId,
-      //     text: `👋 Привет, ${user.first_name || 'друг'}! Спасибо за регистрацию!`,
-      //   }),
-      // });
 
+      // Приветственное сообщение
+      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: userId,
+          text: `👋 Привет, ${user.first_name || 'друг'}! Спасибо за регистрацию!`,
+        }),
+      });
 
       return res.json({
         success: true,
         user,
-        places: [], // Пустой список мест, т.к. пользователь новый
+        places: [],
       });
     } else {
-      // Если пользователь есть — возвращаем его места (place_1..place_10)
+      // Существующий пользователь — загружаем его места
       const userPlaces = rows[0];
 
-      // Соберём массив не-null мест
       const placesIds = [];
       for (let i = 1; i <= 10; i++) {
         const place = userPlaces[`place_${i}`];
         if (place) placesIds.push(place);
       }
 
-      // Можно дополнительно получить из таблицы places подробности по этим place_id
-      // Например:
       let placesDetails = [];
       if (placesIds.length > 0) {
         const resPlaces = await pool.query(
-          `SELECT * FROM places WHERE place_id = ANY($1)`,
+          'SELECT * FROM places WHERE place_id = ANY($1)',
           [placesIds]
         );
         placesDetails = resPlaces.rows;
@@ -71,7 +68,7 @@ async function authHandler(req, res) {
       return res.json({
         success: true,
         user,
-        places: placesDetails, // Возвращаем детали мест
+        places: placesDetails,
       });
     }
   } catch (error) {
@@ -79,6 +76,8 @@ async function authHandler(req, res) {
     return res.status(500).json({ success: false, error: 'Database error' });
   }
 }
+
+
 
 async function addPlaceById(req, res) {
   const { initData, placeId } = req.body;
